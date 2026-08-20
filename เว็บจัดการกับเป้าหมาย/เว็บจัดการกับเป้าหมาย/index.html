@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GoalForge - แพลตฟอร์มตั้งเป้าหมายและย่อยภารกิจรายวันด้วย AI</title>
+  <meta name="description"
+    content="เปลี่ยนเป้าหมายใหญ่ให้กลายเป็นภารกิจย่อยในแต่ละวันด้วยพลังของ AI ติดตามความก้าวหน้าอย่างต่อเนื่องและบรรลุทุกความสำเร็จ">
+
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/roadmap.css">
+
+  <!-- Auth Guard: redirect to login if not logged in -->
+  <script src="js/auth.js"></script>
+  <script>
+    if (!AuthService.isLoggedIn()) {
+      window.location.href = 'login.html';
+    }
+  </script>
+</head>
+
+<body>
+
+  <!-- App Header / Navbar -->
+  <header class="app-header">
+    <div class="container navbar">
+      <div class="brand-logo" onclick="location.reload()">
+        <div class="logo-icon">🎯</div>
+        <span>GoalForge</span>
+      </div>
+
+      <div class="nav-actions">
+        <!-- Goal Selector Dropdown -->
+        <div class="goal-selector-wrapper">
+          <select id="goal-selector" class="goal-select" title="เลือกเป้าหมาย"></select>
+        </div>
+
+        <!-- Streak Badge -->
+        <div class="streak-badge" title="จำนวนวันที่ทำภารกิจติดต่อกัน">
+          <span class="flame-icon">🔥</span>
+          <span id="nav-streak-count">0</span> วัน
+        </div>
+
+        <!-- XP Badge -->
+        <div class="xp-badge" title="คะแนนประสบการณ์ที่สะสมได้">
+          <span>⚡</span>
+          <span id="nav-xp-count">0 XP</span>
+        </div>
+
+        <!-- Create New Goal Button -->
+        <button class="btn btn-primary btn-sm" data-open-modal="new-goal-modal">
+          <span>+</span> ตั้งเป้าหมายใหม่
+        </button>
+
+        <!-- Theme Toggle -->
+        <button id="btn-toggle-theme" class="btn-icon" title="สลับโหมดมืด/สว่าง">🌙</button>
+
+        <!-- Settings Button -->
+        <button class="btn-icon" data-open-modal="settings-modal" title="ตั้งค่าระบบ & API Key">⚙️</button>
+
+        <!-- User Avatar + Logout -->
+        <div class="user-avatar-wrap" id="user-avatar-wrap" style="display:flex;align-items:center;gap:0.5rem;">
+          <div class="user-avatar" id="nav-user-avatar" title="">?</div>
+          <button id="btn-logout" class="btn-icon" title="ออกจากระบบ" style="font-size:1rem;">🚪</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="main-content">
+    <div class="container">
+
+      <!-- Empty State (When no goals exist) -->
+      <div id="app-empty-state" class="empty-state hidden">
+        <div class="empty-icon">🎯</div>
+        <h2 style="margin-bottom: 0.5rem;">ยังไม่มีเป้าหมายที่กำลังดำเนินการ</h2>
+        <p style="margin-bottom: 1.5rem; max-width: 480px; margin-left: auto; margin-right: auto;">
+          เริ่มต้นตั้งเป้าหมายที่คุณอยากทำ แล้วให้ AI ช่วยวิเคราะห์แตกออกเป็นภารกิจย่อยในแต่ละวันให้คุณทำตามได้ทันที
+        </p>
+        <button class="btn btn-primary btn-lg" data-open-modal="new-goal-modal">
+          ✨ สร้างเป้าหมายแรกของคุณด้วย AI
+        </button>
+      </div>
+
+      <!-- Main Goal Dashboard Content -->
+      <div id="app-goal-content">
+
+        <!-- Active Goal Hero Card -->
+        <section class="goal-hero-card">
+          <div class="flex justify-between items-center" style="flex-wrap: wrap; gap: 1rem; margin-bottom: 0.75rem;">
+            <div>
+              <span class="task-tag"
+                style="background: var(--primary-light); color: var(--primary); font-weight: 700; margin-bottom: 0.5rem; display: inline-block;">
+                🎯 เป้าหมายปัจจุบัน
+              </span>
+              <h1 id="hero-goal-title" style="font-size: 1.75rem; margin-bottom: 0.35rem;">กำลังโหลด...</h1>
+              <p id="hero-goal-summary" style="font-size: 0.9375rem; color: var(--text-muted); max-width: 750px;"></p>
+            </div>
+            <div class="flex items-center gap-2" style="flex-wrap: wrap;">
+              <button id="btn-edit-goal" class="btn btn-secondary btn-sm" title="แก้ไขจำนวนวัน/เวลา/รายละเอียดเป้าหมาย">
+                ✏️ แก้ไขเป้าหมาย & เวลา
+              </button>
+              <button id="btn-delete-goal" class="btn btn-ghost btn-sm" style="color: var(--danger);"
+                title="ลบเป้าหมายนี้">
+                🗑️ ลบ
+              </button>
+            </div>
+          </div>
+
+          <!-- Progress Bar -->
+          <div style="margin: 1.25rem 0 0.5rem;">
+            <div class="flex justify-between items-center"
+              style="margin-bottom: 0.4rem; font-size: 0.875rem; font-weight: 600;">
+              <span>ความคืบหน้ารวม</span>
+              <span id="hero-progress-percent"
+                style="color: var(--primary); font-size: 1.1rem; font-weight: 800;">0%</span>
+            </div>
+            <div class="progress-container">
+              <div id="hero-progress-fill" class="progress-bar-fill" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <!-- Meta Grid -->
+          <div class="hero-meta-grid">
+            <div class="hero-meta-item">
+              <div class="label">ภารกิจที่สำเร็จ</div>
+              <div id="hero-tasks-count" class="value">0/0</div>
+            </div>
+            <div class="hero-meta-item">
+              <div class="label">วันที่สำเร็จครบ</div>
+              <div id="hero-days-count" class="value">0/0 วัน</div>
+            </div>
+            <div class="hero-meta-item">
+              <div class="label">เวลาต่อวัน</div>
+              <div id="hero-daily-time" class="value">30 นาที/วัน</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- AI Coach Advice Banner -->
+        <div class="ai-coach-banner">
+          <div class="ai-coach-avatar">🤖</div>
+          <div class="ai-coach-text">
+            <strong style="color: var(--primary);">คำแนะนำจาก AI Coach:</strong>
+            <span id="hero-coach-advice">กำลังวิเคราะห์แนวทาง...</span>
+          </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="view-tabs-container">
+          <div class="view-tabs">
+            <button class="tab-btn active" data-tab="today">
+              <span>⚡</span> ภารกิจวันนี้
+            </button>
+            <button class="tab-btn" data-tab="roadmap">
+              <span>🗺️</span> แผนที่ Roadmap
+            </button>
+            <button class="tab-btn" data-tab="stats">
+              <span>📊</span> สถิติ & ความสำเร็จ
+            </button>
+          </div>
+        </div>
+
+        <!-- TAB 1: TODAY'S MISSION VIEW -->
+        <div id="view-today">
+          <!-- Day Switcher Bar -->
+          <div id="day-switcher-list" class="day-switcher-bar"></div>
+
+          <div class="today-view-grid">
+            <!-- Left: Today's Tasks Checklist -->
+            <div>
+              <div class="card" style="margin-bottom: 1.5rem;">
+                <div class="section-header">
+                  <div class="section-title-wrap">
+                    <div class="section-icon">📋</div>
+                    <div>
+                      <h2 id="today-focus-title" style="font-size: 1.25rem;">ภารกิจของวันนี้</h2>
+                      <span id="today-day-badge" style="font-size: 0.8125rem; color: var(--text-muted);">วันที่ 1</span>
+                    </div>
+                  </div>
+                  <button id="btn-add-task" class="btn btn-secondary btn-sm" title="เพิ่มภารกิจใหม่ในวันนี้">
+                    ➕ เพิ่มภารกิจ
+                  </button>
+                </div>
+
+                <!-- Task List -->
+                <div id="today-tasks-list" class="task-list"></div>
+              </div>
+
+              <!-- Daily Reflection / Notes -->
+              <div class="reflection-box">
+                <div class="flex items-center gap-2" style="margin-bottom: 0.75rem;">
+                  <span style="font-size: 1.2rem;">📝</span>
+                  <h3 style="font-size: 1.05rem;">บันทึก & สิ่งที่ได้เรียนรู้ของวันนี้ (Daily Reflection)</h3>
+                </div>
+                <textarea id="daily-note-input" class="form-textarea" rows="3"
+                  placeholder="จดบันทึกความรู้สึก อุปสรรค หรือข้อคิดดีๆ ที่ได้ลงมือทำในวันนี้... (บันทึกอัตโนมัติ)"></textarea>
+              </div>
+            </div>
+
+            <!-- Right: Focus Timer (Pomodoro) -->
+            <div>
+              <div class="timer-widget">
+                <div class="flex justify-between items-center" style="margin-bottom: 0.5rem;">
+                  <h3 style="font-size: 1.1rem; font-weight: 700;">⏱️ Focus Timer</h3>
+                  <span class="task-tag"
+                    style="background: var(--primary-light); color: var(--primary);">Pomodoro</span>
+                </div>
+                <p style="font-size: 0.8125rem; color: var(--text-muted); margin-bottom: 1rem;">
+                  จับเวลาจดจ่อในการทำภารกิจ ไม่วอกแวก แล้วพักตามจังหวะ
+                </p>
+
+                <!-- Timer Ring -->
+                <div class="timer-circle-wrap">
+                  <svg class="timer-svg" viewBox="0 0 180 180">
+                    <circle class="timer-bg-circle" cx="90" cy="90" r="76"></circle>
+                    <circle id="timer-bar-circle" class="timer-bar-circle" cx="90" cy="90" r="76"></circle>
+                  </svg>
+                  <div class="timer-display">
+                    <span id="timer-digits" class="timer-digits">25:00</span>
+                    <span class="timer-mode-label">FOCUS TIME</span>
+                  </div>
+                </div>
+
+                <!-- Timer Mode Switcher -->
+                <div class="flex justify-center gap-2" style="margin-top: 1rem;">
+                  <button class="btn btn-sm btn-primary timer-mode-btn" data-mode="focus">โฟกัส 25 น.</button>
+                  <button class="btn btn-sm btn-secondary timer-mode-btn" data-mode="short_break">พักสั้น 5 น.</button>
+                  <button class="btn btn-sm btn-secondary timer-mode-btn" data-mode="long_break">พักยาว 15 น.</button>
+                </div>
+
+                <!-- Timer Controls -->
+                <div class="timer-controls">
+                  <button id="btn-timer-toggle" class="btn btn-primary" style="flex: 1;">▶️ เริ่มโฟกัส</button>
+                  <button id="btn-timer-reset" class="btn btn-secondary btn-icon" title="รีเซ็ตเวลา">🔄</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: FULL ROADMAP TIMELINE VIEW -->
+        <div id="view-roadmap" class="hidden">
+          <div class="section-header">
+            <div class="section-title-wrap">
+              <div class="section-icon">🗺️</div>
+              <div>
+                <h2 style="font-size: 1.35rem;">แผนที่การเดินทางสู่เป้าหมาย (Full Roadmap)</h2>
+                <p style="font-size: 0.875rem; color: var(--text-muted);">
+                  ภาพรวมภารกิจในแต่ละระยะ คลิกที่แต่ละวันเพื่อเข้าสู่หน้าภารกิจ
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div id="roadmap-phases-list" class="roadmap-phases-container"></div>
+        </div>
+
+        <!-- TAB 3: STATS & ACHIEVEMENTS VIEW -->
+        <div id="view-stats" class="hidden">
+          <div class="section-header">
+            <div class="section-title-wrap">
+              <div class="section-icon">📊</div>
+              <div>
+                <h2 style="font-size: 1.35rem;">สถิติและความสำเร็จของคุณ</h2>
+                <p style="font-size: 0.875rem; color: var(--text-muted);">
+                  ติดตามความมีวินัยและการเติบโตในทุกๆ วัน
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stats Grid -->
+          <div class="stats-grid">
+            <div class="stat-card-widget">
+              <div class="stat-icon-wrap streak">🔥</div>
+              <div class="stat-content">
+                <div id="stat-streak-val" class="stat-val">0 วัน</div>
+                <div class="stat-lbl">Streak ทำต่อเนื่อง</div>
+              </div>
+            </div>
+
+            <div class="stat-card-widget">
+              <div class="stat-icon-wrap xp">⚡</div>
+              <div class="stat-content">
+                <div id="stat-xp-val" class="stat-val">0 XP</div>
+                <div class="stat-lbl">คะแนนประสบการณ์</div>
+              </div>
+            </div>
+
+            <div class="stat-card-widget">
+              <div class="stat-icon-wrap tasks">✅</div>
+              <div class="stat-content">
+                <div id="stat-tasks-val" class="stat-val">0 งาน</div>
+                <div class="stat-lbl">ภารกิจที่ทำสำเร็จ</div>
+              </div>
+            </div>
+
+            <div class="stat-card-widget">
+              <div class="stat-icon-wrap rate">📈</div>
+              <div class="stat-content">
+                <div id="stat-rate-val" class="stat-val">0%</div>
+                <div class="stat-lbl">ความคืบหน้ารวม</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Achievements Section -->
+          <div class="card">
+            <h3 style="font-size: 1.15rem; margin-bottom: 1.25rem;">🏆 เหรียญรางวัลความสำเร็จ (Achievements)</h3>
+            <div id="achievements-list" class="achievements-grid"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- MODAL 1: NEW GOAL CREATION WIZARD -->
+  <div id="new-goal-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="flex items-center gap-2">
+          <span style="font-size: 1.5rem;">✨</span>
+          <h2 class="modal-title">ตั้งเป้าหมายใหม่ให้ AI วิเคราะห์</h2>
+        </div>
+        <button class="btn-icon btn-close-modal" title="ปิด">✕</button>
+      </div>
+
+      <form id="new-goal-form">
+        <!-- Goal Title -->
+        <div class="form-group">
+          <label class="form-label" for="goal-title">เป้าหมายที่คุณอยากทำให้สำเร็จ *</label>
+          <input type="text" id="goal-title" class="form-input"
+            placeholder="เช่น ฝึกพูดภาษาอังกฤษเพื่อทำงาน, ลดน้ำหนัก 4 กก., เขียนเว็บแรก..." required>
+
+          <!-- Preset Chips for quick inspiration -->
+          <div style="margin-top: 0.65rem;">
+            <span
+              style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 0.35rem;">ตัวอย่างยอดนิยม:</span>
+            <div class="flex gap-2" style="flex-wrap: wrap;">
+              <button type="button" class="btn btn-secondary btn-sm"
+                onclick="document.getElementById('goal-title').value='ฝึกพูดภาษาอังกฤษคล่องเพื่อสื่อสารในที่ทำงาน'; document.getElementById('goal-category').value='language';">🗣️
+                พูดภาษาอังกฤษ</button>
+              <button type="button" class="btn btn-secondary btn-sm"
+                onclick="document.getElementById('goal-title').value='ออกกำลังกายลดพุงและเพิ่มความฟิตใน 30 วัน'; document.getElementById('goal-category').value='health';">🏃
+                ออกกำลังกายลดพุง</button>
+              <button type="button" class="btn btn-secondary btn-sm"
+                onclick="document.getElementById('goal-title').value='เรียนรู้การสร้างเว็บด้วย HTML CSS และ JavaScript'; document.getElementById('goal-category').value='coding';">💻
+                เรียนเขียนเว็บ</button>
+              <button type="button" class="btn btn-secondary btn-sm"
+                onclick="document.getElementById('goal-title').value='อ่านหนังสือพัฒนาตนเองให้จบ 1 เล่มพร้อมสรุป'; document.getElementById('goal-category').value='reading';">📚
+                อ่านหนังสือจบเล่ม</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Category & Duration Grid -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label" for="goal-category">หมวดหมู่</label>
+            <select id="goal-category" class="form-select">
+              <option value="language">🗣️ ภาษาและการสื่อสาร</option>
+              <option value="health">🏃 สุขภาพและการออกกำลังกาย</option>
+              <option value="coding">💻 โปรแกรมมิ่ง & เทคโนโลยี</option>
+              <option value="reading">📚 การเรียน & การอ่านหนังสือ</option>
+              <option value="career">💼 การงาน & ธุรกิจ</option>
+              <option value="habit">🌱 การพัฒนาตนเอง & นิสัย</option>
+              <option value="other">🎯 อื่นๆ</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="goal-duration">ระยะเวลาเป้าหมาย</label>
+            <select id="goal-duration" class="form-select">
+              <option value="7">⚡ 7 วัน (Sprint เร่งด่วน)</option>
+              <option value="14" selected>🚀 14 วัน (2 สัปดาห์ - แนะนำ)</option>
+              <option value="30">📅 30 วัน (1 เดือน สร้างนิสัย)</option>
+              <option value="60">🏆 60 วัน (2 เดือน เปลี่ยนแปลงจริง)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Daily Time & Skill Level Grid -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label" for="goal-minutes">เวลาที่สะดวกต่อวัน</label>
+            <select id="goal-minutes" class="form-select">
+              <option value="15">⏱️ 15 นาที (เบาๆ ต่อเนื่อง)</option>
+              <option value="25" selected>⏱️ 25 นาที (1 Pomodoro)</option>
+              <option value="45">⏱️ 45 นาที (ปานกลาง)</option>
+              <option value="60">⏱️ 60 นาที (1 ชั่วโมงเต็มที่)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">ระดับพื้นฐานปัจจุบัน</label>
+            <div class="option-chips" style="margin-top: 0.25rem;">
+              <label>
+                <input type="radio" name="goal-level" value="เริ่มต้น" class="chip-radio" checked>
+                <span class="chip-label">มือใหม่</span>
+              </label>
+              <label>
+                <input type="radio" name="goal-level" value="ปานกลาง" class="chip-radio">
+                <span class="chip-label">ปานกลาง</span>
+              </label>
+              <label>
+                <input type="radio" name="goal-level" value="มีทักษะแล้ว" class="chip-radio">
+                <span class="chip-label">มีทักษะ</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Extra Notes / Constraints -->
+        <div class="form-group">
+          <label class="form-label" for="goal-notes">รายละเอียดเพิ่มเติม หรือข้อจำกัด (ไม่บังคับ)</label>
+          <textarea id="goal-notes" class="form-textarea" rows="2"
+            placeholder="เช่น ไม่มีอุปกรณ์ยิม, เน้นฝึกฟังและพูด, ทำงานประจำมีเวลาเฉพาะช่วงค่ำ..."></textarea>
+        </div>
+
+        <!-- Submit Button -->
+        <div style="margin-top: 1.5rem;">
+          <button type="submit" id="btn-submit-goal" class="btn btn-primary btn-lg w-full">
+            ✨ ให้ AI วิเคราะห์และสร้างแผนภารกิจรายวัน
+          </button>
+          <p class="form-help" style="text-align: center; margin-top: 0.5rem;">
+            * ทำงานได้ทันทีทั้งแบบใช้ Gemini API หรือระบบ Smart AI ในตัว
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 2: SETTINGS & GEMINI API KEY MODAL -->
+  <div id="settings-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="flex items-center gap-2">
+          <span style="font-size: 1.5rem;">⚙️</span>
+          <h2 class="modal-title">ตั้งค่าระบบ & Gemini AI</h2>
+        </div>
+        <button class="btn-icon btn-close-modal" title="ปิด">✕</button>
+      </div>
+
+      <form id="settings-form">
+        <!-- Gemini is configured securely on the server -->
+        <div class="form-group">
+          <label class="form-label">การเชื่อมต่อ Gemini AI</label>
+          <p class="form-help">
+            ✅ ระบบเชื่อมต่อผ่าน URL กลางของเว็บไซต์โดยอัตโนมัติ ไม่ต้องวาง API Key หรือ URL ในหน้านี้<br>
+            * หากบริการ AI ใช้งานไม่ได้ ระบบจะใช้ Smart Offline Generator ในตัวโดยอัตโนมัติ
+          </p>
+        </div>
+
+        <!-- Gemini Model Selection -->
+        <div class="form-group">
+          <label class="form-label" for="setting-model">โมเดล AI (Model)</label>
+          <select id="setting-model" class="form-select">
+            <option value="gemini-1.5-flash">Gemini 1.5 Flash (เร็ว & เสถียร)</option>
+            <option value="gemini-2.5-flash">Gemini 2.5 Flash (ความฉลาดสูง)</option>
+            <option value="gemini-1.5-pro">Gemini 1.5 Pro (วิเคราะห์ลึกซึ้ง)</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-full" style="margin-bottom: 1.5rem;">
+          💾 บันทึกการตั้งค่า
+        </button>
+
+        <hr style="border: 0; border-top: 1px solid var(--border-subtle); margin-bottom: 1.5rem;">
+
+        <!-- Backup & Restore -->
+        <h3 style="font-size: 1rem; margin-bottom: 0.75rem;">📦 สำรองและกู้คืนข้อมูล (Backup / Restore)</h3>
+        <div class="flex gap-2">
+          <button type="button" id="btn-export-data" class="btn btn-secondary" style="flex: 1;">
+            📥 ส่งออกไฟล์ JSON
+          </button>
+          <label class="btn btn-secondary" style="flex: 1; cursor: pointer;">
+            📤 นำเข้าข้อมูล JSON
+            <input type="file" id="import-file-input" accept=".json" style="display: none;">
+          </label>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 3: EDIT GOAL & DURATION MODAL -->
+  <div id="edit-goal-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="flex items-center gap-2">
+          <span style="font-size: 1.5rem;">✏️</span>
+          <h2 class="modal-title">แก้ไขเป้าหมาย, จำนวนวัน & เวลา</h2>
+        </div>
+        <button class="btn-icon btn-close-modal" title="ปิด">✕</button>
+      </div>
+
+      <form id="edit-goal-form">
+        <!-- Goal Title -->
+        <div class="form-group">
+          <label class="form-label" for="edit-goal-title">ชื่อเป้าหมาย <span
+              style="color: var(--danger);">*</span></label>
+          <input type="text" id="edit-goal-title" class="form-input" required>
+        </div>
+
+        <!-- Category -->
+        <div class="form-group">
+          <label class="form-label" for="edit-goal-category">หมวดหมู่</label>
+          <select id="edit-goal-category" class="form-select">
+            <option value="language">🗣️ ภาษาและการสื่อสาร (Language)</option>
+            <option value="health">🏋️‍♂️ สุขภาพ / ออกกำลังกาย / ลดน้ำหนัก (Health & Fitness)</option>
+            <option value="coding">💻 เขียนโปรแกรม / เว็บไซต์ (Programming)</option>
+            <option value="reading">📚 อ่านหนังสือ / การเรียนรู้ (Reading & Study)</option>
+            <option value="career">💼 การงาน / ธุรกิจ (Career & Business)</option>
+            <option value="other">🎯 เป้าหมายอื่นๆ ทั่วไป (General)</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <!-- Duration in Days -->
+          <div class="form-group">
+            <label class="form-label" for="edit-goal-duration">จำนวนวันทั้งหมด (วัน)</label>
+            <input type="number" id="edit-goal-duration" class="form-input" min="1" max="365" required>
+          </div>
+
+          <!-- Daily Target Time -->
+          <div class="form-group">
+            <label class="form-label">เวลาเป้าหมายต่อวัน</label>
+            <div class="flex items-center gap-2">
+              <div style="flex: 1; display: flex; align-items: center; gap: 0.35rem;">
+                <input type="number" id="edit-goal-hours" class="form-input" min="0" max="23" placeholder="0"
+                  style="text-align: center;">
+                <span style="font-size: 0.875rem; color: var(--text-muted);">ชม.</span>
+              </div>
+              <div style="flex: 1; display: flex; align-items: center; gap: 0.35rem;">
+                <input type="number" id="edit-goal-minutes" class="form-input" min="0" max="59" step="5"
+                  placeholder="30" style="text-align: center;">
+                <span style="font-size: 0.875rem; color: var(--text-muted);">นาที</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notes -->
+        <div class="form-group">
+          <label class="form-label" for="edit-goal-notes">คำอธิบายเพิ่มเติม</label>
+          <textarea id="edit-goal-notes" class="form-textarea" rows="2"></textarea>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="display: flex; flex-direction: column; gap: 0.65rem; margin-top: 1.25rem;">
+          <button type="submit" id="btn-save-goal-info" class="btn btn-primary w-full">
+            💾 บันทึกการแก้ไขข้อมูล
+          </button>
+          <button type="button" id="btn-replan-goal-ai" class="btn btn-secondary w-full"
+            style="border-color: var(--primary); color: var(--primary);">
+            ✨ ให้ AI วางแผนตารางใหม่ตามจำนวนวันและเวลาที่ตั้งไว้
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 4: EDIT INDIVIDUAL TASK MODAL -->
+  <div id="edit-task-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="flex items-center gap-2">
+          <span style="font-size: 1.5rem;">✏️</span>
+          <h2 class="modal-title">แก้ไขภารกิจ & กำหนดเวลา</h2>
+        </div>
+        <button class="btn-icon btn-close-modal" title="ปิด">✕</button>
+      </div>
+
+      <form id="edit-task-form">
+        <input type="hidden" id="edit-task-id">
+        <input type="hidden" id="edit-task-day-num">
+
+        <!-- Task Title -->
+        <div class="form-group">
+          <label class="form-label" for="edit-task-title">ชื่อภารกิจ <span
+              style="color: var(--danger);">*</span></label>
+          <input type="text" id="edit-task-title" class="form-input" required>
+        </div>
+
+        <!-- Task Description -->
+        <div class="form-group">
+          <label class="form-label" for="edit-task-desc">คำอธิบาย / วิธีปฏิบัติ</label>
+          <textarea id="edit-task-desc" class="form-textarea" rows="3"></textarea>
+        </div>
+
+        <div class="form-row">
+          <!-- Time Duration: Hours and Minutes -->
+          <div class="form-group">
+            <label class="form-label">ระยะเวลาที่ใช้ทำภารกิจนี้</label>
+            <div class="flex items-center gap-2">
+              <div style="flex: 1; display: flex; align-items: center; gap: 0.35rem;">
+                <input type="number" id="edit-task-hours" class="form-input" min="0" max="23" placeholder="0"
+                  style="text-align: center;">
+                <span style="font-size: 0.875rem; color: var(--text-muted);">ชม.</span>
+              </div>
+              <div style="flex: 1; display: flex; align-items: center; gap: 0.35rem;">
+                <input type="number" id="edit-task-minutes" class="form-input" min="1" max="59" step="5"
+                  placeholder="15" style="text-align: center;" required>
+                <span style="font-size: 0.875rem; color: var(--text-muted);">นาที</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Difficulty -->
+          <div class="form-group">
+            <label class="form-label" for="edit-task-difficulty">ระดับความยาก</label>
+            <select id="edit-task-difficulty" class="form-select">
+              <option value="easy">ง่าย (Level 1: Easy)</option>
+              <option value="medium">ปานกลาง (Level 2-3: Medium)</option>
+              <option value="hard">ท้าทาย (Level 4-6: Hard)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Pro Tip -->
+        <div class="form-group">
+          <label class="form-label" for="edit-task-tip">เคล็ดลับ / เทคนิค (Tip)</label>
+          <input type="text" id="edit-task-tip" class="form-input"
+            placeholder="เช่น หายใจให้เป็นจังหวะ หรือจำจุดสำคัญ...">
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex gap-2" style="margin-top: 1.25rem;">
+          <button type="submit" class="btn btn-primary" style="flex: 2;">
+            💾 บันทึกการแก้ไข
+          </button>
+          <button type="button" id="btn-delete-current-task" class="btn btn-ghost"
+            style="flex: 1; color: var(--danger);">
+            🗑️ ลบภารกิจนี้
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 5: ADD NEW TASK MODAL -->
+  <div id="add-task-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="flex items-center gap-2">
+          <span style="font-size: 1.5rem;">➕</span>
+          <h2 class="modal-title">เพิ่มภารกิจใหม่ในวันนี้</h2>
+        </div>
+        <button class="btn-icon btn-close-modal" title="ปิด">✕</button>
+      </div>
+
+      <form id="add-task-form">
+        <!-- Task Title -->
+        <div class="form-group">
+          <label class="form-label" for="add-task-title">ชื่อภารกิจ <span style="color: var(--danger);">*</span></label>
+          <input type="text" id="add-task-title" class="form-input"
+            placeholder="เช่น ฝึกท่องศัพท์ 10 คำ หรือ วิดพื้น 3 เซ็ต" required>
+        </div>
+
+        <!-- Task Description -->
+        <div class="form-group">
+          <label class="form-label" for="add-task-desc">คำอธิบาย / วิธีปฏิบัติ</label>
+          <textarea id="add-task-desc" class="form-textarea" rows="2"
+            placeholder="อธิบายขั้นตอนที่ต้องทำอย่างชัดเจน..."></textarea>
+        </div>
+
+        <div class="form-row">
+          <!-- Time Duration -->
+          <div class="form-group">
+            <label class="form-label">ระยะเวลาที่ใช้</label>
+            <div class="flex items-center gap-2">
+              <div style="flex: 1; display: flex; align-items: center; gap: 0.35rem;">
+                <input type="number" id="add-task-hours" class="form-input" min="0" max="23" placeholder="0"
+                  style="text-align: center;">
+                <span style="font-size: 0.875rem; color: var(--text-muted);">ชม.</span>
+              </div>
+              <div style="flex: 1; display: flex; align-items: center; gap: 0.35rem;">
+                <input type="number" id="add-task-minutes" class="form-input" min="1" max="59" step="5" value="15"
+                  style="text-align: center;" required>
+                <span style="font-size: 0.875rem; color: var(--text-muted);">นาที</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Difficulty -->
+          <div class="form-group">
+            <label class="form-label" for="add-task-difficulty">ระดับความยาก</label>
+            <select id="add-task-difficulty" class="form-select">
+              <option value="easy">ง่าย (Level 1: Easy)</option>
+              <option value="medium">ปานกลาง (Level 2-3: Medium)</option>
+              <option value="hard">ท้าทาย (Level 4-6: Hard)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Pro Tip -->
+        <div class="form-group">
+          <label class="form-label" for="add-task-tip">เคล็ดลับ (ไม่บังคับ)</label>
+          <input type="text" id="add-task-tip" class="form-input" placeholder="คำแนะนำที่เป็นประโยชน์...">
+        </div>
+
+        <button type="submit" class="btn btn-primary w-full" style="margin-top: 1.25rem;">
+          ➕ เพิ่มภารกิจทันที
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- JavaScript Entry -->
+  <script src="js/app.js"></script>
+  <script>
+    // Show user info in navbar
+    (function () {
+      const user = AuthService.getCurrentUser();
+      if (user) {
+        const avatar = document.getElementById('nav-user-avatar');
+        if (avatar) {
+          avatar.textContent = user.avatar || user.name.charAt(0).toUpperCase();
+          avatar.title = user.name + ' (' + user.email + ')';
+        }
+      }
+      const logoutBtn = document.getElementById('btn-logout');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+          if (confirm('คุณต้องการออกจากระบบใช่หรือไม่?')) {
+            AuthService.logout();
+            window.location.href = 'login.html';
+          }
+        });
+      }
+    })();
+  </script>
+</body>
+
+</html>
