@@ -225,13 +225,16 @@
                     <circle class="timer-bg-circle" cx="90" cy="90" r="76"></circle>
                     <circle id="timer-bar-circle" class="timer-bar-circle" cx="90" cy="90" r="76"></circle>
                   </svg>
-                  <div class="timer-display" style="display: flex; flex-direction: column; align-items: center; justify-content: center; transform: translateY(-5px);">
-                    <span id="timer-digits" class="timer-digits" style="line-height: 1.2;">25:00</span>
-                    <button id="btn-edit-time" style="background: var(--surface-2); border: 1px solid var(--border-color); border-radius: 999px; padding: 3px 10px; font-size: 0.75rem; font-weight: 600; color: var(--text-main); cursor: pointer; display: flex; align-items: center; gap: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 0.25rem; transition: background 0.2s;" onmouseover="this.style.background='var(--surface-3)'" onmouseout="this.style.background='var(--surface-2)'">
-                      ✏️ แก้ไขเวลา
-                    </button>
-                    <span class="timer-mode-label" style="margin: 0;">FOCUS TIME</span>
+                  <div class="timer-display">
+                    <span id="timer-digits" class="timer-digits">25:00</span>
+                    <span class="timer-mode-label">FOCUS TIME</span>
                   </div>
+                </div>
+
+                <div style="display: flex; justify-content: center; margin-top: 1rem;">
+                  <button id="btn-edit-time" class="btn btn-sm btn-secondary" style="border-radius: 999px; font-weight: 600; display: flex; align-items: center; gap: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+                    ✏️ กำหนดเวลาเอง
+                  </button>
                 </div>
 
                 <!-- Timer Mode Switcher -->
