@@ -190,7 +190,7 @@ const Store = {
     activeGoalId: null,
     selectedDay: 1,
     settings: {
-      model: 'gemini-1.5-flash',
+      model: 'gemini-3.6-flash',
       theme: 'light',
       soundEnabled: true
     },
@@ -1545,7 +1545,7 @@ const App = {
   populateSettingsForm() {
     const s = Store.state.settings;
     const modelSelect = document.getElementById('setting-model');
-    if (modelSelect) modelSelect.value = s.model || 'gemini-1.5-flash';
+    if (modelSelect) modelSelect.value = s.model || 'gemini-3.6-flash';
   },
 
   handleSaveSettings() {

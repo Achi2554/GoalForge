@@ -1,9 +1,6 @@
 const ALLOWED_MODELS = new Set([
-  'gemini-1.5-flash',
-  'gemini-1.5-flash-latest',
-  'gemini-1.5-pro',
-  'gemini-2.5-flash',
   'gemini-3.6-flash',
+  'gemini-3.7-flash',
   'gemini-pro'
 ]);
 
