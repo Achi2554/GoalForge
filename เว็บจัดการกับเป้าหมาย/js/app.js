@@ -885,7 +885,7 @@ const AIService = {
   generateSmartOfflineBreakdown({ title, category, durationDays, dailyMinutes, level, notes }) {
     const t = (title || '').toLowerCase();
     
-    const isHealth = category === 'health' || t.includes('ลด') || t.includes('อ้วน') || t.includes('น้ำหนัก') || t.includes('ออกกำลัง') || t.includes('ฟิต') || t.includes('วิ่ง') || t.includes('หุ่น') || t.includes('กล้าม');
+    const isHealth = category === 'health' || t.includes('ลด') || t.includes('อ้วน') || t.includes('น้ำหนัก') || t.includes('ออกกำลัง') || t.includes('ฟิต') || t.includes('วิ่ง') || t.includes('หุ่น') || t.includes('กล้าม') || t.includes('ว่ายน้ำ');
     const isCoding = category === 'coding' || t.includes('โค้ด') || t.includes('โปรแกรม') || t.includes('เว็บ') || t.includes('python') || t.includes('javascript') || t.includes('react') || t.includes('html');
     const isReading = category === 'reading' || t.includes('อ่าน') || t.includes('หนังสือ') || t.includes('เรียน') || t.includes('สอบ');
     const isLanguage = category === 'language' || t.includes('อังกฤษ') || t.includes('ภาษา') || t.includes('english') || t.includes('japanese');
