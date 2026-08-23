@@ -202,28 +202,34 @@ const Store = {
     }
   },
 
-  init() {
+  async init() {
     try {
-      const savedGoals = localStorage.getItem(STORAGE_KEYS.GOALS);
-      if (savedGoals) {
-        this.state.goals = JSON.parse(savedGoals);
-      }
-
-      const savedActiveId = localStorage.getItem(STORAGE_KEYS.ACTIVE_GOAL_ID);
-      if (savedActiveId && this.state.goals.some(g => g.id === savedActiveId)) {
-        this.state.activeGoalId = savedActiveId;
-      } else if (this.state.goals.length > 0) {
-        this.state.activeGoalId = this.state.goals[0].id;
-      }
-
-      const savedSettings = localStorage.getItem(STORAGE_KEYS.SETTINGS);
-      if (savedSettings) {
-        this.state.settings = { ...this.state.settings, ...JSON.parse(savedSettings) };
-      }
-
-      const savedStats = localStorage.getItem(STORAGE_KEYS.STATS);
-      if (savedStats) {
-        this.state.stats = { ...this.state.stats, ...JSON.parse(savedStats) };
+      const user = AuthService.getCurrentUser();
+      if (user && window.db) {
+        const userDocRef = window.db.collection('userData').doc(user.id);
+        const docSnap = await userDocRef.get();
+        
+        if (docSnap.exists) {
+          const data = docSnap.data();
+          this.state.goals = data.goals || [];
+          this.state.activeGoalId = data.activeGoalId || null;
+          if (data.settings) this.state.settings = { ...this.state.settings, ...data.settings };
+          if (data.stats) this.state.stats = { ...this.state.stats, ...data.stats };
+        }
+      } else {
+        // Fallback for local testing if needed
+        const savedGoals = localStorage.getItem(STORAGE_KEYS.GOALS);
+        if (savedGoals) this.state.goals = JSON.parse(savedGoals);
+        const savedActiveId = localStorage.getItem(STORAGE_KEYS.ACTIVE_GOAL_ID);
+        if (savedActiveId && this.state.goals.some(g => g.id === savedActiveId)) {
+          this.state.activeGoalId = savedActiveId;
+        } else if (this.state.goals.length > 0) {
+          this.state.activeGoalId = this.state.goals[0].id;
+        }
+        const savedSettings = localStorage.getItem(STORAGE_KEYS.SETTINGS);
+        if (savedSettings) this.state.settings = { ...this.state.settings, ...JSON.parse(savedSettings) };
+        const savedStats = localStorage.getItem(STORAGE_KEYS.STATS);
+        if (savedStats) this.state.stats = { ...this.state.stats, ...JSON.parse(savedStats) };
       }
 
       this.checkDailyStreak();
@@ -232,14 +238,26 @@ const Store = {
     }
   },
 
-  save() {
+  async save() {
     try {
-      localStorage.setItem(STORAGE_KEYS.GOALS, JSON.stringify(this.state.goals));
-      if (this.state.activeGoalId) {
-        localStorage.setItem(STORAGE_KEYS.ACTIVE_GOAL_ID, this.state.activeGoalId);
+      const user = AuthService.getCurrentUser();
+      if (user && window.db) {
+        const userDocRef = window.db.collection('userData').doc(user.id);
+        await userDocRef.set({
+          goals: this.state.goals,
+          activeGoalId: this.state.activeGoalId,
+          settings: this.state.settings,
+          stats: this.state.stats
+        }, { merge: true });
+      } else {
+        // Fallback
+        localStorage.setItem(STORAGE_KEYS.GOALS, JSON.stringify(this.state.goals));
+        if (this.state.activeGoalId) {
+          localStorage.setItem(STORAGE_KEYS.ACTIVE_GOAL_ID, this.state.activeGoalId);
+        }
+        localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(this.state.settings));
+        localStorage.setItem(STORAGE_KEYS.STATS, JSON.stringify(this.state.stats));
       }
-      localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(this.state.settings));
-      localStorage.setItem(STORAGE_KEYS.STATS, JSON.stringify(this.state.stats));
     } catch (e) {
       console.error('Store save error:', e);
     }
@@ -1305,8 +1323,8 @@ const AIService = {
 const App = {
   activeTab: 'today',
 
-  init() {
-    Store.init();
+  async init() {
+    await Store.init();
     this.removeLegacyDefaultGoal();
 
     this.applyTheme(Store.state.settings.theme || 'light');
@@ -2316,7 +2334,7 @@ const App = {
 
 // Initialize when DOM is ready
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => App.init());
+  document.addEventListener('DOMContentLoaded', async () => await App.init());
 } else {
   App.init();
 }

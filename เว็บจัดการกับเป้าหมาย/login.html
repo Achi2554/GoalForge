@@ -212,7 +212,7 @@
       gap: 0.5rem;
     }
 
-    /* ── Submit Button ── */
+    /* ── Submit Button & Social Auth ── */
     .auth-submit-btn {
       width: 100%;
       padding: 0.85rem 1.5rem;
@@ -247,6 +247,35 @@
       opacity: 0.65;
       cursor: not-allowed;
       transform: none;
+    }
+
+    .auth-google-btn {
+      width: 100%;
+      padding: 0.85rem 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border: 1px solid var(--border-medium);
+      border-radius: 14px;
+      background: var(--bg-surface);
+      color: var(--text-main);
+      cursor: pointer;
+      font-family: var(--font-body);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .auth-google-btn:hover {
+      background: var(--bg-subtle);
+      border-color: var(--border-focus);
+    }
+
+    .auth-google-btn img {
+      width: 20px;
+      height: 20px;
     }
 
     /* ── Divider ── */
@@ -379,6 +408,13 @@
     <div class="auth-panel active" id="panel-login">
       <div class="auth-alert error" id="login-error">⚠️ <span id="login-error-text"></span></div>
 
+      <button type="button" class="auth-google-btn btn-google-login">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo">
+        เข้าสู่ระบบด้วย Google
+      </button>
+
+      <div class="auth-divider">หรือใช้อีเมล</div>
+
       <form id="login-form" novalidate>
         <div class="auth-field">
           <label class="auth-label" for="login-email">อีเมล</label>
@@ -412,6 +448,13 @@
     <div class="auth-panel" id="panel-register">
       <div class="auth-alert error" id="register-error">⚠️ <span id="register-error-text"></span></div>
       <div class="auth-alert success" id="register-success">✅ <span id="register-success-text"></span></div>
+
+      <button type="button" class="auth-google-btn btn-google-login">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo">
+        สมัครสมาชิกด้วย Google
+      </button>
+
+      <div class="auth-divider">หรือใช้อีเมล</div>
 
       <form id="register-form" novalidate>
         <div class="auth-field">
@@ -476,6 +519,9 @@
 
   </div>
 
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-init.js"></script>
   <script src="js/auth.js"></script>
   <script>
     // ── Check if already logged in ──
@@ -552,8 +598,8 @@
       btn.disabled = true;
       btn.innerHTML = `<div class="btn-spinner"></div> กำลังเข้าสู่ระบบ...`;
 
-      setTimeout(() => {
-        const result = AuthService.login({ email, password });
+      setTimeout(async () => {
+        const result = await AuthService.login({ email, password });
 
         if (result.success) {
           btn.innerHTML = '✅ สำเร็จ! กำลังเข้าสู่ระบบ...';
@@ -593,8 +639,8 @@
       btn.disabled = true;
       btn.innerHTML = `<div class="btn-spinner"></div> กำลังสร้างบัญชี...`;
 
-      setTimeout(() => {
-        const result = AuthService.register({ name, email, password });
+      setTimeout(async () => {
+        const result = await AuthService.register({ name, email, password });
 
         if (result.success) {
           btn.innerHTML = '✅ สมัครสำเร็จ! กำลังเข้าสู่ระบบ...';
@@ -607,6 +653,53 @@
           btn.innerHTML = '✨ สมัครสมาชิกฟรี';
         }
       }, 400);
+    });
+
+    // ── Mock Google Login ──
+    document.querySelectorAll('.btn-google-login').forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Mock prompt to simulate Google Account selection
+        const email = prompt('[จำลองการเข้าสู่ระบบด้วย Google]\\nกรุณาระบุ Gmail ของคุณ:', 'user@gmail.com');
+        if (!email) return;
+
+        const name = email.split('@')[0];
+        
+        btn.disabled = true;
+        btn.innerHTML = `<div class="btn-spinner"></div> กำลังเชื่อมต่อ Google...`;
+
+        setTimeout(async () => {
+          // In a real app we'd use Firebase Auth, but here we just check Firestore directly
+          try {
+            const userRef = window.db.collection('users').where('email', '==', email.toLowerCase());
+            const snapshot = await userRef.get();
+            let user = null;
+            
+            if (snapshot.empty) {
+              user = {
+                id: 'google_' + Date.now(),
+                name: name,
+                email: email.toLowerCase(),
+                passwordHash: 'google_oauth_mock',
+                createdAt: new Date().toISOString(),
+                avatar: name.charAt(0).toUpperCase()
+              };
+              await window.db.collection('users').doc(user.id).set(user);
+            } else {
+              user = snapshot.docs[0].data();
+            }
+
+            AuthService.createSession(user);
+            btn.innerHTML = '✅ เชื่อมต่อสำเร็จ! กำลังเข้าสู่ระบบ...';
+            setTimeout(() => {
+              window.location.href = 'index.html';
+            }, 600);
+          } catch(err) {
+            console.error(err);
+            btn.innerHTML = '❌ เชื่อมต่อล้มเหลว';
+            btn.disabled = false;
+          }
+        }, 800);
+      });
     });
   </script>
 </body>

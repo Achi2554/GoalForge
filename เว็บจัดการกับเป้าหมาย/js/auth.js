@@ -9,17 +9,8 @@ const AuthService = {
     SESSION: 'goalforge_session'
   },
 
-  // Get all registered users
-  getUsers() {
-    try {
-      return JSON.parse(localStorage.getItem(this.KEYS.USERS) || '[]');
-    } catch { return []; }
-  },
-
-  // Save users list
-  saveUsers(users) {
-    localStorage.setItem(this.KEYS.USERS, JSON.stringify(users));
-  },
+  // We no longer use getUsers/saveUsers for local array manipulation.
+  // Instead, we interact directly with Firestore.
 
   // Get current logged-in user
   getCurrentUser() {
@@ -39,51 +30,60 @@ const AuthService = {
     return 'hashed_' + Math.abs(hash).toString(36);
   },
 
-  // Register a new user
-  register({ name, email, password }) {
-    const users = this.getUsers();
-
-    // Check duplicate email
-    if (users.find(u => u.email.toLowerCase() === email.toLowerCase())) {
-      return { success: false, error: 'อีเมลนี้ถูกใช้งานแล้ว กรุณาใช้อีเมลอื่น' };
-    }
-
+  // Register a new user (Async)
+  async register({ name, email, password }) {
     if (password.length < 6) {
       return { success: false, error: 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร' };
     }
 
-    const newUser = {
-      id: 'user_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
-      name: name.trim(),
-      email: email.trim().toLowerCase(),
-      passwordHash: this.hashPassword(password),
-      createdAt: new Date().toISOString(),
-      avatar: name.trim().charAt(0).toUpperCase()
-    };
+    try {
+      const usersRef = window.db.collection('users');
+      const snapshot = await usersRef.where('email', '==', email.trim().toLowerCase()).get();
 
-    users.push(newUser);
-    this.saveUsers(users);
+      if (!snapshot.empty) {
+        return { success: false, error: 'อีเมลนี้ถูกใช้งานแล้ว กรุณาใช้อีเมลอื่น' };
+      }
 
-    // Auto-login after register
-    this.createSession(newUser);
-    return { success: true, user: newUser };
+      const newUser = {
+        id: 'user_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+        name: name.trim(),
+        email: email.trim().toLowerCase(),
+        passwordHash: this.hashPassword(password),
+        createdAt: new Date().toISOString(),
+        avatar: name.trim().charAt(0).toUpperCase()
+      };
+
+      await usersRef.doc(newUser.id).set(newUser);
+      this.createSession(newUser);
+      return { success: true, user: newUser };
+    } catch (err) {
+      console.error("Register Error:", err);
+      return { success: false, error: 'เกิดข้อผิดพลาดในการเชื่อมต่อฐานข้อมูล' };
+    }
   },
 
-  // Login existing user
-  login({ email, password }) {
-    const users = this.getUsers();
-    const user = users.find(u => u.email.toLowerCase() === email.trim().toLowerCase());
+  // Login existing user (Async)
+  async login({ email, password }) {
+    try {
+      const usersRef = window.db.collection('users');
+      const snapshot = await usersRef.where('email', '==', email.trim().toLowerCase()).get();
 
-    if (!user) {
-      return { success: false, error: 'ไม่พบอีเมลนี้ในระบบ กรุณาสมัครสมาชิกก่อน' };
+      if (snapshot.empty) {
+        return { success: false, error: 'ไม่พบอีเมลนี้ในระบบ กรุณาสมัครสมาชิกก่อน' };
+      }
+
+      const user = snapshot.docs[0].data();
+
+      if (user.passwordHash !== this.hashPassword(password)) {
+        return { success: false, error: 'รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง' };
+      }
+
+      this.createSession(user);
+      return { success: true, user };
+    } catch (err) {
+      console.error("Login Error:", err);
+      return { success: false, error: 'เกิดข้อผิดพลาดในการเชื่อมต่อฐานข้อมูล' };
     }
-
-    if (user.passwordHash !== this.hashPassword(password)) {
-      return { success: false, error: 'รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง' };
-    }
-
-    this.createSession(user);
-    return { success: true, user };
   },
 
   // Create session

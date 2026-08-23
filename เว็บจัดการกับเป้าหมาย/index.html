@@ -1,15 +1,22 @@
 <!DOCTYPE html>
 <html lang="th" data-theme="light">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GoalForge AI - แพลตฟอร์มตั้งเป้าหมายและย่อยภารกิจรายวันด้วย AI</title>
-  <meta name="description" content="เปลี่ยนเป้าหมายใหญ่ให้กลายเป็นภารกิจย่อยในแต่ละวันด้วยพลังของ AI ติดตามความก้าวหน้าอย่างต่อเนื่องและบรรลุทุกความสำเร็จ">
-  
+  <title>GoalForge - แพลตฟอร์มตั้งเป้าหมายและย่อยภารกิจรายวันด้วย AI</title>
+  <meta name="description"
+    content="เปลี่ยนเป้าหมายใหญ่ให้กลายเป็นภารกิจย่อยในแต่ละวันด้วยพลังของ AI ติดตามความก้าวหน้าอย่างต่อเนื่องและบรรลุทุกความสำเร็จ">
+
   <!-- CSS Stylesheets -->
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/roadmap.css">
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-init.js"></script>
 
   <!-- Auth Guard: redirect to login if not logged in -->
   <script src="js/auth.js"></script>
@@ -19,6 +26,7 @@
     }
   </script>
 </head>
+
 <body>
 
   <!-- App Header / Navbar -->
@@ -26,7 +34,7 @@
     <div class="container navbar">
       <div class="brand-logo" onclick="location.reload()">
         <div class="logo-icon">🎯</div>
-        <span>GoalForge <span style="color: var(--primary);">AI</span></span>
+        <span>GoalForge</span>
       </div>
 
       <div class="nav-actions">
@@ -85,12 +93,13 @@
 
       <!-- Main Goal Dashboard Content -->
       <div id="app-goal-content">
-        
+
         <!-- Active Goal Hero Card -->
         <section class="goal-hero-card">
           <div class="flex justify-between items-center" style="flex-wrap: wrap; gap: 1rem; margin-bottom: 0.75rem;">
             <div>
-              <span class="task-tag" style="background: var(--primary-light); color: var(--primary); font-weight: 700; margin-bottom: 0.5rem; display: inline-block;">
+              <span class="task-tag"
+                style="background: var(--primary-light); color: var(--primary); font-weight: 700; margin-bottom: 0.5rem; display: inline-block;">
                 🎯 เป้าหมายปัจจุบัน
               </span>
               <h1 id="hero-goal-title" style="font-size: 1.75rem; margin-bottom: 0.35rem;">กำลังโหลด...</h1>
@@ -100,7 +109,8 @@
               <button id="btn-edit-goal" class="btn btn-secondary btn-sm" title="แก้ไขจำนวนวัน/เวลา/รายละเอียดเป้าหมาย">
                 ✏️ แก้ไขเป้าหมาย & เวลา
               </button>
-              <button id="btn-delete-goal" class="btn btn-ghost btn-sm" style="color: var(--danger);" title="ลบเป้าหมายนี้">
+              <button id="btn-delete-goal" class="btn btn-ghost btn-sm" style="color: var(--danger);"
+                title="ลบเป้าหมายนี้">
                 🗑️ ลบ
               </button>
             </div>
@@ -108,9 +118,11 @@
 
           <!-- Progress Bar -->
           <div style="margin: 1.25rem 0 0.5rem;">
-            <div class="flex justify-between items-center" style="margin-bottom: 0.4rem; font-size: 0.875rem; font-weight: 600;">
+            <div class="flex justify-between items-center"
+              style="margin-bottom: 0.4rem; font-size: 0.875rem; font-weight: 600;">
               <span>ความคืบหน้ารวม</span>
-              <span id="hero-progress-percent" style="color: var(--primary); font-size: 1.1rem; font-weight: 800;">0%</span>
+              <span id="hero-progress-percent"
+                style="color: var(--primary); font-size: 1.1rem; font-weight: 800;">0%</span>
             </div>
             <div class="progress-container">
               <div id="hero-progress-fill" class="progress-bar-fill" style="width: 0%;"></div>
@@ -190,7 +202,8 @@
                   <span style="font-size: 1.2rem;">📝</span>
                   <h3 style="font-size: 1.05rem;">บันทึก & สิ่งที่ได้เรียนรู้ของวันนี้ (Daily Reflection)</h3>
                 </div>
-                <textarea id="daily-note-input" class="form-textarea" rows="3" placeholder="จดบันทึกความรู้สึก อุปสรรค หรือข้อคิดดีๆ ที่ได้ลงมือทำในวันนี้... (บันทึกอัตโนมัติ)"></textarea>
+                <textarea id="daily-note-input" class="form-textarea" rows="3"
+                  placeholder="จดบันทึกความรู้สึก อุปสรรค หรือข้อคิดดีๆ ที่ได้ลงมือทำในวันนี้... (บันทึกอัตโนมัติ)"></textarea>
               </div>
             </div>
 
@@ -199,7 +212,8 @@
               <div class="timer-widget">
                 <div class="flex justify-between items-center" style="margin-bottom: 0.5rem;">
                   <h3 style="font-size: 1.1rem; font-weight: 700;">⏱️ Focus Timer</h3>
-                  <span class="task-tag" style="background: var(--primary-light); color: var(--primary);">Pomodoro</span>
+                  <span class="task-tag"
+                    style="background: var(--primary-light); color: var(--primary);">Pomodoro</span>
                 </div>
                 <p style="font-size: 0.8125rem; color: var(--text-muted); margin-bottom: 1rem;">
                   จับเวลาจดจ่อในการทำภารกิจ ไม่วอกแวก แล้วพักตามจังหวะ
@@ -326,16 +340,26 @@
         <!-- Goal Title -->
         <div class="form-group">
           <label class="form-label" for="goal-title">เป้าหมายที่คุณอยากทำให้สำเร็จ *</label>
-          <input type="text" id="goal-title" class="form-input" placeholder="เช่น ฝึกพูดภาษาอังกฤษเพื่อทำงาน, ลดน้ำหนัก 4 กก., เขียนเว็บแรก..." required>
-          
+          <input type="text" id="goal-title" class="form-input"
+            placeholder="เช่น ฝึกพูดภาษาอังกฤษเพื่อทำงาน, ลดน้ำหนัก 4 กก., เขียนเว็บแรก..." required>
+
           <!-- Preset Chips for quick inspiration -->
           <div style="margin-top: 0.65rem;">
-            <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 0.35rem;">ตัวอย่างยอดนิยม:</span>
+            <span
+              style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 0.35rem;">ตัวอย่างยอดนิยม:</span>
             <div class="flex gap-2" style="flex-wrap: wrap;">
-              <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('goal-title').value='ฝึกพูดภาษาอังกฤษคล่องเพื่อสื่อสารในที่ทำงาน'; document.getElementById('goal-category').value='language';">🗣️ พูดภาษาอังกฤษ</button>
-              <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('goal-title').value='ออกกำลังกายลดพุงและเพิ่มความฟิตใน 30 วัน'; document.getElementById('goal-category').value='health';">🏃 ออกกำลังกายลดพุง</button>
-              <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('goal-title').value='เรียนรู้การสร้างเว็บด้วย HTML CSS และ JavaScript'; document.getElementById('goal-category').value='coding';">💻 เรียนเขียนเว็บ</button>
-              <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('goal-title').value='อ่านหนังสือพัฒนาตนเองให้จบ 1 เล่มพร้อมสรุป'; document.getElementById('goal-category').value='reading';">📚 อ่านหนังสือจบเล่ม</button>
+              <button type="button" class="btn btn-secondary btn-sm"
+                onclick="document.getElementById('goal-title').value='ฝึกพูดภาษาอังกฤษคล่องเพื่อสื่อสารในที่ทำงาน'; document.getElementById('goal-category').value='language';">🗣️
+                พูดภาษาอังกฤษ</button>
+              <button type="button" class="btn btn-secondary btn-sm"
+                onclick="document.getElementById('goal-title').value='ออกกำลังกายลดพุงและเพิ่มความฟิตใน 30 วัน'; document.getElementById('goal-category').value='health';">🏃
+                ออกกำลังกายลดพุง</button>
+              <button type="button" class="btn btn-secondary btn-sm"
+                onclick="document.getElementById('goal-title').value='เรียนรู้การสร้างเว็บด้วย HTML CSS และ JavaScript'; document.getElementById('goal-category').value='coding';">💻
+                เรียนเขียนเว็บ</button>
+              <button type="button" class="btn btn-secondary btn-sm"
+                onclick="document.getElementById('goal-title').value='อ่านหนังสือพัฒนาตนเองให้จบ 1 เล่มพร้อมสรุป'; document.getElementById('goal-category').value='reading';">📚
+                อ่านหนังสือจบเล่ม</button>
             </div>
           </div>
         </div>
@@ -400,7 +424,8 @@
         <!-- Extra Notes / Constraints -->
         <div class="form-group">
           <label class="form-label" for="goal-notes">รายละเอียดเพิ่มเติม หรือข้อจำกัด (ไม่บังคับ)</label>
-          <textarea id="goal-notes" class="form-textarea" rows="2" placeholder="เช่น ไม่มีอุปกรณ์ยิม, เน้นฝึกฟังและพูด, ทำงานประจำมีเวลาเฉพาะช่วงค่ำ..."></textarea>
+          <textarea id="goal-notes" class="form-textarea" rows="2"
+            placeholder="เช่น ไม่มีอุปกรณ์ยิม, เน้นฝึกฟังและพูด, ทำงานประจำมีเวลาเฉพาะช่วงค่ำ..."></textarea>
         </div>
 
         <!-- Submit Button -->
@@ -482,7 +507,8 @@
       <form id="edit-goal-form">
         <!-- Goal Title -->
         <div class="form-group">
-          <label class="form-label" for="edit-goal-title">ชื่อเป้าหมาย <span style="color: var(--danger);">*</span></label>
+          <label class="form-label" for="edit-goal-title">ชื่อเป้าหมาย <span
+              style="color: var(--danger);">*</span></label>
           <input type="text" id="edit-goal-title" class="form-input" required>
         </div>
 
@@ -511,11 +537,13 @@
             <label class="form-label">เวลาเป้าหมายต่อวัน</label>
             <div class="flex items-center gap-2">
               <div style="flex: 1; display: flex; align-items: center; gap: 0.35rem;">
-                <input type="number" id="edit-goal-hours" class="form-input" min="0" max="23" placeholder="0" style="text-align: center;">
+                <input type="number" id="edit-goal-hours" class="form-input" min="0" max="23" placeholder="0"
+                  style="text-align: center;">
                 <span style="font-size: 0.875rem; color: var(--text-muted);">ชม.</span>
               </div>
               <div style="flex: 1; display: flex; align-items: center; gap: 0.35rem;">
-                <input type="number" id="edit-goal-minutes" class="form-input" min="0" max="59" step="5" placeholder="30" style="text-align: center;">
+                <input type="number" id="edit-goal-minutes" class="form-input" min="0" max="59" step="5"
+                  placeholder="30" style="text-align: center;">
                 <span style="font-size: 0.875rem; color: var(--text-muted);">นาที</span>
               </div>
             </div>
@@ -533,7 +561,8 @@
           <button type="submit" id="btn-save-goal-info" class="btn btn-primary w-full">
             💾 บันทึกการแก้ไขข้อมูล
           </button>
-          <button type="button" id="btn-replan-goal-ai" class="btn btn-secondary w-full" style="border-color: var(--primary); color: var(--primary);">
+          <button type="button" id="btn-replan-goal-ai" class="btn btn-secondary w-full"
+            style="border-color: var(--primary); color: var(--primary);">
             ✨ ให้ AI วางแผนตารางใหม่ตามจำนวนวันและเวลาที่ตั้งไว้
           </button>
         </div>
@@ -558,7 +587,8 @@
 
         <!-- Task Title -->
         <div class="form-group">
-          <label class="form-label" for="edit-task-title">ชื่อภารกิจ <span style="color: var(--danger);">*</span></label>
+          <label class="form-label" for="edit-task-title">ชื่อภารกิจ <span
+              style="color: var(--danger);">*</span></label>
           <input type="text" id="edit-task-title" class="form-input" required>
         </div>
 
@@ -574,11 +604,13 @@
             <label class="form-label">ระยะเวลาที่ใช้ทำภารกิจนี้</label>
             <div class="flex items-center gap-2">
               <div style="flex: 1; display: flex; align-items: center; gap: 0.35rem;">
-                <input type="number" id="edit-task-hours" class="form-input" min="0" max="23" placeholder="0" style="text-align: center;">
+                <input type="number" id="edit-task-hours" class="form-input" min="0" max="23" placeholder="0"
+                  style="text-align: center;">
                 <span style="font-size: 0.875rem; color: var(--text-muted);">ชม.</span>
               </div>
               <div style="flex: 1; display: flex; align-items: center; gap: 0.35rem;">
-                <input type="number" id="edit-task-minutes" class="form-input" min="1" max="59" step="5" placeholder="15" style="text-align: center;" required>
+                <input type="number" id="edit-task-minutes" class="form-input" min="1" max="59" step="5"
+                  placeholder="15" style="text-align: center;" required>
                 <span style="font-size: 0.875rem; color: var(--text-muted);">นาที</span>
               </div>
             </div>
@@ -598,7 +630,8 @@
         <!-- Pro Tip -->
         <div class="form-group">
           <label class="form-label" for="edit-task-tip">เคล็ดลับ / เทคนิค (Tip)</label>
-          <input type="text" id="edit-task-tip" class="form-input" placeholder="เช่น หายใจให้เป็นจังหวะ หรือจำจุดสำคัญ...">
+          <input type="text" id="edit-task-tip" class="form-input"
+            placeholder="เช่น หายใจให้เป็นจังหวะ หรือจำจุดสำคัญ...">
         </div>
 
         <!-- Buttons -->
@@ -606,7 +639,8 @@
           <button type="submit" class="btn btn-primary" style="flex: 2;">
             💾 บันทึกการแก้ไข
           </button>
-          <button type="button" id="btn-delete-current-task" class="btn btn-ghost" style="flex: 1; color: var(--danger);">
+          <button type="button" id="btn-delete-current-task" class="btn btn-ghost"
+            style="flex: 1; color: var(--danger);">
             🗑️ ลบภารกิจนี้
           </button>
         </div>
@@ -629,13 +663,15 @@
         <!-- Task Title -->
         <div class="form-group">
           <label class="form-label" for="add-task-title">ชื่อภารกิจ <span style="color: var(--danger);">*</span></label>
-          <input type="text" id="add-task-title" class="form-input" placeholder="เช่น ฝึกท่องศัพท์ 10 คำ หรือ วิดพื้น 3 เซ็ต" required>
+          <input type="text" id="add-task-title" class="form-input"
+            placeholder="เช่น ฝึกท่องศัพท์ 10 คำ หรือ วิดพื้น 3 เซ็ต" required>
         </div>
 
         <!-- Task Description -->
         <div class="form-group">
           <label class="form-label" for="add-task-desc">คำอธิบาย / วิธีปฏิบัติ</label>
-          <textarea id="add-task-desc" class="form-textarea" rows="2" placeholder="อธิบายขั้นตอนที่ต้องทำอย่างชัดเจน..."></textarea>
+          <textarea id="add-task-desc" class="form-textarea" rows="2"
+            placeholder="อธิบายขั้นตอนที่ต้องทำอย่างชัดเจน..."></textarea>
         </div>
 
         <div class="form-row">
@@ -644,11 +680,13 @@
             <label class="form-label">ระยะเวลาที่ใช้</label>
             <div class="flex items-center gap-2">
               <div style="flex: 1; display: flex; align-items: center; gap: 0.35rem;">
-                <input type="number" id="add-task-hours" class="form-input" min="0" max="23" placeholder="0" style="text-align: center;">
+                <input type="number" id="add-task-hours" class="form-input" min="0" max="23" placeholder="0"
+                  style="text-align: center;">
                 <span style="font-size: 0.875rem; color: var(--text-muted);">ชม.</span>
               </div>
               <div style="flex: 1; display: flex; align-items: center; gap: 0.35rem;">
-                <input type="number" id="add-task-minutes" class="form-input" min="1" max="59" step="5" value="15" style="text-align: center;" required>
+                <input type="number" id="add-task-minutes" class="form-input" min="1" max="59" step="5" value="15"
+                  style="text-align: center;" required>
                 <span style="font-size: 0.875rem; color: var(--text-muted);">นาที</span>
               </div>
             </div>
@@ -682,7 +720,7 @@
   <script src="js/app.js"></script>
   <script>
     // Show user info in navbar
-    (function() {
+    (function () {
       const user = AuthService.getCurrentUser();
       if (user) {
         const avatar = document.getElementById('nav-user-avatar');
@@ -703,4 +741,5 @@
     })();
   </script>
 </body>
+
 </html>
