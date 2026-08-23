@@ -924,9 +924,9 @@
     font-size: 0.875rem;
   }
 
-  /* Stats grid — 2 columns on mobile */
+  /* Stats grid - 1 column on mobile */
   .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
     gap: 0.75rem;
     margin-bottom: 1.25rem;
   }
