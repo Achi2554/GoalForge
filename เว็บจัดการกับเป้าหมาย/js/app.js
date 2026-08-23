@@ -1293,20 +1293,28 @@ const App = {
     const timerCircle = document.getElementById('timer-bar-circle');
     const timerToggleBtn = document.getElementById('btn-timer-toggle');
 
+    const btnEditTime = document.getElementById('btn-edit-time');
+    
+    const handleEditTime = () => {
+      if (TimerEngine.isRunning) TimerEngine.pause();
+      const currentMins = Math.round(TimerEngine.remainingSeconds / 60);
+      const input = prompt('ตั้งเวลาใหม่ (นาที):', currentMins);
+      if (input !== null) {
+        const mins = parseInt(input, 10);
+        if (!isNaN(mins) && mins > 0) {
+          TimerEngine.setCustomTime(mins);
+        }
+      }
+    };
+
     if (timerDigits) {
       timerDigits.style.cursor = 'pointer';
       timerDigits.title = 'คลิกเพื่อแก้ไขเวลา';
-      timerDigits.addEventListener('click', () => {
-        if (TimerEngine.isRunning) TimerEngine.pause();
-        const currentMins = Math.round(TimerEngine.remainingSeconds / 60);
-        const input = prompt('ตั้งเวลาใหม่ (นาที):', currentMins);
-        if (input !== null) {
-          const mins = parseInt(input, 10);
-          if (!isNaN(mins) && mins > 0) {
-            TimerEngine.setCustomTime(mins);
-          }
-        }
-      });
+      timerDigits.addEventListener('click', handleEditTime);
+    }
+    
+    if (btnEditTime) {
+      btnEditTime.addEventListener('click', handleEditTime);
     }
 
     const circumference = 2 * Math.PI * 76;
