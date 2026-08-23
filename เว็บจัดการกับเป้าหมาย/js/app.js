@@ -267,6 +267,18 @@ const Store = {
     return this.state.goals;
   },
 
+  getStats(goalId) {
+    const goal = this.state.goals.find(g => g.id === goalId);
+    if (!goal) return { streak: 0, totalXp: 0, completedTasksCount: 0, lastActiveDate: null };
+    if (!goal.stats) {
+      // Initialize with 0
+      goal.stats = { streak: 0, totalXp: 0, completedTasksCount: 0, lastActiveDate: null };
+      // Save it immediately so it persists
+      this.save();
+    }
+    return goal.stats;
+  },
+
   getActiveGoal() {
     return this.state.goals.find(g => g.id === this.state.activeGoalId) || null;
   },
@@ -373,13 +385,14 @@ const Store = {
     task.completed = !task.completed;
     task.completedAt = task.completed ? new Date().toISOString() : null;
 
+    const stats = this.getStats(goalId);
     if (task.completed) {
-      this.state.stats.totalXp += 20;
-      this.state.stats.completedTasksCount += 1;
-      this.recordActivity();
+      stats.totalXp += 20;
+      stats.completedTasksCount += 1;
+      this.recordActivity(goalId);
     } else {
-      this.state.stats.totalXp = Math.max(0, this.state.stats.totalXp - 20);
-      this.state.stats.completedTasksCount = Math.max(0, this.state.stats.completedTasksCount - 1);
+      stats.totalXp = Math.max(0, stats.totalXp - 20);
+      stats.completedTasksCount = Math.max(0, stats.completedTasksCount - 1);
     }
 
     this.save();
@@ -550,24 +563,28 @@ const Store = {
   },
 
   checkDailyStreak() {
+    if (!this.state.activeGoalId) return;
+    const stats = this.getStats(this.state.activeGoalId);
     const today = new Date().toDateString();
-    if (!this.state.stats.lastActiveDate) return;
+    if (!stats.lastActiveDate) return;
 
-    const lastDate = new Date(this.state.stats.lastActiveDate);
+    const lastDate = new Date(stats.lastActiveDate);
     const diffTime = Math.abs(new Date(today) - lastDate);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     if (diffDays > 1 && new Date(today).toDateString() !== lastDate.toDateString()) {
-      this.state.stats.streak = 0;
+      stats.streak = 0;
       this.save();
     }
   },
 
-  recordActivity() {
+  recordActivity(goalId) {
+    if (!goalId) return;
+    const stats = this.getStats(goalId);
     const today = new Date().toDateString();
-    if (this.state.stats.lastActiveDate !== today) {
-      this.state.stats.streak += 1;
-      this.state.stats.lastActiveDate = today;
+    if (stats.lastActiveDate !== today) {
+      stats.streak += 1;
+      stats.lastActiveDate = today;
       this.save();
     }
   },
@@ -1857,10 +1874,13 @@ const App = {
   },
 
   renderHeader() {
+    const activeGoal = Store.getActiveGoal();
+    const stats = activeGoal ? Store.getStats(activeGoal.id) : { streak: 0, totalXp: 0 };
+
     const streakEl = document.getElementById('nav-streak-count');
     const xpEl = document.getElementById('nav-xp-count');
-    if (streakEl) streakEl.textContent = Store.state.stats.streak;
-    if (xpEl) xpEl.textContent = `${Store.state.stats.totalXp} XP`;
+    if (streakEl) streakEl.textContent = stats.streak;
+    if (xpEl) xpEl.textContent = `${stats.totalXp} XP`;
 
     const selector = document.getElementById('goal-selector');
     if (selector) {
@@ -2272,7 +2292,7 @@ const App = {
   },
 
   renderStatsView(goal) {
-    const stats = Store.state.stats;
+    const stats = Store.getStats(goal.id);
     const progress = Store.getGoalProgress(goal);
 
     const streakVal = document.getElementById('stat-streak-val');
