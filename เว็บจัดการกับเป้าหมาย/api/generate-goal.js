@@ -7,7 +7,7 @@ const ALLOWED_MODELS = new Set([
   'gemini-pro'
 ]);
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
     return res.status(405).json({ error: { message: 'Method not allowed' } });
