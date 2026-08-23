@@ -704,7 +704,7 @@ const TimerEngine = {
 // 4. MULTI-CATEGORY AI PROGRESSIVE DECOMPOSER
 // ==========================================================================
 const AIService = {
-  async generateGoalBreakdown({ title, category, durationDays, dailyMinutes, level, notes, model = 'gemini-1.5-flash' }) {
+  async generateGoalBreakdown({ title, category, durationDays, dailyMinutes, level, notes, model = 'gemini-1.5-flash-latest' }) {
     durationDays = parseInt(durationDays, 10) || 14;
     dailyMinutes = parseInt(dailyMinutes, 10) || 25;
 
