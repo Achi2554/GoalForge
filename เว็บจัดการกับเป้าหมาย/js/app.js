@@ -636,6 +636,13 @@ const TimerEngine = {
     this.notifyTick();
   },
 
+  setCustomTime(minutes) {
+    this.pause();
+    this.durationSeconds = minutes * 60;
+    this.remainingSeconds = this.durationSeconds;
+    this.notifyTick();
+  },
+
   start() {
     if (this.isRunning) return;
     this.isRunning = true;
@@ -1285,6 +1292,22 @@ const App = {
     const timerDigits = document.getElementById('timer-digits');
     const timerCircle = document.getElementById('timer-bar-circle');
     const timerToggleBtn = document.getElementById('btn-timer-toggle');
+
+    if (timerDigits) {
+      timerDigits.style.cursor = 'pointer';
+      timerDigits.title = 'คลิกเพื่อแก้ไขเวลา';
+      timerDigits.addEventListener('click', () => {
+        if (TimerEngine.isRunning) TimerEngine.pause();
+        const currentMins = Math.round(TimerEngine.remainingSeconds / 60);
+        const input = prompt('ตั้งเวลาใหม่ (นาที):', currentMins);
+        if (input !== null) {
+          const mins = parseInt(input, 10);
+          if (!isNaN(mins) && mins > 0) {
+            TimerEngine.setCustomTime(mins);
+          }
+        }
+      });
+    }
 
     const circumference = 2 * Math.PI * 76;
     if (timerCircle) {
