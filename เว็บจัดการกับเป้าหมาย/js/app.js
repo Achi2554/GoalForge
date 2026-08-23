@@ -909,167 +909,46 @@ const AIService = {
         { phaseNumber: 4, title: `ระยะที่ 4: ทดสอบความฟิต & วัดผล (Day 13-${durationDays})`, daysRange: `Day 13 - ${durationDays}`, description: '100 Reps Challenge และประเมินผลลัพธ์แห่งชัยชนะ' }
       ];
 
-      curriculumData = [
-        {
-          focus: 'Level 1: Full-Body Foundation & ตัดน้ำหวาน 100%',
-          task1: {
-            title: '🏋️‍♂️ ออกกำลังกายพื้นฐานกระตุ้นกล้ามเนื้อมัดใหญ่ (Day 1)',
-            desc: 'วอร์มอัพ 3 นาที แล้วทำตามตารางท่าฝึก พัก 45 วินาทีระหว่างเซ็ต',
-            tip: 'ท่า Squat ให้ลงจนต้นขาขนานกับพื้น และไม่ให้หัวเข่าเลยปลายเท้า',
-            drill: {
-              type: 'workout',
-              title: 'ตารางท่าฝึก Day 1 (Level 1)',
-              exercises: [
-                { name: 'Bodyweight Squats (ลุกนั่ง)', sets: '3 เซ็ต', reps: '10-12 ครั้ง', rest: '45 วิ' },
-                { name: 'Knee Push-ups (วิดพื้นกับเข่า)', sets: '3 เซ็ต', reps: '8-10 ครั้ง', rest: '45 วิ' },
-                { name: 'Plank (เกร็งหน้าท้อง)', sets: '3 เซ็ต', reps: '20 วินาที', rest: '30 วิ' }
-              ]
-            },
-            resources: [{ title: '▶️ วิดีโอสอนท่า Squat และ Push-up ที่ถูกต้อง', url: `https://www.youtube.com/results?search_query=${encodeURIComponent('Home workout beginner no equipment')}` }]
-          },
-          task2: {
-            title: '🥗 กฎโภชนาการ Day 1: ดื่มน้ำ 2.5 ลิตร & ตัดน้ำหวาน',
-            desc: 'ดื่มน้ำเปล่า 1 แก้วใหญ่ทันทีหลังตื่นนอน และจิบน้ำตลอดทั้งวัน',
-            tip: 'การดื่มน้ำช่วยเพิ่มอัตราการเผาผลาญแคลอรี่ขณะพักได้ถึง 24-30%',
-            drill: {
-              type: 'steps',
-              title: 'Checklist สุขภาพประจำวัน (Day 1)',
-              items: [
-                '1. ดื่มน้ำ 1 แก้วใหญ่ทันทีหลังตื่นนอน',
-                '2. หลีกเลี่ยงน้ำอัดลม ชานม ชาเขียวหวาน และน้ำผลไม้แปรรูป',
-                '3. ทานข้าว/แป้งไม่เกิน 1 ทัพพีในแต่ละมื้อ'
-              ]
-            },
-            resources: [{ title: '💡 Healthline: เคล็ดลับการดื่มน้ำเพื่อลดน้ำหนัก', url: 'https://www.healthline.com/nutrition/7-health-benefits-of-water' }]
-          }
-        },
-        {
-          focus: 'Level 1+: Low-Impact Cardio & เริ่มต้นบันทึกอาหาร',
-          task1: {
-            title: '🏃‍♂️ คาร์ดิโอเบิร์นไขมันระดับเริ่มต้น (Cardio Burn)',
-            desc: 'ทำท่าบริหารต่อเนื่องเพื่อกระตุ้นอัตราการเต้นของหัวใจ (Heart Rate Zone 2)',
-            tip: 'หายใจเข้าทางจมูกและเป่าลมออกทางปากอย่างสม่ำเสมอ',
-            drill: {
-              type: 'workout',
-              title: 'ตารางคาร์ดิโอ Day 2 (Level 1+)',
-              exercises: [
-                { name: 'Jumping Jacks (กระโดดตบ)', sets: '3 เซ็ต', reps: '25 ครั้ง', rest: '30 วิ' },
-                { name: 'Glute Bridges (ยกสะโพกกระชับก้น)', sets: '3 เซ็ต', reps: '12 ครั้ง', rest: '30 วิ' },
-                { name: 'Standing High Knees (ยกเข่าสูง)', sets: '3 เซ็ต', reps: '30 วินาที', rest: '30 วิ' }
-              ]
-            },
-            resources: [{ title: '▶️ Low Impact Cardio 15 min', url: `https://www.youtube.com/results?search_query=${encodeURIComponent('Low impact cardio for fat loss at home')}` }]
-          },
-          task2: {
-            title: '📝 จดบันทึกอาหารทุกมื้อลงสมุด/โทรศัพท์ (Food Diary)',
-            desc: 'ถ่ายรูปหรือจดรายการอาหารทุกอย่างที่ทานเข้าไปในวันนี้ เพื่อเช็คสัดส่วน',
-            tip: 'คนที่จดบันทึกอาหารมีโอกาสลดน้ำหนักสำเร็จมากกว่าคนที่ไม่จดถึง 2 เท่า',
-            drill: null,
-            resources: [{ title: '🥗 หลักการคำนวณแคลอรี่เบื้องต้น (TDEE/BMR)', url: `https://www.google.com/search?q=${encodeURIComponent('วิธีคำนวณ TDEE ลดน้ำหนัก')}` }]
-          }
-        },
-        {
-          focus: 'Level 2: สร้างความแข็งแรงแกนกลางลำตัว (Core & Abs) & เสริมโปรตีน',
-          task1: {
-            title: '🧘‍♂️ ฝึกแกนกลางลำตัวสร้างหน้าท้องแบนราบ (Core Stability)',
-            desc: 'เกร็งหน้าท้องตลอดการเคลื่อนไหว ไม่แอ่นหลังส่วนล่าง',
-            tip: 'แนบแผ่นหลังให้ติดพื้นเสมอขณะทำท่า Deadbug',
-            drill: {
-              type: 'workout',
-              title: 'ตารางฝึก Core Day 3 (Level 2)',
-              exercises: [
-                { name: 'Deadbug (นอนยกแขน-ขาตรงข้าม)', sets: '3 เซ็ต', reps: '10 ครั้ง/ข้าง', rest: '30 วิ' },
-                { name: 'Bird-Dog (คุกเข่ายกแขน-ขา)', sets: '3 เซ็ต', reps: '10 ครั้ง/ข้าง', rest: '30 วิ' },
-                { name: 'Wall Sit (นั่งพิงผนังค้างไว้)', sets: '3 เซ็ต', reps: '30 วินาที', rest: '45 วิ' }
-              ]
-            },
-            resources: [{ title: '▶️ Core Workout for Beginners', url: `https://www.youtube.com/results?search_query=${encodeURIComponent('Core workout for beginners no equipment')}` }]
-          },
-          task2: {
-            title: '🍗 เพิ่มโปรตีนคุณภาพสูงในมื้อหลัก (Protein Intake)',
-            desc: 'ทานโปรตีนอย่างน้อย 1 ฝ่ามือในทุกมื้อหลัก (อกไก่, ไข่ต้ม, ปลา, เต้าหู้)',
-            tip: 'โปรตีนช่วยรักษาและสร้างกล้ามเนื้อ ทำให้ร่างกายเผาผลาญพลังงานได้สูงตลอดวัน',
-            drill: null,
-            resources: [{ title: '💪 แหล่งโปรตีนที่ดีที่สุดสำหรับลดไขมัน', url: `https://www.google.com/search?q=${encodeURIComponent('แหล่งโปรตีนที่ดีที่สุดลดน้ำหนัก')}` }]
-          }
-        },
-        {
-          focus: 'Level 2+: Lower Body Tone & เริ่มต้น Intermittent Fasting (IF 16/8)',
-          task1: {
-            title: '🦵 กระชับต้นขาและสะโพก (Lower Body Endurance)',
-            desc: 'ก้าวขาให้กว้างและตั้งฉาก 90 องศาขณะทำท่า Lunges',
-            tip: 'ดันตัวขึ้นจากส้นเท้าเพื่อโฟกัสกล้ามเนื้อก้นและต้นขาด้านหลัง',
-            drill: {
-              type: 'workout',
-              title: 'ตารางฝึกขาและก้น Day 4',
-              exercises: [
-                { name: 'Walking Lunges (ก้าวขาย่อตัว)', sets: '3 เซ็ต', reps: '10 ครั้ง/ข้าง', rest: '45 วิ' },
-                { name: 'Incline Push-ups (วิดพื้นกับโต๊ะ/เตียง)', sets: '3 เซ็ต', reps: '10-12 ครั้ง', rest: '45 วิ' },
-                { name: 'Mountain Climbers (ปีนเขาวิ่งสลับขา)', sets: '3 เซ็ต', reps: '20 ครั้ง', rest: '30 วิ' }
-              ]
-            },
-            resources: [{ title: '▶️ Lower Body Workout at Home', url: `https://www.youtube.com/results?search_query=${encodeURIComponent('Leg workout for fat loss at home')}` }]
-          },
-          task2: {
-            title: '⏰ ปรับช่วงเวลากินอาหาร: งดกินมื้อดึกหลัง 20:00 น.',
-            desc: 'ให้ระบบย่อยอาหารได้พักอย่างน้อย 12-14 ชั่วโมงข้ามคืน',
-            tip: 'หากหิวช่วงค่ำ ให้ดื่มน้ำอุ่นหรือชาคาโมมายล์ที่ไม่ใส่น้ำตาล',
-            drill: null,
-            resources: [{ title: '📚 คู่มือเริ่มต้นทำ IF 16/8 สำหรับมือใหม่', url: `https://www.google.com/search?q=${encodeURIComponent('วิธีทำ IF 16/8 สำหรับมือใหม่')}` }]
-          }
-        },
-        {
-          focus: 'Level 3: Full Body Density Circuit & กฎผักใบเขียว 50%',
-          task1: {
-            title: '🔥 เซอร์กิตเผาผลาญพลังงานแบบ Full-Body (Day 5)',
-            desc: 'ทำแต่ละท่าต่อเนื่องโดยพักสั้นๆ เพื่อเบิร์นแคลอรี่อย่างเข้มข้น',
-            tip: 'ท่า Sumo Squat ให้กางขากว้างกว่าหัวไหล่และชี้ปลายเท้าออก 45 องศา',
-            drill: {
-              type: 'workout',
-              title: 'Full Body Circuit Day 5 (Level 3)',
-              exercises: [
-                { name: 'Sumo Squats (สควอทกางขากว้าง)', sets: '3 เซ็ต', reps: '15 ครั้ง', rest: '45 วิ' },
-                { name: 'Plank Shoulder Taps (แตะไหล่สลับ)', sets: '3 เซ็ต', reps: '16 ครั้ง', rest: '30 วิ' },
-                { name: 'Step-ups (ก้าวขึ้นเก้าอี้/บันได)', sets: '3 เซ็ต', reps: '12 ครั้ง/ข้าง', rest: '45 วิ' }
-              ]
-            },
-            resources: [{ title: '▶️ Full Body Fat Burn Circuit', url: `https://www.youtube.com/results?search_query=${encodeURIComponent('Full body fat burn workout no equipment')}` }]
-          },
-          task2: {
-            title: '🥗 กฎจานอาหาร 2:1:1 (ผัก 2 ส่วน : โปรตีน 1 ส่วน : แป้ง 1 ส่วน)',
-            desc: 'เพิ่มผักใบเขียวให้ได้ครึ่งหนึ่งของจานอาหารเพื่อเพิ่มไฟเบอร์และอิ่มนาน',
-            tip: 'ไฟเบอร์ช่วยชะลอการดูดซึมน้ำตาล และช่วยให้ระบบขับถ่ายทำงานคล่อง',
-            drill: null,
-            resources: [{ title: '🥗 กฎจานอาหารสุขภาพ 2:1:1 สสส.', url: `https://www.google.com/search?q=${encodeURIComponent('สูตรอาหาร 2 1 1 ลดน้ำหนัก')}` }]
-          }
-        }
+      const workoutRoutines = [
+        { focus: 'Full-Body Foundation & ตัดน้ำหวาน 100%', title: 'ออกกำลังกายพื้นฐานกระตุ้นกล้ามเนื้อมัดใหญ่', exercises: [{ name: 'Bodyweight Squats', reps: '12 ครั้ง' }, { name: 'Knee Push-ups', reps: '10 ครั้ง' }, { name: 'Plank', reps: '20 วินาที' }], nutrition: 'ดื่มน้ำ 2.5 ลิตร & ตัดน้ำหวาน', nutDesc: 'งดเครื่องดื่มที่มีน้ำตาลทั้งหมด' },
+        { focus: 'Low-Impact Cardio & เริ่มต้นบันทึกอาหาร', title: 'คาร์ดิโอเบิร์นไขมันระดับเริ่มต้น (Cardio Burn)', exercises: [{ name: 'Jumping Jacks (หรือก้าวแตะสลับ)', reps: '30 วินาที' }, { name: 'High Knees (ยกเข่าสูง)', reps: '30 วินาที' }, { name: 'Butt Kicks', reps: '30 วินาที' }], nutrition: 'เริ่มบันทึกอาหารทุกมื้อ', nutDesc: 'จดบันทึกอาหารที่กินเพื่อให้รู้แคลอรี่คร่าวๆ' },
+        { focus: 'Upper Body Strength & โปรตีนมื้อเช้า', title: 'สร้างความแข็งแรงช่วงบน (แขน ไหล่ อก)', exercises: [{ name: 'Push-ups', reps: '10 ครั้ง' }, { name: 'Pike Push-ups', reps: '8 ครั้ง' }, { name: 'Triceps Dips (กับเก้าอี้)', reps: '10 ครั้ง' }], nutrition: 'เน้นโปรตีนในมื้อเช้า', nutDesc: 'เพิ่มไข่ต้ม หรืออกไก่ในมื้อเช้าเพื่อให้อิ่มนาน' },
+        { focus: 'Lower Body Sculpt & เลี่ยงของทอด', title: 'กระชับต้นขาและสะโพก (Lower Body Sculpt)', exercises: [{ name: 'Walking Lunges', reps: '10 ครั้ง/ข้าง' }, { name: 'Glute Bridges', reps: '15 ครั้ง' }, { name: 'Calf Raises', reps: '20 ครั้ง' }], nutrition: 'ลดของทอดของมัน', nutDesc: 'เปลี่ยนจากของทอดเป็นต้ม ย่าง หรือนึ่ง' },
+        { focus: 'Core & Abs Burner & กฎผักครึ่งจาน', title: 'สร้างซิกแพคและลดพุง (Core Burner)', exercises: [{ name: 'Crunches', reps: '20 ครั้ง' }, { name: 'Russian Twists', reps: '20 ครั้ง' }, { name: 'Leg Raises', reps: '15 ครั้ง' }], nutrition: 'กฎผัก 50% ของจาน', nutDesc: 'มื้อเที่ยงและเย็น ต้องมีผักใบเขียวครึ่งจาน' },
+        { focus: 'Active Recovery & Stretching', title: 'วันพักฟื้น ยืดเหยียดกล้ามเนื้อ (Yoga/Stretching)', exercises: [{ name: 'Cat-Cow Stretch', reps: '1 นาที' }, { name: 'Child\'s Pose', reps: '1 นาที' }, { name: 'Downward Dog', reps: '1 นาที' }], nutrition: 'นอนหลับ 7-8 ชั่วโมง', nutDesc: 'วันพักฟื้น ร่างกายต้องการการนอนหลับที่มีคุณภาพ' },
+        { focus: 'HIIT Fat Blast & วันชีทมีลแบบมีสติ', title: 'คาดิโอความเข้มข้นสูง (HIIT 15 นาที)', exercises: [{ name: 'Burpees', reps: '40 วิ (พัก 20 วิ)' }, { name: 'Mountain Climbers', reps: '40 วิ (พัก 20 วิ)' }, { name: 'Jump Squats', reps: '40 วิ (พัก 20 วิ)' }], nutrition: 'ควบคุมสติในวัน Cheat Meal', nutDesc: 'ทานของชอบได้ 1 มื้อ แต่ปริมาณพอดีไม่ยัดเยียด' },
+        { focus: 'Advanced Full-Body & โภชนาการก่อนออกกำลัง', title: 'ออกกำลังกายแบบคอมพาวด์ (Compound Movements)', exercises: [{ name: 'Squat to Press (ขวดน้ำ)', reps: '15 ครั้ง' }, { name: 'Renegade Rows', reps: '12 ครั้ง' }, { name: 'Spiderman Plank', reps: '16 ครั้ง' }], nutrition: 'อาหารก่อนออกกำลังกาย (Pre-workout)', nutDesc: 'ทานกล้วยหอม หรือกาแฟดำก่อนออกกำลังกาย 30 นาที' },
+        { focus: 'Endurance Cardio & ลดโซเดียม', title: 'ฝึกความอึดของหัวใจ (Steady State Cardio)', exercises: [{ name: 'วิ่งเหยาะๆ หรือเดินเร็ว', reps: '30 นาทีต่อเนื่อง' }, { name: 'กระโดดเชือก', reps: '5 นาที' }, { name: 'Jumping Jacks', reps: '3 นาที' }], nutrition: 'ลดโซเดียมและผงชูรส', nutDesc: 'ซดน้ำซุปให้น้อยลง ลดเครื่องปรุงรสจัด' },
+        { focus: 'Back & Biceps & ไขมันดี', title: 'ดึงและกระชับแผ่นหลัง (Back & Biceps)', exercises: [{ name: 'Superman Pose', reps: '15 ครั้ง' }, { name: 'Towel Rows (ใช้ผ้าขนหนู)', reps: '15 ครั้ง' }, { name: 'Bicep Curls (ขวดน้ำ)', reps: '15 ครั้ง' }], nutrition: 'ทานไขมันดี (Good Fats)', nutDesc: 'เพิ่มถั่วอัลมอนด์ อะโวคาโด หรือน้ำมันมะกอก' },
+        { focus: 'Dynamic Legs & มื้อเย็นเบาๆ', title: 'ฝึกขาแบบเคลื่อนไหว (Plyometric Legs)', exercises: [{ name: 'Skater Jumps', reps: '20 ครั้ง' }, { name: 'Lunge Jumps', reps: '16 ครั้ง' }, { name: 'Wall Sit', reps: '45 วินาที' }], nutrition: 'มื้อเย็นเบาๆ (Light Dinner)', nutDesc: 'ทานสลัด หรือปลา และงดแป้งขัดขาวในมื้อเย็น' },
+        { focus: 'Mobility Flow & ชาเขียว', title: 'เพิ่มความยืดหยุ่นให้ข้อต่อ (Mobility Flow)', exercises: [{ name: 'World\'s Greatest Stretch', reps: '5 ครั้ง/ข้าง' }, { name: 'Hip Rotations', reps: '10 ครั้ง' }, { name: 'Arm Circles', reps: '20 ครั้ง' }], nutrition: 'ดื่มชาเขียวไม่มีน้ำตาล', nutDesc: 'ชาเขียวมีสาร EGCG ช่วยเร่งการเผาผลาญไขมัน' },
+        { focus: 'Total Core Annihilation & IF 16/8', title: 'ระเบิดหน้าท้องขั้นสุด (Core Annihilation)', exercises: [{ name: 'V-Ups', reps: '15 ครั้ง' }, { name: 'Bicycle Crunches', reps: '30 ครั้ง' }, { name: 'Plank Jacks', reps: '20 ครั้ง' }], nutrition: 'ทดลองทำ IF 16/8', nutDesc: 'งดอาหาร 16 ชม. ทาน 8 ชม. เพื่อดึงไขมันเก่ามาใช้' },
+        { focus: 'The 100 Rep Challenge & สรุปผล', title: 'ทดสอบความฟิต (100 Reps Challenge)', exercises: [{ name: 'Squats', reps: '25 ครั้ง' }, { name: 'Push-ups', reps: '25 ครั้ง' }, { name: 'Sit-ups', reps: '50 ครั้ง' }], nutrition: 'ประเมินสัดส่วนและเป้าหมาย', nutDesc: 'ชั่งน้ำหนัก วัดสัดส่วน และถ่ายรูปเก็บความภูมิใจ' }
       ];
 
-      // Fill up to 14 or more days
-      for (let d = 6; d <= Math.max(14, durationDays); d++) {
+      curriculumData = [];
+      for (let d = 1; d <= Math.max(14, durationDays); d++) {
+        const stage = workoutRoutines[(d - 1) % workoutRoutines.length];
+        const round = Math.floor((d - 1) / workoutRoutines.length) + 1;
         curriculumData.push({
-          focus: `Level ${Math.min(6, Math.ceil(d/2))}: ออกกำลังกาย & พัฒนาความฟิต (วันที่ ${d})`,
+          focus: `Level ${Math.min(6, Math.ceil(d / 2))}: ${stage.focus} (วันที่ ${d}${round > 1 ? ` · รอบ ${round}` : ''})`,
           task1: {
-            title: `🔥 เซสชันฝึกร่างกายประจำวันที่ ${d} (${Utils.formatMinutes(Math.floor(dailyMinutes * 0.6))})`,
+            title: `🔥 ${stage.title} (${Utils.formatMinutes(Math.floor(dailyMinutes * 0.6))})`,
             desc: `ออกกำลังกายตามลำดับท่าฝึกอย่างมีวินัย พักระหว่างเซ็ต 45 วินาที`,
-            tip: 'เพิ่มจำนวนครั้งขึ้นทีละนิดเพื่อพัฒนาความแข็งแกร่ง (Progressive Overload)',
+            tip: 'พยายามทำจำนวนครั้งให้มากกว่ารอบที่แล้วเสมอ (Progressive Overload)',
             drill: {
               type: 'workout',
-              title: `ตารางท่าฝึก Day ${d}`,
-              exercises: [
-                { name: 'Push-ups / Knee Push-ups', sets: '3 เซ็ต', reps: `${8 + Math.min(10, d)} ครั้ง`, rest: '45 วิ' },
-                { name: 'Squat Variations', sets: '3 เซ็ต', reps: `${12 + Math.min(8, d)} ครั้ง`, rest: '45 วิ' },
-                { name: 'Core Plank / Russian Twist', sets: '3 เซ็ต', reps: `${20 + Math.min(25, d * 2)} วิ/ครั้ง`, rest: '30 วิ' }
-              ]
+              title: `ตารางฝึก Day ${d}`,
+              exercises: stage.exercises.map(ex => ({ name: ex.name, sets: '3 เซ็ต', reps: ex.reps, rest: '45 วิ' }))
             },
-            resources: [{ title: '▶️ Workouts for weight loss at home', url: `https://www.youtube.com/results?search_query=${encodeURIComponent('Home workout progressive weight loss')}` }]
+            resources: [{ title: '▶️ Workout tutorials at home', url: `https://www.youtube.com/results?search_query=${encodeURIComponent(stage.title)}` }]
           },
           task2: {
-            title: `🥗 ปฏิบัติการโภชนาการและการพักผ่อน (Day ${d})`,
-            desc: `ดื่มน้ำให้ครบ 2.5-3 ลิตร งดของหวาน และนอนหลับให้สนิท 7-8 ชั่วโมง`,
-            tip: 'การพักผ่อนและการดื่มน้ำที่เพียงพอคือหัวใจของการลดไขมัน',
+            title: `🥗 ภารกิจโภชนาการ: ${stage.nutrition}`,
+            desc: stage.nutDesc,
+            tip: 'สุขภาพ 80% มาจากอาหารในครัว 20% มาจากการออกกำลังกาย',
             drill: null,
-            resources: [{ title: '💡 เคล็ดลับสุขภาพและการลดน้ำหนัก', url: `https://www.google.com/search?q=${encodeURIComponent('เคล็ดลับลดไขมันอย่างยั่งยืน')}` }]
+            resources: [{ title: '💡 เคล็ดลับโภชนาการ', url: `https://www.google.com/search?q=${encodeURIComponent(stage.nutrition)}` }]
           }
         });
       }
@@ -1087,27 +966,46 @@ const AIService = {
         { phaseNumber: 4, title: `ระยะที่ 4: Capstone Showcase (Day 13-${durationDays})`, daysRange: `Day 13 - ${durationDays}`, description: 'Deploy โปรเจกต์จริง' }
       ];
 
+      const codingTopics = [
+        { focus: 'HTML Structure & Semantic Tags', topic: 'วางโครงสร้าง HTML', review: 'เช็คความถูกต้องของ Semantic HTML' },
+        { focus: 'CSS Styling & Colors', topic: 'ตกแต่งหน้าเว็บด้วย CSS', review: 'ทดสอบความสวยงามของสี' },
+        { focus: 'CSS Flexbox & Grid Layout', topic: 'จัด Layout ด้วย Flexbox/Grid', review: 'ทดสอบ Responsive บนมือถือ' },
+        { focus: 'CSS Animations & Transitions', topic: 'เพิ่มลูกเล่น Animation', review: 'เช็คความลื่นไหลของการแสดงผล' },
+        { focus: 'JavaScript Variables & Logic', topic: 'เขียนลอจิกพื้นฐาน (Variables/If-Else)', review: 'console.log เช็คตัวแปร' },
+        { focus: 'JavaScript Functions & Arrays', topic: 'สร้างฟังก์ชันจัดการข้อมูล', review: 'รันโค้ดและเทสผลลัพธ์ของฟังก์ชัน' },
+        { focus: 'DOM Manipulation', topic: 'เขียน JS เพื่อควบคุม HTML (DOM)', review: 'ทดสอบคลิกปุ่มบนหน้าเว็บ' },
+        { focus: 'Event Listeners & Forms', topic: 'รับค่าจาก Form และ Event', review: 'กรอกฟอร์มแล้วเช็คว่ามี Error ไหม' },
+        { focus: 'Local Storage & Data Persistence', topic: 'บันทึกข้อมูลลง Local Storage', review: 'ลองรีเฟรชหน้าเว็บว่าข้อมูลยังอยู่ไหม' },
+        { focus: 'API Fetching & Promises (1)', topic: 'ดึงข้อมูลจาก API', review: 'เช็ค Network Tab ใน DevTools' },
+        { focus: 'API Fetching & Promises (2)', topic: 'แสดงผลข้อมูล API บนหน้าเว็บ', review: 'เช็คว่าข้อมูลที่ดึงมาแสดงผลถูกต้องไหม' },
+        { focus: 'Error Handling & Debugging', topic: 'ดักจับ Error และ Bug (Try/Catch)', review: 'ลองทำให้ระบบพังดูว่าดัก Error ได้ไหม' },
+        { focus: 'Refactoring & Clean Code', topic: 'จัดระเบียบโค้ดให้สะอาด (Refactoring)', review: 'อ่านโค้ดตัวเองซ้ำอีกรอบว่าเข้าใจไหม' },
+        { focus: 'Deployment & Hosting', topic: 'เตรียมโปรเจกต์สำหรับ Deploy (เช่น Vercel, Netlify)', review: 'อัปโหลดขึ้น GitHub และเช็คลิ้งค์จริง' }
+      ];
+
       curriculumData = [];
       for (let d = 1; d <= Math.max(14, durationDays); d++) {
+        const stage = codingTopics[(d - 1) % codingTopics.length];
+        const round = Math.floor((d - 1) / codingTopics.length) + 1;
         curriculumData.push({
-          focus: `Level ${Math.min(6, Math.ceil(d/2))}: การพัฒนาและเขียนโค้ดประจำวันที่ ${d}`,
+          focus: `Level ${Math.min(6, Math.ceil(d/2))}: ${stage.focus} (วันที่ ${d}${round > 1 ? ` · รอบ ${round}` : ''})`,
           task1: {
-            title: `💻 ฝึกพิมพ์โค้ดและสร้างฟังก์ชัน (Session ${d})`,
-            desc: `เปิด VS Code หรือ Editor แล้วลงมือเขียนโค้ดตามหัวข้อประจำวัน`,
-            tip: 'ฝึกแก้ Error ด้วยการอ่านข้อความใน Console อย่างใจเย็น',
+            title: `💻 ภารกิจเขียนโค้ด: ${stage.topic}`,
+            desc: `เปิด VS Code หรือ Editor แล้วลงมือเขียนโค้ดตามหัวข้อนี้อย่างน้อย ${Utils.formatMinutes(Math.floor(dailyMinutes * 0.6))}`,
+            tip: 'ฝึกแก้ Error ด้วยการอ่านข้อความใน Console อย่างใจเย็น หรือโยนถาม AI',
             drill: {
               type: 'code',
               title: `Code Snippet Day ${d}`,
-              code: `// Code Practice Day ${d}\nconst taskName = "Day ${d} Coding Challenge";\nconsole.log(\`Running: \${taskName}\`);\n\nfunction executeProgress() {\n  return { day: ${d}, completed: true };\n}\n\nconsole.log(executeProgress());`
+              code: `// ${stage.topic} - Day ${d}\nconsole.log('เริ่มเขียนโค้ดสำหรับวันนี้เลย!');\n\n// TODO: ลงมือทำ ${stage.topic}`
             },
-            resources: [{ title: '🌐 MDN Web Docs', url: 'https://developer.mozilla.org/' }]
+            resources: [{ title: '🌐 ค้นหาข้อมูลใน MDN Docs', url: `https://developer.mozilla.org/en-US/search?q=${encodeURIComponent(stage.focus)}` }]
           },
           task2: {
-            title: `🧪 ทดสอบและบันทึกโค้ดลงโปรเจกต์ (Day ${d})`,
+            title: `🧪 ตรวจสอบและ Review: ${stage.review}`,
             desc: `ทดลองรันโค้ดและตรวจเช็คผลลัพธ์บนเบราว์เซอร์`,
-            tip: 'บันทึกโค้ดบ่อยๆ และเก็บเป็นเวอร์ชันย่อย',
+            tip: 'การบันทึกโค้ดบ่อยๆ (Git commit) ช่วยให้เราย้อนกลับได้เมื่อทำพัง',
             drill: null,
-            resources: [{ title: '💻 JavaScript Practice', url: 'https://javascript.info/' }]
+            resources: [{ title: '💻 Stack Overflow', url: 'https://stackoverflow.com/' }]
           }
         });
       }
@@ -1125,30 +1023,50 @@ const AIService = {
         { phaseNumber: 4, title: `ระยะที่ 4: สรุปเล่ม & Action Plan (Day 13-${durationDays})`, daysRange: `Day 13 - ${durationDays}`, description: 'ประยุกต์ใช้จริง' }
       ];
 
+      const readingStrategies = [
+        { focus: 'สำรวจหนังสือ & สารบัญ', topic: 'อ่านแบบสำรวจ (Inspectional Reading)', review: 'สรุปโครงสร้างหนังสือ', qty: 'สารบัญและบทนำ' },
+        { focus: 'อ่านเพื่อจับใจความหลัก', topic: 'สแกนหา Keywords สำคัญ', review: 'เขียน Keyword 5 คำ', qty: 'บทที่ 1 หรือ 15 หน้า' },
+        { focus: 'Deep Reading (โฟกัสสูงสุด)', topic: 'อ่านแบบเจาะลึก (Deep Reading)', review: 'จดโน้ตย่อด้วยภาษาตัวเอง', qty: 'บทที่ 2 หรือ 20 หน้า' },
+        { focus: 'Feynman Technique (1)', topic: 'อธิบายสิ่งที่อ่านให้เด็กฟัง', review: 'พูดอัดเสียงตัวเอง', qty: 'สรุป 30 หน้าแรก' },
+        { focus: 'เชื่อมโยงกับชีวิตจริง', topic: 'หา 1 ไอเดียที่ประยุกต์ใช้ได้เลย', review: 'วางแผน Action Plan เล็กๆ', qty: 'บทต่อไป 20 หน้า' },
+        { focus: 'ตั้งคำถามกับผู้เขียน', topic: 'อ่านแบบวิพากษ์ (Critical Reading)', review: 'เขียนคำถามที่สงสัย 2 ข้อ', qty: 'บทต่อไป 15 หน้า' },
+        { focus: 'สร้าง Mind Map', topic: 'วาดแผนผังเชื่อมโยงเนื้อหา', review: 'ทบทวน Mind Map', qty: 'บทต่อไป 20 หน้า' },
+        { focus: 'อ่านแบบจับเวลา (Pomodoro)', topic: 'อ่านแบบ 25 นาที พัก 5 นาที', review: 'ประเมินสมาธิตัวเอง', qty: 'บทต่อไป 20 หน้า' },
+        { focus: 'อ่านข้ามน้ำ (Skimming)', topic: 'ข้ามส่วนยืดเยื้อ หาเฉพาะแก่น', review: 'สรุปแก่นของบท', qty: 'อ่านข้ามบทที่น้ำเยอะ' },
+        { focus: 'Feynman Technique (2)', topic: 'อธิบายแนวคิดที่ยากที่สุด', review: 'เขียนสรุป 1 หน้ากระดาษ', qty: 'ทบทวนส่วนที่ยาก' },
+        { focus: 'Highlight & Note', topic: 'ไฮไลต์เฉพาะประโยคเปลี่ยนชีวิต', review: 'คัดลอกประโยคเด็ดลงสมุด', qty: 'บทต่อไป 20 หน้า' },
+        { focus: 'ถกเถียงกับหนังสือ', topic: 'หาข้อโต้แย้งในสิ่งที่ผู้เขียนบอก', review: 'บันทึกมุมมองที่ต่างออกไป', qty: 'บทต่อไป 15 หน้า' },
+        { focus: 'สรุปรวมเล่ม', topic: 'รวบรวมโน้ตทั้งหมดที่จดไว้', review: 'เขียนบทสรุปภาพรวม', qty: 'ทบทวนเนื้อหาทั้งหมด' },
+        { focus: 'Action Plan', topic: 'แปลงความรู้เป็นการลงมือทำ', review: 'ตั้งเป้าหมายจากหนังสือ 1 อย่าง', qty: 'ออกแบบแผนปฏิบัติ' }
+      ];
+
       curriculumData = [];
       for (let d = 1; d <= Math.max(14, durationDays); d++) {
+        const stage = readingStrategies[(d - 1) % readingStrategies.length];
+        const round = Math.floor((d - 1) / readingStrategies.length) + 1;
         curriculumData.push({
-          focus: `Level ${Math.min(6, Math.ceil(d/2))}: อ่านเนื้อหา & สรุปบทเรียนวันที่ ${d}`,
+          focus: `Level ${Math.min(6, Math.ceil(d/2))}: ${stage.focus} (วันที่ ${d}${round > 1 ? ` · รอบ ${round}` : ''})`,
           task1: {
-            title: `📖 อ่านเนื้อหาเป้าหมาย 15-20 หน้า (วันที่ ${d})`,
+            title: `📖 ${stage.topic} (${stage.qty})`,
             desc: `อ่านอย่างมีสมาธิแบบ Deep Work ${Utils.formatMinutes(Math.floor(dailyMinutes * 0.6))} ไม่เปิดแจ้งเตือนโทรศัพท์`,
-            tip: 'ใช้ดินสอขีดเส้นใต้เฉพาะประโยคที่กระตุกความคิดของคุณจริงๆ',
+            tip: 'ถ้าหลุดโฟกัส ให้สูดหายใจลึกๆ 3 ครั้งแล้วดึงความสนใจกลับมาที่ตัวหนังสือ',
             drill: {
               type: 'steps',
-              title: `สรุปใจความสำคัญประจำวันที่ ${d}`,
+              title: `ภารกิจการอ่านประจำวันที่ ${d}`,
               items: [
-                `1. สรุปใจความสำคัญของสิ่งที่อ่านในวันนี้ 3 ข้อ`,
-                `2. บันทึกไอเดียที่สามารถนำไปปรับใช้กับชีวิตหรือการทำงานได้ทันที 1 ข้อ`
+                `1. ${stage.topic}`,
+                `2. สรุปใจความสำคัญ 2-3 ประโยค`,
+                `3. เชื่อมโยงสิ่งที่อ่านเข้ากับประสบการณ์ตัวเอง`
               ]
             },
             resources: [{ title: '🧠 Feynman Technique เทคนิคการเรียนรู้ที่จำแม่น', url: `https://www.google.com/search?q=${encodeURIComponent('Feynman technique คืออะไร')}` }]
           },
           task2: {
-            title: `✍️ บันทึกบทเรียนสำคัญลงใน Daily Reflection`,
-            desc: `เขียนอธิบายด้วยภาษาของตัวเองเสมือนกำลังเล่าให้เพื่อนฟัง`,
-            tip: 'การเขียนสรุปด้วยคำพูดตัวเองทำให้ข้อมูลถูกย้ายเข้าสู่ความจำระยะยาว',
+            title: `✍️ บันทึกบทเรียน: ${stage.review}`,
+            desc: `จดบันทึกสิ่งที่ได้เรียนรู้วันนี้ เพื่อเปลี่ยนจาก "แค่ตาดู" เป็น "ความจำระยะยาว"`,
+            tip: 'การเขียนสรุปด้วยคำพูดตัวเองทำให้ข้อมูลถูกย้ายเข้าสู่ความจำถาวร',
             drill: null,
-            resources: [{ title: '📚 Goodreads Book Insights', url: 'https://goodreads.com/' }]
+            resources: [{ title: '📚 Goodreads: หาแรงบันดาลใจจากหนังสือ', url: 'https://goodreads.com/' }]
           }
         });
       }
@@ -1166,27 +1084,31 @@ const AIService = {
         { phaseNumber: 4, title: `ระยะที่ 4: บททดสอบเสมือนจริง (Day 13-${durationDays})`, daysRange: `Day 13 - ${durationDays}`, description: 'จำลองการสัมภาษณ์งานและสปีช' }
       ];
 
-      curriculumData = [];
       const vocabs = [
-        { w: "Accomplish", ipa: "/əˈkɑːm.plɪʃ/", m: "ทำสำเร็จ, บรรลุผล", ex: "I will accomplish my goals step by step." },
-        { w: "Prioritize", ipa: "/praɪˈɔːr.ə.taɪz/", m: "จัดลำดับความสำคัญ", ex: "We must prioritize our most important task." },
-        { w: "Collaborate", ipa: "/kəˈlæb.ə.reɪt/", m: "ร่วมมือกันทำงาน", ex: "Let's collaborate on this new project." },
-        { w: "Resilience", ipa: "/rɪˈzɪl.jəns/", m: "ความยืดหยุ่นทางใจ, การฟื้นตัวจากปัญหา", ex: "Resilience helps us overcome challenges." },
-        { w: "Feasible", ipa: "/ˈfiː.zə.bəl/", m: "เป็นไปได้จริง, ปฏิบัติได้", ex: "This timeline is very feasible." },
-        { w: "Compelling", ipa: "/kəmˈpel.ɪŋ/", m: "น่าดึงดูดใจ, มีเหตุผลหนักแน่น", ex: "She made a compelling presentation." },
-        { w: "Streamline", ipa: "/ˈstriːm.laɪn/", m: "ปรับกระบวนการให้กระชับ", ex: "We streamline our workflow daily." },
-        { w: "Articulate", ipa: "/ɑːrˈtɪk.jə.leɪt/", m: "ถ่ายทอดความคิดได้ชัดเจน", ex: "He articulates his ideas clearly." },
-        { w: "Mitigate", ipa: "/ˈmɪt̬.ə.ɡeɪt/", m: "บรรเทา, ลดผลกระทบ", ex: "We mitigated the risk early." },
-        { w: "Paradigm", ipa: "/ˈper.ə.daɪm/", m: "กระบวนทัศน์, แบบจำลองความคิด", ex: "A new paradigm in learning." },
-        { w: "Spearhead", ipa: "/ˈspɪr.hed/", m: "เป็นหัวหอกนำทัพขับเคลื่อน", ex: "She spearheaded the project." }
+        { w: "Accomplish", ipa: "/əˈkɑːm.plɪʃ/", m: "ทำสำเร็จ, บรรลุผล", ex: "I will accomplish my goals step by step.", t2: "แนะนำตัวเองเป็นภาษาอังกฤษ (Self-Introduction)" },
+        { w: "Prioritize", ipa: "/praɪˈɔːr.ə.taɪz/", m: "จัดลำดับความสำคัญ", ex: "We must prioritize our most important task.", t2: "พูดคุยเรื่องงานอดิเรกและความชอบ" },
+        { w: "Collaborate", ipa: "/kəˈlæb.ə.reɪt/", m: "ร่วมมือกันทำงาน", ex: "Let's collaborate on this new project.", t2: "การสั่งอาหารที่ร้านอาหาร (Ordering Food)" },
+        { w: "Resilience", ipa: "/rɪˈzɪl.jəns/", m: "ความยืดหยุ่นทางใจ, การฟื้นตัว", ex: "Resilience helps us overcome challenges.", t2: "การถามทางและการบอกทาง (Directions)" },
+        { w: "Feasible", ipa: "/ˈfiː.zə.bəl/", m: "เป็นไปได้จริง, ปฏิบัติได้", ex: "This timeline is very feasible.", t2: "การจองโรงแรมและการเช็คอิน (Hotel Check-in)" },
+        { w: "Compelling", ipa: "/kəmˈpel.ɪŋ/", m: "น่าดึงดูดใจ, มีเหตุผลหนักแน่น", ex: "She made a compelling presentation.", t2: "เล่าเรื่องราวในอดีต (Past Tense Practice)" },
+        { w: "Streamline", ipa: "/ˈstriːm.laɪn/", m: "ปรับกระบวนการให้กระชับ", ex: "We streamline our workflow daily.", t2: "การสัมภาษณ์งานพื้นฐาน (Job Interview Basics)" },
+        { w: "Articulate", ipa: "/ɑːrˈtɪk.jə.leɪt/", m: "ถ่ายทอดความคิดได้ชัดเจน", ex: "He articulates his ideas clearly.", t2: "การอธิบายปัญหาที่ทำงาน (Describing Issues)" },
+        { w: "Mitigate", ipa: "/ˈmɪt̬.ə.ɡeɪt/", m: "บรรเทา, ลดผลกระทบ", ex: "We mitigated the risk early.", t2: "การต่อรองราคา (Bargaining & Negotiation)" },
+        { w: "Paradigm", ipa: "/ˈper.ə.daɪm/", m: "กระบวนทัศน์, แบบจำลองความคิด", ex: "A new paradigm in learning.", t2: "การแสดงความคิดเห็น (Expressing Opinions)" },
+        { w: "Spearhead", ipa: "/ˈspɪr.hed/", m: "เป็นหัวหอกนำทัพขับเคลื่อน", ex: "She spearheaded the project.", t2: "อธิบายแผนการในอนาคต (Future Tense)" },
+        { w: "Innovative", ipa: "/ˈɪn.ə.veɪ.t̬ɪv/", m: "ซึ่งสร้างสรรค์สิ่งใหม่", ex: "We need an innovative solution.", t2: "จำลองการประชุม (Meeting Simulation)" },
+        { w: "Proactive", ipa: "/proʊˈæk.tɪv/", m: "เชิงรุก, ล่วงหน้า", ex: "Be proactive, not reactive.", t2: "การนำเสนองานสั้นๆ (Mini Presentation)" },
+        { w: "Synergy", ipa: "/ˈsɪn.ɚ.dʒi/", m: "การผสานพลัง", ex: "Our team has great synergy.", t2: "รีวิวภาพยนตร์หรือหนังสือที่ชอบ" }
       ];
 
+      curriculumData = [];
       for (let d = 1; d <= Math.max(14, durationDays); d++) {
         const v = vocabs[(d - 1) % vocabs.length];
+        const round = Math.floor((d - 1) / vocabs.length) + 1;
         curriculumData.push({
-          focus: `Level ${Math.min(6, Math.ceil(d/2))}: คำศัพท์และการสื่อสารประจำวันที่ ${d}`,
+          focus: `Level ${Math.min(6, Math.ceil(d/2))}: คำศัพท์และการสื่อสาร (วันที่ ${d}${round > 1 ? ` · รอบ ${round}` : ''})`,
           task1: {
-            title: `🗣️ ฝึกคำศัพท์และการออกเสียงประจำวันที่ ${d}`,
+            title: `🗣️ ฝึกคำศัพท์และการออกเสียง: ${v.w}`,
             desc: `กดปุ่ม 🔊 เพื่อฟังเสียงอ่านภาษาอังกฤษ ฝึกออกเสียงตาม 3 รอบ`,
             tip: `ออกเสียงคำว่า "${v.w}" ให้ชัดเจนและฟังตัวอย่างประโยค`,
             drill: {
@@ -1199,11 +1121,11 @@ const AIService = {
             resources: [{ title: '📚 Cambridge Dictionary', url: 'https://dictionary.cambridge.org/' }]
           },
           task2: {
-            title: `🎙️ ฝึกพูดประโยคสื่อสารในชีวิตประจำวัน (Day ${d})`,
-            desc: `ฝึกพูดออกเสียงประโยค 2-3 นาทีอย่างมั่นใจ`,
-            tip: 'บันทึกเสียงตัวเองไว้ในโทรศัพท์เพื่อฟังสำเนียงย้อนหลัง',
+            title: `🎙️ ฝึกพูดสื่อสาร: ${v.t2}`,
+            desc: `ฝึกพูดออกเสียงประโยค 2-3 นาทีอย่างมั่นใจ หัวข้อ: ${v.t2}`,
+            tip: 'บันทึกเสียงตัวเองไว้ในโทรศัพท์เพื่อฟังสำเนียงย้อนหลัง แล้วเทียบกับเจ้าของภาษา',
             drill: null,
-            resources: [{ title: '▶️ English Speaking Practice', url: `https://www.youtube.com/results?search_query=${encodeURIComponent('Daily English speaking practice conversation')}` }]
+            resources: [{ title: '▶️ English Speaking Practice', url: `https://www.youtube.com/results?search_query=${encodeURIComponent(v.t2 + ' conversation english')}` }]
           }
         });
       }
