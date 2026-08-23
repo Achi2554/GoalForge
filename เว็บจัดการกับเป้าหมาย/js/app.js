@@ -723,6 +723,7 @@ const AIService = {
       }
     } catch (err) {
       console.warn('Gemini API call failed, falling back to smart progressive offline generator:', err);
+      alert('⚠️ ไม่สามารถเชื่อมต่อกับ AI ได้ (ระบบจะใช้ตารางสำรองแทน)\n\nข้อความข้อผิดพลาด: ' + err.message);
     }
 
     return this.generateSmartOfflineBreakdown({
