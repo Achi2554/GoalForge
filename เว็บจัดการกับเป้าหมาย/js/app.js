@@ -736,9 +736,12 @@ const AIService = {
   },
 
   async callGeminiAPI({ title, category, durationDays, dailyMinutes, level, notes, model }) {
-    // Keep one central endpoint: the current site's serverless API proxy.
-    // The Gemini key stays on the server and is never exposed to the browser.
-    const endpoint = new URL('/api/generate-goal', window.location.origin);
+    const apiKey = localStorage.getItem('gemini_api_key');
+    if (!apiKey) {
+      throw new Error('No Gemini API key configured. Falling back to offline generator.');
+    }
+
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
 
     const promptText = `
 คุณคือสุดยอด AI Goal Coach และผู้เชี่ยวชาญด้านการออกแบบหลักสูตรที่มีความก้าวหน้าอย่างเป็นระบบ (Progressive Curriculum Architect)
@@ -746,14 +749,13 @@ const AIService = {
 
 ข้อมูลเป้าหมาย:
 - เป้าหมาย: "${title}"
-- หมวดหมู่: ${category}
 - ระยะเวลาทั้งหมด: ${durationDays} วัน
 - เวลาว่างต่อวัน: ${dailyMinutes} นาที
 - ระดับพื้นฐาน: ${level}
 - ข้อมูลเพิ่มเติม: ${notes || 'ไม่มี'}
 
 กฎสำคัญที่สุด (CRITICAL INSTRUCTIONS):
-1. **ต้องตรงกับหมวดหมู่และหัวข้อเป้าหมายอย่างเคร่งครัด**: ถ้าเป้าหมายคือลดน้ำหนัก/ออกกำลังกาย ต้องเป็นตารางท่าฝึกและโภชนาการจริง, ถ้าเป็นโปรแกรมมิ่งต้องเป็นโค้ดจริง, ถ้าเป็นภาษาต้องเป็นคำศัพท์/บทสนทนาจริง
+1. **ต้องตอบโจทย์เป้าหมายอย่างเคร่งครัด**: วิเคราะห์จาก "เป้าหมาย" ที่ผู้ใช้พิมพ์มาเท่านั้น ไม่ต้องสนใจหมวดหมู่
 2. **ห้ามซ้ำกันเด็ดขาด (100% Unique Every Day)**: ทุกๆ วัน (Day 1 ถึง Day ${durationDays}) ต้องมีเนื้อหาและโจทย์ที่ไม่ซ้ำกัน
 3. **ความยากต้องไต่ระดับขึ้นเรื่อยๆ (Progressive Difficulty Escalation)**:
    - Day 1-4: ระดับ "easy" เน้นพื้นฐานเบื้องต้น
@@ -788,10 +790,10 @@ const AIService = {
           "difficulty": "easy",
           "tip": "คำแนะนำ",
           "drill": {
-            "type": "workout",
+            "type": "steps",
             "title": "หัวข้อเนื้อหาฝึกฝนเฉพาะวันนี้",
-            "exercises": [
-              { "name": "Bodyweight Squats", "sets": "3 เซ็ต", "reps": "12 ครั้ง", "rest": "45 วิ" }
+            "items": [
+              "ขั้นตอนที่ 1", "ขั้นตอนที่ 2"
             ]
           },
           "resources": [
@@ -821,7 +823,7 @@ const AIService = {
 
     if (!response.ok) {
       const errData = await response.json().catch(() => ({}));
-      throw new Error(errData.error?.message || `API error: ${response.status}`);
+      throw new Error(errData.error?.message || \`API error: \${response.status}\`);
     }
 
     const data = await response.json();
@@ -1558,7 +1560,6 @@ const App = {
 
   populateEditGoalForm(goal) {
     document.getElementById('edit-goal-title').value = goal.title || '';
-    document.getElementById('edit-goal-category').value = goal.category || 'other';
     document.getElementById('edit-goal-duration').value = goal.durationDays || goal.dailyTasks?.length || 14;
 
     const totalMins = goal.dailyMinutes || 30;
@@ -1574,7 +1575,7 @@ const App = {
     if (!active) return;
 
     const title = document.getElementById('edit-goal-title').value.trim();
-    const category = document.getElementById('edit-goal-category').value;
+    const category = 'general';
     const durationDays = parseInt(document.getElementById('edit-goal-duration').value, 10) || 14;
     const hours = parseInt(document.getElementById('edit-goal-hours').value, 10) || 0;
     const mins = parseInt(document.getElementById('edit-goal-minutes').value, 10) || 0;
@@ -1719,7 +1720,7 @@ const App = {
 
   async handleCreateGoal() {
     const title = document.getElementById('goal-title').value.trim();
-    const category = document.getElementById('goal-category').value;
+    const category = 'general';
     const durationDays = parseInt(document.getElementById('goal-duration').value, 10) || 14;
     const dailyMinutes = parseInt(document.getElementById('goal-minutes').value, 10) || 25;
     const level = document.querySelector('input[name="goal-level"]:checked')?.value || 'เริ่มต้น';

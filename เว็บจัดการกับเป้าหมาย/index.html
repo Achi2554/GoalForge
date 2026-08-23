@@ -349,36 +349,23 @@
               style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 0.35rem;">ตัวอย่างยอดนิยม:</span>
             <div class="flex gap-2" style="flex-wrap: wrap;">
               <button type="button" class="btn btn-secondary btn-sm"
-                onclick="document.getElementById('goal-title').value='ฝึกพูดภาษาอังกฤษคล่องเพื่อสื่อสารในที่ทำงาน'; document.getElementById('goal-category').value='language';">🗣️
+                onclick="document.getElementById('goal-title').value='ฝึกพูดภาษาอังกฤษคล่องเพื่อสื่อสารในที่ทำงาน';">🗣️
                 พูดภาษาอังกฤษ</button>
               <button type="button" class="btn btn-secondary btn-sm"
-                onclick="document.getElementById('goal-title').value='ออกกำลังกายลดพุงและเพิ่มความฟิตใน 30 วัน'; document.getElementById('goal-category').value='health';">🏃
+                onclick="document.getElementById('goal-title').value='ออกกำลังกายลดพุงและเพิ่มความฟิตใน 30 วัน';">🏃
                 ออกกำลังกายลดพุง</button>
               <button type="button" class="btn btn-secondary btn-sm"
-                onclick="document.getElementById('goal-title').value='เรียนรู้การสร้างเว็บด้วย HTML CSS และ JavaScript'; document.getElementById('goal-category').value='coding';">💻
+                onclick="document.getElementById('goal-title').value='เรียนรู้การสร้างเว็บด้วย HTML CSS และ JavaScript';">💻
                 เรียนเขียนเว็บ</button>
               <button type="button" class="btn btn-secondary btn-sm"
-                onclick="document.getElementById('goal-title').value='อ่านหนังสือพัฒนาตนเองให้จบ 1 เล่มพร้อมสรุป'; document.getElementById('goal-category').value='reading';">📚
+                onclick="document.getElementById('goal-title').value='อ่านหนังสือพัฒนาตนเองให้จบ 1 เล่มพร้อมสรุป';">📚
                 อ่านหนังสือจบเล่ม</button>
             </div>
           </div>
         </div>
 
-        <!-- Category & Duration Grid -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-          <div class="form-group">
-            <label class="form-label" for="goal-category">หมวดหมู่</label>
-            <select id="goal-category" class="form-select">
-              <option value="language">🗣️ ภาษาและการสื่อสาร</option>
-              <option value="health">🏃 สุขภาพและการออกกำลังกาย</option>
-              <option value="coding">💻 โปรแกรมมิ่ง & เทคโนโลยี</option>
-              <option value="reading">📚 การเรียน & การอ่านหนังสือ</option>
-              <option value="career">💼 การงาน & ธุรกิจ</option>
-              <option value="habit">🌱 การพัฒนาตนเอง & นิสัย</option>
-              <option value="other">🎯 อื่นๆ</option>
-            </select>
-          </div>
-
+        <!-- Duration Grid -->
+        <div style="display: grid; grid-template-columns: 1fr; gap: 1rem;">
           <div class="form-group">
             <label class="form-label" for="goal-duration">ระยะเวลาเป้าหมาย</label>
             <select id="goal-duration" class="form-select">
@@ -510,19 +497,6 @@
           <label class="form-label" for="edit-goal-title">ชื่อเป้าหมาย <span
               style="color: var(--danger);">*</span></label>
           <input type="text" id="edit-goal-title" class="form-input" required>
-        </div>
-
-        <!-- Category -->
-        <div class="form-group">
-          <label class="form-label" for="edit-goal-category">หมวดหมู่</label>
-          <select id="edit-goal-category" class="form-select">
-            <option value="language">🗣️ ภาษาและการสื่อสาร (Language)</option>
-            <option value="health">🏋️‍♂️ สุขภาพ / ออกกำลังกาย / ลดน้ำหนัก (Health & Fitness)</option>
-            <option value="coding">💻 เขียนโปรแกรม / เว็บไซต์ (Programming)</option>
-            <option value="reading">📚 อ่านหนังสือ / การเรียนรู้ (Reading & Study)</option>
-            <option value="career">💼 การงาน / ธุรกิจ (Career & Business)</option>
-            <option value="other">🎯 เป้าหมายอื่นๆ ทั่วไป (General)</option>
-          </select>
         </div>
 
         <div class="form-row">
