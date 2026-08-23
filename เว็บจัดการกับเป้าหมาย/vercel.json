@@ -1,9 +1,4 @@
 {
   "version": 2,
-  "name": "my-goalforge",
-  "functions": {
-    "api/*.js": {
-      "maxDuration": 30
-    }
-  }
+  "name": "my-goalforge"
 }

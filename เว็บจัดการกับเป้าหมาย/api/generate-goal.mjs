@@ -1,7 +1,10 @@
 const ALLOWED_MODELS = new Set([
   'gemini-1.5-flash',
+  'gemini-1.5-flash-latest',
   'gemini-1.5-pro',
-  'gemini-2.5-flash'
+  'gemini-2.5-flash',
+  'gemini-3.6-flash',
+  'gemini-pro'
 ]);
 
 export default async function handler(req, res) {
@@ -20,7 +23,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: { message: 'Invalid JSON request.' } });
   }
 
-  const model = ALLOWED_MODELS.has(payload?.model) ? payload.model : 'gemini-1.5-flash';
+  const model = ALLOWED_MODELS.has(payload?.model) ? payload.model : 'gemini-3.6-flash';
   if (!payload?.requestBody || typeof payload.requestBody !== 'object') {
     return res.status(400).json({ error: { message: 'Missing AI request data.' } });
   }
