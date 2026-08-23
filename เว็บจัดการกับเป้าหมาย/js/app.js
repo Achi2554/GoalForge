@@ -736,12 +736,9 @@ const AIService = {
   },
 
   async callGeminiAPI({ title, category, durationDays, dailyMinutes, level, notes, model }) {
-    const apiKey = localStorage.getItem('gemini_api_key');
-    if (!apiKey) {
-      throw new Error('No Gemini API key configured. Falling back to offline generator.');
-    }
-
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+    // Keep one central endpoint: the current site's serverless API proxy.
+    // The Gemini key stays on the server (Vercel) and is never exposed to the browser.
+    const endpoint = new URL('/api/generate-goal', window.location.origin);
 
     const promptText = `
 คุณคือสุดยอด AI Goal Coach และผู้เชี่ยวชาญด้านการออกแบบหลักสูตรที่มีความก้าวหน้าอย่างเป็นระบบ (Progressive Curriculum Architect)
@@ -823,7 +820,7 @@ const AIService = {
 
     if (!response.ok) {
       const errData = await response.json().catch(() => ({}));
-      throw new Error(errData.error?.message || \`API error: \${response.status}\`);
+      throw new Error(errData.error?.message || `API error: ${response.status}`);
     }
 
     const data = await response.json();
