@@ -770,6 +770,7 @@ const AIService = {
 4. **ต้องมีเนื้อหาเจาะจงที่ให้ทำทันที (drill)** ในแต่ละภารกิจ (เช่น vocab, workout, code, steps)
 5. **ต้องมีแหล่งศึกษาข้อมูลและลิงก์ความรู้ (resources)**
 6. **ต้องสร้างภารกิจย่อย (tasks) อย่างน้อย 2-3 ข้อต่อวัน ห้ามให้มาแค่วันละข้อเด็ดขาด!**
+7. **(สำคัญมาก) กระชับแต่ได้ใจความ (Action-Oriented)**: ไม่ต้องเกริ่นน้ำเยอะ หรือเขียนอธิบายยาวเกินไป ให้เขียนเน้นขั้นตอนปฏิบัติที่เจาะจง (Actionable steps) สั้นๆ แต่อัดแน่นด้วยเนื้อหา เน้นให้ผู้ใช้ทำตามได้ทันที
 
 ส่งผลลัพธ์กลับมาเป็น JSON ตามโครงสร้างนี้เท่านั้น:
 {
@@ -1769,7 +1770,23 @@ const App = {
     const submitBtn = document.getElementById('btn-submit-goal');
     const originalText = submitBtn.innerHTML;
     submitBtn.disabled = true;
-    submitBtn.innerHTML = `<span class="loading-spinner"></span> กำลังให้ AI วิเคราะห์และวางแผน...`;
+    
+    const loadingMessages = [
+      "กำลังให้ AI วิเคราะห์และวางแผน...",
+      "AI กำลังจิบกาแฟและคิดตารางให้คุณ...",
+      "กำลังจัดภารกิจให้เป๊ะที่สุด...",
+      "ประมวลผลข้อมูล... ใกล้เสร็จแล้ว...",
+      "รอแป๊บนะ กำลังประกอบร่างเป้าหมาย...",
+      "AI กำลังปั่นตารางอย่างขะมักเขม้น..."
+    ];
+    let msgIndex = 0;
+    submitBtn.innerHTML = `<span class="loading-spinner"></span> ${loadingMessages[0]}`;
+    
+    // Store interval ID on the button element itself so we can clear it in finally block
+    submitBtn.loadingInterval = setInterval(() => {
+      msgIndex = (msgIndex + 1) % loadingMessages.length;
+      submitBtn.innerHTML = `<span class="loading-spinner"></span> ${loadingMessages[msgIndex]}`;
+    }, 2500);
 
     try {
       const breakdown = await AIService.generateGoalBreakdown({
@@ -1806,6 +1823,10 @@ const App = {
       console.error(err);
       alert('เกิดข้อผิดพลาดในการสร้างแผนงาน: ' + err.message);
     } finally {
+      if (submitBtn.loadingInterval) {
+        clearInterval(submitBtn.loadingInterval);
+        submitBtn.loadingInterval = null;
+      }
       submitBtn.disabled = false;
       submitBtn.innerHTML = originalText;
     }
