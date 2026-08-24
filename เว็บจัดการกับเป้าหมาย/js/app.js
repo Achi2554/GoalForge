@@ -1326,15 +1326,31 @@ const App = {
     const handleEditTime = () => {
       if (TimerEngine.isRunning) TimerEngine.pause();
       const currentMins = Math.round(TimerEngine.remainingSeconds / 60);
-      const input = prompt('ตั้งเวลาใหม่ (นาที):', currentMins);
-      if (input !== null) {
-        const mins = parseInt(input, 10);
-        if (!isNaN(mins) && mins > 0) {
-          TimerEngine.setCustomTime(mins);
+      Swal.fire({
+        title: 'กำหนดเวลาเอง',
+        input: 'number',
+        inputLabel: 'ตั้งเวลาใหม่ (นาที):',
+        inputValue: currentMins,
+        inputAttributes: {
+          min: 1,
+          max: 180,
+          step: 1
+        },
+        showCancelButton: true,
+        confirmButtonText: 'ตั้งเวลา',
+        cancelButtonText: 'ยกเลิก',
+        confirmButtonColor: 'var(--primary)',
+        cancelButtonColor: 'var(--bg-subtle, #f1f5f9)',
+        customClass: { cancelButton: 'swal2-cancel-custom' }
+      }).then((result) => {
+        if (result.isConfirmed && result.value) {
+          const mins = parseInt(result.value, 10);
+          if (!isNaN(mins) && mins > 0) {
+            TimerEngine.setCustomTime(mins);
+          }
         }
-      }
+      });
     };
-
     if (timerDigits) {
       timerDigits.style.cursor = 'pointer';
       timerDigits.title = 'คลิกเพื่อแก้ไขเวลา';
