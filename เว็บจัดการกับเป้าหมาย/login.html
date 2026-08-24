@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>à¹€à¸‚à¹‰à¸²à¸ªà¸¹à¹ˆà¸£à¸°à¸šà¸š â€” GoalForge AI</title>
-  <meta name="description" content="à¹€à¸‚à¹‰à¸²à¸ªà¸¹à¹ˆà¸£à¸°à¸šà¸šà¸«à¸£à¸·à¸­à¸ªà¸¡à¸±à¸„à¸£à¸ªà¸¡à¸²à¸Šà¸´à¸ GoalForge AI à¹à¸žà¸¥à¸•à¸Ÿà¸­à¸£à¹Œà¸¡à¸•à¸±à¹‰à¸‡à¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢à¹à¸¥à¸°à¹à¸•à¸à¸ à¸²à¸£à¸à¸´à¸ˆà¸£à¸²à¸¢à¸§à¸±à¸™à¸”à¹‰à¸§à¸¢ AI">
+  <title>เข้าสู่ระบบ - GoalForge AI</title>
+  <meta name="description" content="เข้าสู่ระบบ - GoalForge AI">
   <link rel="stylesheet" href="css/main.css">
   <style>
     /* â”€â”€ Auth Page Layout â”€â”€ */
@@ -407,15 +407,15 @@
       <div class="auth-alert error" id="login-error">âš ï¸ <span id="login-error-text"></span></div>
 
       <button type="button" class="auth-google-btn btn-google-login">
-        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo">
-        à¹€à¸‚à¹‰à¸²à¸ªà¸¹à¹ˆà¸£à¸°à¸šà¸šà¸”à¹‰à¸§à¸¢ Google
-      </button>
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo">
+          สมัครสมาชิกด้วย Google
+        </button>
 
-      <div class="auth-divider">à¸«à¸£à¸·à¸­à¹ƒà¸Šà¹‰à¸­à¸µà¹€à¸¡à¸¥</div>
+      <div class="auth-divider">หรือใช้อีเมล</div>
 
       <form id="login-form" novalidate>
         <div class="auth-field">
-          <label class="auth-label" for="login-email">à¸­à¸µà¹€à¸¡à¸¥</label>
+          <label class="auth-label" for="login-email">อีเมล</label>
           <div class="auth-input-wrap">
             <span class="auth-input-icon">âœ‰ï¸</span>
             <input type="email" id="login-email" class="auth-input" placeholder="your@email.com" required autocomplete="email">
@@ -423,23 +423,18 @@
         </div>
 
         <div class="auth-field">
-          <label class="auth-label" for="login-password">à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™</label>
+          <label class="auth-label" for="login-password">รหัสผ่าน</label>
           <div class="auth-input-wrap">
             <span class="auth-input-icon">ðŸ”’</span>
-            <input type="password" id="login-password" class="auth-input" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required autocomplete="current-password">
+            <input type="password" id="login-password" class="auth-input" placeholder="••••••••" required autocomplete="current-password">
           </div>
         </div>
 
-        <button type="submit" class="auth-submit-btn" id="login-submit-btn">
-          ðŸ”‘ à¹€à¸‚à¹‰à¸²à¸ªà¸¹à¹ˆà¸£à¸°à¸šà¸š
-        </button>
+        <button type="submit" class="auth-submit-btn" id="login-submit-btn">🚀 เข้าสู่ระบบ</button>
       </form>
 
-      <div class="auth-divider">à¸«à¸£à¸·à¸­</div>
-      <p style="text-align: center; font-size: 0.875rem; color: var(--text-muted);">
-        à¸¢à¸±à¸‡à¹„à¸¡à¹ˆà¸¡à¸µà¸šà¸±à¸à¸Šà¸µ?
-        <a href="#" id="goto-register" style="color: var(--primary); font-weight: 600;">à¸ªà¸¡à¸±à¸„à¸£à¸ªà¸¡à¸²à¸Šà¸´à¸à¸Ÿà¸£à¸µ â†’</a>
-      </p>
+      <div class="auth-divider">หรือใช้อีเมล</div>
+      <p style="text-align: center; font-size: 0.875rem; color: var(--text-muted);">มีบัญชีอยู่แล้ว? <a href="#" id="goto-login" style="color: var(--primary); font-weight: 500; text-decoration: none;">เข้าสู่ระบบเลย</a></p>
     </div>
 
     <!-- â”€â”€ REGISTER PANEL â”€â”€ -->
@@ -452,19 +447,19 @@
         à¸ªà¸¡à¸±à¸„à¸£à¸ªà¸¡à¸²à¸Šà¸´à¸à¸”à¹‰à¸§à¸¢ Google
       </button>
 
-      <div class="auth-divider">à¸«à¸£à¸·à¸­à¹ƒà¸Šà¹‰à¸­à¸µà¹€à¸¡à¸¥</div>
+      <div class="auth-divider">หรือใช้อีเมล</div>
 
       <form id="register-form" novalidate>
         <div class="auth-field">
-          <label class="auth-label" for="reg-name">à¸Šà¸·à¹ˆà¸­à¸‚à¸­à¸‡à¸„à¸¸à¸“</label>
+          <label class="auth-label" for="reg-name">ชื่อของคุณ</label>
           <div class="auth-input-wrap">
             <span class="auth-input-icon">ðŸ‘¤</span>
-            <input type="text" id="reg-name" class="auth-input" placeholder="à¹€à¸Šà¹ˆà¸™ à¸ªà¸¡à¸Šà¸²à¸¢ à¹ƒà¸ˆà¸”à¸µ" required autocomplete="name">
+            <input type="text" id="reg-name" class="auth-input" placeholder="เช่น สมชาย ใจดี" required autocomplete="name">
           </div>
         </div>
 
         <div class="auth-field">
-          <label class="auth-label" for="reg-email">à¸­à¸µà¹€à¸¡à¸¥</label>
+          <label class="auth-label" for="reg-email">อีเมล</label>
           <div class="auth-input-wrap">
             <span class="auth-input-icon">âœ‰ï¸</span>
             <input type="email" id="reg-email" class="auth-input" placeholder="your@email.com" required autocomplete="email">
@@ -472,27 +467,25 @@
         </div>
 
         <div class="auth-field">
-          <label class="auth-label" for="reg-password">à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™ <span style="color: var(--text-muted); font-weight: 400;">(à¸­à¸¢à¹ˆà¸²à¸‡à¸™à¹‰à¸­à¸¢ 6 à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£)</span></label>
+          <label class="auth-label" for="reg-password">รหัสผ่าน <span style="color: var(--text-muted); font-weight: 400;">(ขั้นต่ำ 6 ตัวอักษร)</span></label>
           <div class="auth-input-wrap">
             <span class="auth-input-icon">ðŸ”’</span>
-            <input type="password" id="reg-password" class="auth-input" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required autocomplete="new-password" minlength="6">
+            <input type="password" id="reg-password" class="auth-input" placeholder="••••••••" required autocomplete="new-password" minlength="6">
           </div>
         </div>
 
         <div class="auth-field">
-          <label class="auth-label" for="reg-confirm">à¸¢à¸·à¸™à¸¢à¸±à¸™à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™</label>
+          <label class="auth-label" for="reg-confirm">ยืนยันรหัสผ่าน</label>
           <div class="auth-input-wrap">
             <span class="auth-input-icon">ðŸ”’</span>
-            <input type="password" id="reg-confirm" class="auth-input" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required autocomplete="new-password">
+            <input type="password" id="reg-confirm" class="auth-input" placeholder="••••••••" required autocomplete="new-password">
           </div>
         </div>
 
-        <button type="submit" class="auth-submit-btn" id="register-submit-btn">
-          âœ¨ à¸ªà¸¡à¸±à¸„à¸£à¸ªà¸¡à¸²à¸Šà¸´à¸à¸Ÿà¸£à¸µ
-        </button>
+        <button type="submit" class="auth-submit-btn" id="register-submit-btn">✨ สร้างบัญชีใหม่</button>
       </form>
 
-      <div class="auth-divider">à¸«à¸£à¸·à¸­</div>
+      <div class="auth-divider">หรือใช้อีเมล</div>
       <p style="text-align: center; font-size: 0.875rem; color: var(--text-muted);">
         à¸¡à¸µà¸šà¸±à¸à¸Šà¸µà¸­à¸¢à¸¹à¹ˆà¹à¸¥à¹‰à¸§?
         <a href="#" id="goto-login" style="color: var(--primary); font-weight: 600;">â† à¹€à¸‚à¹‰à¸²à¸ªà¸¹à¹ˆà¸£à¸°à¸šà¸š</a>
