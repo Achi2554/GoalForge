@@ -389,7 +389,12 @@ const Store = {
     if (task.completed) {
       stats.totalXp += 20;
       stats.completedTasksCount += 1;
-      this.recordActivity(goalId);
+      
+      // ตรวจสอบว่าภารกิจของวันนี้ถูกติ๊กครบทุกอันแล้วหรือยัง
+      const allCompleted = dayData.tasks.every(t => t.completed);
+      if (allCompleted) {
+        this.recordActivity(goalId);
+      }
     } else {
       stats.totalXp = Math.max(0, stats.totalXp - 20);
       stats.completedTasksCount = Math.max(0, stats.completedTasksCount - 1);
