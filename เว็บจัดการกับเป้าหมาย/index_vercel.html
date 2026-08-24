@@ -1,0 +1,725 @@
+﻿<!DOCTYPE html>
+<html lang="th" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GoalForge - à¹à¸žà¸¥à¸•à¸Ÿà¸­à¸£à¹Œà¸¡à¸•à¸±à¹‰à¸‡à¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢à¹à¸¥à¸°à¸¢à¹ˆà¸­à¸¢à¸ à¸²à¸£à¸à¸´à¸ˆà¸£à¸²à¸¢à¸§à¸±à¸™à¸”à¹‰à¸§à¸¢ AI</title>
+  <meta name="description"
+    content="à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢à¹ƒà¸«à¸à¹ˆà¹ƒà¸«à¹‰à¸à¸¥à¸²à¸¢à¹€à¸›à¹‡à¸™à¸ à¸²à¸£à¸à¸´à¸ˆà¸¢à¹ˆà¸­à¸¢à¹ƒà¸™à¹à¸•à¹ˆà¸¥à¸°à¸§à¸±à¸™à¸”à¹‰à¸§à¸¢à¸žà¸¥à¸±à¸‡à¸‚à¸­à¸‡ AI à¸•à¸´à¸”à¸•à¸²à¸¡à¸„à¸§à¸²à¸¡à¸à¹‰à¸²à¸§à¸«à¸™à¹‰à¸²à¸­à¸¢à¹ˆà¸²à¸‡à¸•à¹ˆà¸­à¹€à¸™à¸·à¹ˆà¸­à¸‡à¹à¸¥à¸°à¸šà¸£à¸£à¸¥à¸¸à¸—à¸¸à¸à¸„à¸§à¸²à¸¡à¸ªà¸³à¹€à¸£à¹‡à¸ˆ">
+
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="css/main.css?v=3">
+  <link rel="stylesheet" href="css/components.css?v=3">
+  <link rel="stylesheet" href="css/roadmap.css?v=3">
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
+  <script src="js/firebase-init.js"></script>
+
+  <!-- Auth Guard: redirect to login if not logged in -->
+  <script src="js/auth.js"></script>
+  <script>
+    if (!AuthService.isLoggedIn()) {
+      window.location.href = 'login.html';
+    }
+  </script>
+</head>
+
+<body>
+
+  <!-- App Header / Navbar -->
+  <header class="app-header">
+    <div class="container navbar">
+      <div class="brand-logo" onclick="location.reload()">
+        <div class="logo-icon">ðŸŽ¯</div>
+        <span>GoalForge</span>
+      </div>
+
+      <div class="nav-actions">
+        <!-- Goal Selector Dropdown -->
+        <div class="goal-selector-wrapper">
+          <select id="goal-selector" class="goal-select" title="à¹€à¸¥à¸·à¸­à¸à¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢"></select>
+        </div>
+
+        <!-- Streak Badge -->
+        <div class="streak-badge" title="à¸ˆà¸³à¸™à¸§à¸™à¸§à¸±à¸™à¸—à¸µà¹ˆà¸—à¸³à¸ à¸²à¸£à¸à¸´à¸ˆà¸•à¸´à¸”à¸•à¹ˆà¸­à¸à¸±à¸™">
+          <span class="flame-icon">ðŸ”¥</span>
+          <span id="nav-streak-count">0</span> à¸§à¸±à¸™
+        </div>
+
+        <!-- XP Badge -->
+        <div class="xp-badge" title="à¸„à¸°à¹à¸™à¸™à¸›à¸£à¸°à¸ªà¸šà¸à¸²à¸£à¸“à¹Œà¸—à¸µà¹ˆà¸ªà¸°à¸ªà¸¡à¹„à¸”à¹‰">
+          <span>âš¡</span>
+          <span id="nav-xp-count">0 XP</span>
+        </div>
+
+        <!-- Create New Goal Button -->
+        <button class="btn btn-primary btn-sm" data-open-modal="new-goal-modal">
+          <span>+</span> à¸•à¸±à¹‰à¸‡à¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢à¹ƒà¸«à¸¡à¹ˆ
+        </button>
+
+        <!-- Theme Toggle -->
+        <button id="btn-toggle-theme" class="btn-icon" title="à¸ªà¸¥à¸±à¸šà¹‚à¸«à¸¡à¸”à¸¡à¸·à¸”/à¸ªà¸§à¹ˆà¸²à¸‡">ðŸŒ™</button>
+
+        <!-- Settings Button -->
+        <button class="btn-icon" data-open-modal="settings-modal" title="à¸•à¸±à¹‰à¸‡à¸„à¹ˆà¸²à¸£à¸°à¸šà¸š & API Key">âš™ï¸</button>
+
+        <!-- User Avatar + Logout -->
+        <div class="user-avatar-wrap" id="user-avatar-wrap" style="display:flex;align-items:center;gap:0.5rem;">
+          <div class="user-avatar" id="nav-user-avatar" title="">?</div>
+          <button id="btn-logout" class="btn-icon" title="à¸­à¸­à¸à¸ˆà¸²à¸à¸£à¸°à¸šà¸š" style="font-size:1rem;">ðŸšª</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="main-content">
+    <div class="container">
+
+      <!-- Empty State (When no goals exist) -->
+      <div id="app-empty-state" class="empty-state hidden">
+        <div class="empty-icon">ðŸŽ¯</div>
+        <h2 style="margin-bottom: 0.5rem;">à¸¢à¸±à¸‡à¹„à¸¡à¹ˆà¸¡à¸µà¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢à¸—à¸µà¹ˆà¸à¸³à¸¥à¸±à¸‡à¸”à¸³à¹€à¸™à¸´à¸™à¸à¸²à¸£</h2>
+        <p style="margin-bottom: 1.5rem; max-width: 480px; margin-left: auto; margin-right: auto;">
+          à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™à¸•à¸±à¹‰à¸‡à¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢à¸—à¸µà¹ˆà¸„à¸¸à¸“à¸­à¸¢à¸²à¸à¸—à¸³ à¹à¸¥à¹‰à¸§à¹ƒà¸«à¹‰ AI à¸Šà¹ˆà¸§à¸¢à¸§à¸´à¹€à¸„à¸£à¸²à¸°à¸«à¹Œà¹à¸•à¸à¸­à¸­à¸à¹€à¸›à¹‡à¸™à¸ à¸²à¸£à¸à¸´à¸ˆà¸¢à¹ˆà¸­à¸¢à¹ƒà¸™à¹à¸•à¹ˆà¸¥à¸°à¸§à¸±à¸™à¹ƒà¸«à¹‰à¸„à¸¸à¸“à¸—à¸³à¸•à¸²à¸¡à¹„à¸”à¹‰à¸—à¸±à¸™à¸—à¸µ
+        </p>
+        <button class="btn btn-primary btn-lg" data-open-modal="new-goal-modal">
+          âœ¨ à¸ªà¸£à¹‰à¸²à¸‡à¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢à¹à¸£à¸à¸‚à¸­à¸‡à¸„à¸¸à¸“à¸”à¹‰à¸§à¸¢ AI
+        </button>
+      </div>
+
+      <!-- Main Goal Dashboard Content -->
+      <div id="app-goal-content">
+
+        <!-- Active Goal Hero Card -->
+        <section class="goal-hero-card">
+          <div class="flex justify-between items-center" style="flex-wrap: wrap; gap: 1rem; margin-bottom: 0.75rem;">
+            <div>
+              <span class="task-tag"
+                style="background: var(--primary-light); color: var(--primary); font-weight: 700; margin-bottom: 0.5rem; display: inline-block;">
+                ðŸŽ¯ à¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢à¸›à¸±à¸ˆà¸ˆà¸¸à¸šà¸±à¸™
+              </span>
+              <h1 id="hero-goal-title" style="font-size: 1.75rem; margin-bottom: 0.35rem;">à¸à¸³à¸¥à¸±à¸‡à¹‚à¸«à¸¥à¸”...</h1>
+              <p id="hero-goal-summary" style="font-size: 0.9375rem; color: var(--text-muted); max-width: 750px;"></p>
+            </div>
+            <div class="flex items-center gap-2" style="flex-wrap: wrap;">
+              <button id="btn-edit-goal" class="btn btn-secondary btn-sm" title="à¹à¸à¹‰à¹„à¸‚à¸ˆà¸³à¸™à¸§à¸™à¸§à¸±à¸™/à¹€à¸§à¸¥à¸²/à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”à¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢">
+                âœï¸ à¹à¸à¹‰à¹„à¸‚à¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢ & à¹€à¸§à¸¥à¸²
+              </button>
+              <button id="btn-delete-goal" class="btn btn-ghost btn-sm" style="color: var(--danger);"
+                title="à¸¥à¸šà¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢à¸™à¸µà¹‰">
+                ðŸ—‘ï¸ à¸¥à¸š
+              </button>
+            </div>
+          </div>
+
+          <!-- Progress Bar -->
+          <div style="margin: 1.25rem 0 0.5rem;">
+            <div class="flex justify-between items-center"
+              style="margin-bottom: 0.4rem; font-size: 0.875rem; font-weight: 600;">
+              <span>à¸„à¸§à¸²à¸¡à¸„à¸·à¸šà¸«à¸™à¹‰à¸²à¸£à¸§à¸¡</span>
+              <span id="hero-progress-percent"
+                style="color: var(--primary); font-size: 1.1rem; font-weight: 800;">0%</span>
+            </div>
+            <div class="progress-container">
+              <div id="hero-progress-fill" class="progress-bar-fill" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <!-- Meta Grid -->
+          <div class="hero-meta-grid">
+            <div class="hero-meta-item">
+              <div class="label">à¸ à¸²à¸£à¸à¸´à¸ˆà¸—à¸µà¹ˆà¸ªà¸³à¹€à¸£à¹‡à¸ˆ</div>
+              <div id="hero-tasks-count" class="value">0/0</div>
+            </div>
+            <div class="hero-meta-item">
+              <div class="label">à¸§à¸±à¸™à¸—à¸µà¹ˆà¸ªà¸³à¹€à¸£à¹‡à¸ˆà¸„à¸£à¸š</div>
+              <div id="hero-days-count" class="value">0/0 à¸§à¸±à¸™</div>
+            </div>
+            <div class="hero-meta-item">
+              <div class="label">à¹€à¸§à¸¥à¸²à¸•à¹ˆà¸­à¸§à¸±à¸™</div>
+              <div id="hero-daily-time" class="value">30 à¸™à¸²à¸—à¸µ/à¸§à¸±à¸™</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- AI Coach Advice Banner -->
+        <div class="ai-coach-banner">
+          <div class="ai-coach-avatar">ðŸ¤–</div>
+          <div class="ai-coach-text">
+            <strong style="color: var(--primary);">à¸„à¸³à¹à¸™à¸°à¸™à¸³à¸ˆà¸²à¸ AI Coach:</strong>
+            <span id="hero-coach-advice">à¸à¸³à¸¥à¸±à¸‡à¸§à¸´à¹€à¸„à¸£à¸²à¸°à¸«à¹Œà¹à¸™à¸§à¸—à¸²à¸‡...</span>
+          </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="view-tabs-container">
+          <div class="view-tabs">
+            <button class="tab-btn active" data-tab="today">
+              <span>âš¡</span> à¸ à¸²à¸£à¸à¸´à¸ˆà¸§à¸±à¸™à¸™à¸µà¹‰
+            </button>
+            <button class="tab-btn" data-tab="roadmap">
+              <span>ðŸ—ºï¸</span> à¹à¸œà¸™à¸—à¸µà¹ˆ Roadmap
+            </button>
+            <button class="tab-btn" data-tab="stats">
+              <span>ðŸ“Š</span> à¸ªà¸–à¸´à¸•à¸´ & à¸„à¸§à¸²à¸¡à¸ªà¸³à¹€à¸£à¹‡à¸ˆ
+            </button>
+          </div>
+        </div>
+
+        <!-- TAB 1: TODAY'S MISSION VIEW -->
+        <div id="view-today">
+          <!-- Day Switcher Bar -->
+          <div id="day-switcher-list" class="day-switcher-bar"></div>
+
+          <div class="today-view-grid">
+            <!-- Left: Today's Tasks Checklist -->
+            <div>
+              <div class="card" style="margin-bottom: 1.5rem;">
+                <div class="section-header">
+                  <div class="section-title-wrap">
+                    <div class="section-icon">ðŸ“‹</div>
+                    <div>
+                      <h2 id="today-focus-title" style="font-size: 1.25rem;">à¸ à¸²à¸£à¸à¸´à¸ˆà¸‚à¸­à¸‡à¸§à¸±à¸™à¸™à¸µà¹‰</h2>
+                      <span id="today-day-badge" style="font-size: 0.8125rem; color: var(--text-muted);">à¸§à¸±à¸™à¸—à¸µà¹ˆ 1</span>
+                    </div>
+                  </div>
+                  <button id="btn-add-task" class="btn btn-secondary btn-sm" title="à¹€à¸žà¸´à¹ˆà¸¡à¸ à¸²à¸£à¸à¸´à¸ˆà¹ƒà¸«à¸¡à¹ˆà¹ƒà¸™à¸§à¸±à¸™à¸™à¸µà¹‰">
+                    âž• à¹€à¸žà¸´à¹ˆà¸¡à¸ à¸²à¸£à¸à¸´à¸ˆ
+                  </button>
+                </div>
+
+                <!-- Task List -->
+                <div id="today-tasks-list" class="task-list"></div>
+              </div>
+
+              <!-- Daily Reflection / Notes -->
+              <div class="reflection-box">
+                <div class="flex items-center gap-2" style="margin-bottom: 0.75rem;">
+                  <span style="font-size: 1.2rem;">ðŸ“</span>
+                  <h3 style="font-size: 1.05rem;">à¸šà¸±à¸™à¸—à¸¶à¸ & à¸ªà¸´à¹ˆà¸‡à¸—à¸µà¹ˆà¹„à¸”à¹‰à¹€à¸£à¸µà¸¢à¸™à¸£à¸¹à¹‰à¸‚à¸­à¸‡à¸§à¸±à¸™à¸™à¸µà¹‰ (Daily Reflection)</h3>
+                </div>
+                <textarea id="daily-note-input" class="form-textarea" rows="3"
+                  placeholder="à¸ˆà¸”à¸šà¸±à¸™à¸—à¸¶à¸à¸„à¸§à¸²à¸¡à¸£à¸¹à¹‰à¸ªà¸¶à¸ à¸­à¸¸à¸›à¸ªà¸£à¸£à¸„ à¸«à¸£à¸·à¸­à¸‚à¹‰à¸­à¸„à¸´à¸”à¸”à¸µà¹† à¸—à¸µà¹ˆà¹„à¸”à¹‰à¸¥à¸‡à¸¡à¸·à¸­à¸—à¸³à¹ƒà¸™à¸§à¸±à¸™à¸™à¸µà¹‰... (à¸šà¸±à¸™à¸—à¸¶à¸à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´)"></textarea>
+              </div>
+            </div>
+
+            <!-- Right: Focus Timer (Pomodoro) -->
+            <div>
+              <div class="timer-widget">
+                <div class="flex justify-between items-center" style="margin-bottom: 0.5rem;">
+                  <h3 style="font-size: 1.1rem; font-weight: 700;">â±ï¸ Focus Timer</h3>
+                  <span class="task-tag"
+                    style="background: var(--primary-light); color: var(--primary);">Pomodoro</span>
+                </div>
+                <p style="font-size: 0.8125rem; color: var(--text-muted); margin-bottom: 1rem;">
+                  à¸ˆà¸±à¸šà¹€à¸§à¸¥à¸²à¸ˆà¸”à¸ˆà¹ˆà¸­à¹ƒà¸™à¸à¸²à¸£à¸—à¸³à¸ à¸²à¸£à¸à¸´à¸ˆ à¹„à¸¡à¹ˆà¸§à¸­à¸à¹à¸§à¸ à¹à¸¥à¹‰à¸§à¸žà¸±à¸à¸•à¸²à¸¡à¸ˆà¸±à¸‡à¸«à¸§à¸°
+                </p>
+
+                <!-- Timer Ring -->
+                <div class="timer-circle-wrap">
+                  <svg class="timer-svg" viewBox="0 0 180 180">
+                    <circle class="timer-bg-circle" cx="90" cy="90" r="76"></circle>
+                    <circle id="timer-bar-circle" class="timer-bar-circle" cx="90" cy="90" r="76"></circle>
+                  </svg>
+                  <div class="timer-display">
+                    <span id="timer-digits" class="timer-digits">25:00</span>
+                    <span class="timer-mode-label">FOCUS TIME</span>
+                  </div>
+                </div>
+
+                <div style="display: flex; justify-content: center; margin-top: 1rem;">
+                  <button id="btn-edit-time" class="btn btn-sm btn-secondary" style="border-radius: 999px; font-weight: 600; display: flex; align-items: center; gap: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+                    âœï¸ à¸à¸³à¸«à¸™à¸”à¹€à¸§à¸¥à¸²à¹€à¸­à¸‡
+                  </button>
+                </div>
+
+                <!-- Timer Mode Switcher -->
+                <div class="flex justify-center gap-2" style="margin-top: 1rem;">
+                  <button class="btn btn-sm btn-primary timer-mode-btn" data-mode="focus">à¹‚à¸Ÿà¸à¸±à¸ª 25 à¸™.</button>
+                  <button class="btn btn-sm btn-secondary timer-mode-btn" data-mode="short_break">à¸žà¸±à¸à¸ªà¸±à¹‰à¸™ 5 à¸™.</button>
+                  <button class="btn btn-sm btn-secondary timer-mode-btn" data-mode="long_break">à¸žà¸±à¸à¸¢à¸²à¸§ 15 à¸™.</button>
+                </div>
+
+                <!-- Timer Controls -->
+                <div class="timer-controls">
+                  <button id="btn-timer-toggle" class="btn btn-primary" style="flex: 1;">â–¶ï¸ à¹€à¸£à¸´à¹ˆà¸¡à¹‚à¸Ÿà¸à¸±à¸ª</button>
+                  <button id="btn-timer-reset" class="btn btn-secondary btn-icon" title="à¸£à¸µà¹€à¸‹à¹‡à¸•à¹€à¸§à¸¥à¸²">ðŸ”„</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: FULL ROADMAP TIMELINE VIEW -->
+        <div id="view-roadmap" class="hidden">
+          <div class="section-header">
+            <div class="section-title-wrap">
+              <div class="section-icon">ðŸ—ºï¸</div>
+              <div>
+                <h2 style="font-size: 1.35rem;">à¹à¸œà¸™à¸—à¸µà¹ˆà¸à¸²à¸£à¹€à¸”à¸´à¸™à¸—à¸²à¸‡à¸ªà¸¹à¹ˆà¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢ (Full Roadmap)</h2>
+                <p style="font-size: 0.875rem; color: var(--text-muted);">
+                  à¸ à¸²à¸žà¸£à¸§à¸¡à¸ à¸²à¸£à¸à¸´à¸ˆà¹ƒà¸™à¹à¸•à¹ˆà¸¥à¸°à¸£à¸°à¸¢à¸° à¸„à¸¥à¸´à¸à¸—à¸µà¹ˆà¹à¸•à¹ˆà¸¥à¸°à¸§à¸±à¸™à¹€à¸žà¸·à¹ˆà¸­à¹€à¸‚à¹‰à¸²à¸ªà¸¹à¹ˆà¸«à¸™à¹‰à¸²à¸ à¸²à¸£à¸à¸´à¸ˆ
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div id="roadmap-phases-list" class="roadmap-phases-container"></div>
+        </div>
+
+        <!-- TAB 3: STATS & ACHIEVEMENTS VIEW -->
+        <div id="view-stats" class="hidden">
+          <div class="section-header">
+            <div class="section-title-wrap">
+              <div class="section-icon">ðŸ“Š</div>
+              <div>
+                <h2 style="font-size: 1.35rem;">à¸ªà¸–à¸´à¸•à¸´à¹à¸¥à¸°à¸„à¸§à¸²à¸¡à¸ªà¸³à¹€à¸£à¹‡à¸ˆà¸‚à¸­à¸‡à¸„à¸¸à¸“</h2>
+                <p style="font-size: 0.875rem; color: var(--text-muted);">
+                  à¸•à¸´à¸”à¸•à¸²à¸¡à¸„à¸§à¸²à¸¡à¸¡à¸µà¸§à¸´à¸™à¸±à¸¢à¹à¸¥à¸°à¸à¸²à¸£à¹€à¸•à¸´à¸šà¹‚à¸•à¹ƒà¸™à¸—à¸¸à¸à¹† à¸§à¸±à¸™
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stats Grid -->
+          <div class="stats-grid">
+            <div class="stat-card-widget">
+              <div class="stat-icon-wrap streak">ðŸ”¥</div>
+              <div class="stat-content">
+                <div id="stat-streak-val" class="stat-val">0 à¸§à¸±à¸™</div>
+                <div class="stat-lbl">Streak à¸—à¸³à¸•à¹ˆà¸­à¹€à¸™à¸·à¹ˆà¸­à¸‡</div>
+              </div>
+            </div>
+
+            <div class="stat-card-widget">
+              <div class="stat-icon-wrap xp">âš¡</div>
+              <div class="stat-content">
+                <div id="stat-xp-val" class="stat-val">0 XP</div>
+                <div class="stat-lbl">à¸„à¸°à¹à¸™à¸™à¸›à¸£à¸°à¸ªà¸šà¸à¸²à¸£à¸“à¹Œ</div>
+              </div>
+            </div>
+
+            <div class="stat-card-widget">
+              <div class="stat-icon-wrap tasks">âœ…</div>
+              <div class="stat-content">
+                <div id="stat-tasks-val" class="stat-val">0 à¸‡à¸²à¸™</div>
+                <div class="stat-lbl">à¸ à¸²à¸£à¸à¸´à¸ˆà¸—à¸µà¹ˆà¸—à¸³à¸ªà¸³à¹€à¸£à¹‡à¸ˆ</div>
+              </div>
+            </div>
+
+            <div class="stat-card-widget">
+              <div class="stat-icon-wrap rate">ðŸ“ˆ</div>
+              <div class="stat-content">
+                <div id="stat-rate-val" class="stat-val">0%</div>
+                <div class="stat-lbl">à¸„à¸§à¸²à¸¡à¸„à¸·à¸šà¸«à¸™à¹‰à¸²à¸£à¸§à¸¡</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Achievements Section -->
+          <div class="card">
+            <h3 style="font-size: 1.15rem; margin-bottom: 1.25rem;">ðŸ† à¹€à¸«à¸£à¸µà¸¢à¸à¸£à¸²à¸‡à¸§à¸±à¸¥à¸„à¸§à¸²à¸¡à¸ªà¸³à¹€à¸£à¹‡à¸ˆ (Achievements)</h3>
+            <div id="achievements-list" class="achievements-grid"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- MODAL 1: NEW GOAL CREATION WIZARD -->
+  <div id="new-goal-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="flex items-center gap-2">
+          <span style="font-size: 1.5rem;">âœ¨</span>
+          <h2 class="modal-title">à¸•à¸±à¹‰à¸‡à¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢à¹ƒà¸«à¸¡à¹ˆà¹ƒà¸«à¹‰ AI à¸§à¸´à¹€à¸„à¸£à¸²à¸°à¸«à¹Œ</h2>
+        </div>
+        <button class="btn-icon btn-close-modal" title="à¸›à¸´à¸”">âœ•</button>
+      </div>
+
+      <form id="new-goal-form">
+        <!-- Goal Title -->
+        <div class="form-group">
+          <label class="form-label" for="goal-title">à¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢à¸—à¸µà¹ˆà¸„à¸¸à¸“à¸­à¸¢à¸²à¸à¸—à¸³à¹ƒà¸«à¹‰à¸ªà¸³à¹€à¸£à¹‡à¸ˆ *</label>
+          <input type="text" id="goal-title" class="form-input"
+            placeholder="à¹€à¸Šà¹ˆà¸™ à¸à¸¶à¸à¸žà¸¹à¸”à¸ à¸²à¸©à¸²à¸­à¸±à¸‡à¸à¸¤à¸©à¹€à¸žà¸·à¹ˆà¸­à¸—à¸³à¸‡à¸²à¸™, à¸¥à¸”à¸™à¹‰à¸³à¸«à¸™à¸±à¸ 4 à¸à¸., à¹€à¸‚à¸µà¸¢à¸™à¹€à¸§à¹‡à¸šà¹à¸£à¸..." required>
+
+          <!-- Preset Chips for quick inspiration -->
+          <div style="margin-top: 0.65rem;">
+            <span
+              style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 0.35rem;">à¸•à¸±à¸§à¸­à¸¢à¹ˆà¸²à¸‡à¸¢à¸­à¸”à¸™à¸´à¸¢à¸¡:</span>
+            <div class="flex gap-2" style="flex-wrap: wrap;">
+              <button type="button" class="btn btn-secondary btn-sm"
+                onclick="document.getElementById('goal-title').value='à¸à¸¶à¸à¸žà¸¹à¸”à¸ à¸²à¸©à¸²à¸­à¸±à¸‡à¸à¸¤à¸©à¸„à¸¥à¹ˆà¸­à¸‡à¹€à¸žà¸·à¹ˆà¸­à¸ªà¸·à¹ˆà¸­à¸ªà¸²à¸£à¹ƒà¸™à¸—à¸µà¹ˆà¸—à¸³à¸‡à¸²à¸™';">ðŸ—£ï¸
+                à¸žà¸¹à¸”à¸ à¸²à¸©à¸²à¸­à¸±à¸‡à¸à¸¤à¸©</button>
+              <button type="button" class="btn btn-secondary btn-sm"
+                onclick="document.getElementById('goal-title').value='à¸­à¸­à¸à¸à¸³à¸¥à¸±à¸‡à¸à¸²à¸¢à¸¥à¸”à¸žà¸¸à¸‡à¹à¸¥à¸°à¹€à¸žà¸´à¹ˆà¸¡à¸„à¸§à¸²à¸¡à¸Ÿà¸´à¸•à¹ƒà¸™ 30 à¸§à¸±à¸™';">ðŸƒ
+                à¸­à¸­à¸à¸à¸³à¸¥à¸±à¸‡à¸à¸²à¸¢à¸¥à¸”à¸žà¸¸à¸‡</button>
+              <button type="button" class="btn btn-secondary btn-sm"
+                onclick="document.getElementById('goal-title').value='à¹€à¸£à¸µà¸¢à¸™à¸£à¸¹à¹‰à¸à¸²à¸£à¸ªà¸£à¹‰à¸²à¸‡à¹€à¸§à¹‡à¸šà¸”à¹‰à¸§à¸¢ HTML CSS à¹à¸¥à¸° JavaScript';">ðŸ’»
+                à¹€à¸£à¸µà¸¢à¸™à¹€à¸‚à¸µà¸¢à¸™à¹€à¸§à¹‡à¸š</button>
+              <button type="button" class="btn btn-secondary btn-sm"
+                onclick="document.getElementById('goal-title').value='à¸­à¹ˆà¸²à¸™à¸«à¸™à¸±à¸‡à¸ªà¸·à¸­à¸žà¸±à¸’à¸™à¸²à¸•à¸™à¹€à¸­à¸‡à¹ƒà¸«à¹‰à¸ˆà¸š 1 à¹€à¸¥à¹ˆà¸¡à¸žà¸£à¹‰à¸­à¸¡à¸ªà¸£à¸¸à¸›';">ðŸ“š
+                à¸­à¹ˆà¸²à¸™à¸«à¸™à¸±à¸‡à¸ªà¸·à¸­à¸ˆà¸šà¹€à¸¥à¹ˆà¸¡</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Duration Grid -->
+        <div style="display: grid; grid-template-columns: 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label" for="goal-duration">à¸£à¸°à¸¢à¸°à¹€à¸§à¸¥à¸²à¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢</label>
+            <select id="goal-duration" class="form-select">
+              <option value="7">âš¡ 7 à¸§à¸±à¸™ (Sprint à¹€à¸£à¹ˆà¸‡à¸”à¹ˆà¸§à¸™)</option>
+              <option value="14" selected>ðŸš€ 14 à¸§à¸±à¸™ (2 à¸ªà¸±à¸›à¸”à¸²à¸«à¹Œ - à¹à¸™à¸°à¸™à¸³)</option>
+              <option value="30">ðŸ“… 30 à¸§à¸±à¸™ (1 à¹€à¸”à¸·à¸­à¸™ à¸ªà¸£à¹‰à¸²à¸‡à¸™à¸´à¸ªà¸±à¸¢)</option>
+              <option value="60">ðŸ† 60 à¸§à¸±à¸™ (2 à¹€à¸”à¸·à¸­à¸™ à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹à¸›à¸¥à¸‡à¸ˆà¸£à¸´à¸‡)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Daily Time & Skill Level Grid -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label" for="goal-minutes">à¹€à¸§à¸¥à¸²à¸—à¸µà¹ˆà¸ªà¸°à¸”à¸§à¸à¸•à¹ˆà¸­à¸§à¸±à¸™</label>
+            <select id="goal-minutes" class="form-select">
+              <option value="15">â±ï¸ 15 à¸™à¸²à¸—à¸µ (à¹€à¸šà¸²à¹† à¸•à¹ˆà¸­à¹€à¸™à¸·à¹ˆà¸­à¸‡)</option>
+              <option value="25" selected>â±ï¸ 25 à¸™à¸²à¸—à¸µ (1 Pomodoro)</option>
+              <option value="45">â±ï¸ 45 à¸™à¸²à¸—à¸µ (à¸›à¸²à¸™à¸à¸¥à¸²à¸‡)</option>
+              <option value="60">â±ï¸ 60 à¸™à¸²à¸—à¸µ (1 à¸Šà¸±à¹ˆà¸§à¹‚à¸¡à¸‡à¹€à¸•à¹‡à¸¡à¸—à¸µà¹ˆ)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">à¸£à¸°à¸”à¸±à¸šà¸žà¸·à¹‰à¸™à¸à¸²à¸™à¸›à¸±à¸ˆà¸ˆà¸¸à¸šà¸±à¸™</label>
+            <div class="option-chips" style="margin-top: 0.25rem;">
+              <label>
+                <input type="radio" name="goal-level" value="à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™" class="chip-radio" checked>
+                <span class="chip-label">à¸¡à¸·à¸­à¹ƒà¸«à¸¡à¹ˆ</span>
+              </label>
+              <label>
+                <input type="radio" name="goal-level" value="à¸›à¸²à¸™à¸à¸¥à¸²à¸‡" class="chip-radio">
+                <span class="chip-label">à¸›à¸²à¸™à¸à¸¥à¸²à¸‡</span>
+              </label>
+              <label>
+                <input type="radio" name="goal-level" value="à¸¡à¸µà¸—à¸±à¸à¸©à¸°à¹à¸¥à¹‰à¸§" class="chip-radio">
+                <span class="chip-label">à¸¡à¸µà¸—à¸±à¸à¸©à¸°</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Extra Notes / Constraints -->
+        <div class="form-group">
+          <label class="form-label" for="goal-notes">à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”à¹€à¸žà¸´à¹ˆà¸¡à¹€à¸•à¸´à¸¡ à¸«à¸£à¸·à¸­à¸‚à¹‰à¸­à¸ˆà¸³à¸à¸±à¸” (à¹„à¸¡à¹ˆà¸šà¸±à¸‡à¸„à¸±à¸š)</label>
+          <textarea id="goal-notes" class="form-textarea" rows="2"
+            placeholder="à¹€à¸Šà¹ˆà¸™ à¹„à¸¡à¹ˆà¸¡à¸µà¸­à¸¸à¸›à¸à¸£à¸“à¹Œà¸¢à¸´à¸¡, à¹€à¸™à¹‰à¸™à¸à¸¶à¸à¸Ÿà¸±à¸‡à¹à¸¥à¸°à¸žà¸¹à¸”, à¸—à¸³à¸‡à¸²à¸™à¸›à¸£à¸°à¸ˆà¸³à¸¡à¸µà¹€à¸§à¸¥à¸²à¹€à¸‰à¸žà¸²à¸°à¸Šà¹ˆà¸§à¸‡à¸„à¹ˆà¸³..."></textarea>
+        </div>
+
+        <!-- Submit Button -->
+        <div style="margin-top: 1.5rem;">
+          <button type="submit" id="btn-submit-goal" class="btn btn-primary btn-lg w-full">
+            âœ¨ à¹ƒà¸«à¹‰ AI à¸§à¸´à¹€à¸„à¸£à¸²à¸°à¸«à¹Œà¹à¸¥à¸°à¸ªà¸£à¹‰à¸²à¸‡à¹à¸œà¸™à¸ à¸²à¸£à¸à¸´à¸ˆà¸£à¸²à¸¢à¸§à¸±à¸™
+          </button>
+          <p class="form-help" style="text-align: center; margin-top: 0.5rem;">
+            * à¸—à¸³à¸‡à¸²à¸™à¹„à¸”à¹‰à¸—à¸±à¸™à¸—à¸µà¸—à¸±à¹‰à¸‡à¹à¸šà¸šà¹ƒà¸Šà¹‰ Gemini API à¸«à¸£à¸·à¸­à¸£à¸°à¸šà¸š Smart AI à¹ƒà¸™à¸•à¸±à¸§
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 2: SETTINGS & GEMINI API KEY MODAL -->
+  <div id="settings-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="flex items-center gap-2">
+          <span style="font-size: 1.5rem;">âš™ï¸</span>
+          <h2 class="modal-title">à¸•à¸±à¹‰à¸‡à¸„à¹ˆà¸²à¸£à¸°à¸šà¸š & Gemini AI</h2>
+        </div>
+        <button class="btn-icon btn-close-modal" title="à¸›à¸´à¸”">âœ•</button>
+      </div>
+
+      <form id="settings-form">
+        <!-- Gemini is configured securely on the server -->
+        <div class="form-group">
+          <label class="form-label">à¸à¸²à¸£à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¸•à¹ˆà¸­ Gemini AI</label>
+          <p class="form-help">
+            âœ… à¸£à¸°à¸šà¸šà¹€à¸Šà¸·à¹ˆà¸­à¸¡à¸•à¹ˆà¸­à¸œà¹ˆà¸²à¸™ URL à¸à¸¥à¸²à¸‡à¸‚à¸­à¸‡à¹€à¸§à¹‡à¸šà¹„à¸‹à¸•à¹Œà¹‚à¸”à¸¢à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´ à¹„à¸¡à¹ˆà¸•à¹‰à¸­à¸‡à¸§à¸²à¸‡ API Key à¸«à¸£à¸·à¸­ URL à¹ƒà¸™à¸«à¸™à¹‰à¸²à¸™à¸µà¹‰<br>
+            * à¸«à¸²à¸à¸šà¸£à¸´à¸à¸²à¸£ AI à¹ƒà¸Šà¹‰à¸‡à¸²à¸™à¹„à¸¡à¹ˆà¹„à¸”à¹‰ à¸£à¸°à¸šà¸šà¸ˆà¸°à¹ƒà¸Šà¹‰ Smart Offline Generator à¹ƒà¸™à¸•à¸±à¸§à¹‚à¸”à¸¢à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´
+          </p>
+        </div>
+
+        <!-- Gemini Model Selection -->
+        <div class="form-group">
+          <label class="form-label" for="setting-model">à¹‚à¸¡à¹€à¸”à¸¥ AI (Model)</label>
+          <select id="setting-model" class="form-select">
+            <option value="gemini-1.5-flash">Gemini 1.5 Flash (à¹€à¸£à¹‡à¸§ & à¹€à¸ªà¸–à¸µà¸¢à¸£)</option>
+            <option value="gemini-2.5-flash">Gemini 2.5 Flash (à¸„à¸§à¸²à¸¡à¸‰à¸¥à¸²à¸”à¸ªà¸¹à¸‡)</option>
+            <option value="gemini-1.5-pro">Gemini 1.5 Pro (à¸§à¸´à¹€à¸„à¸£à¸²à¸°à¸«à¹Œà¸¥à¸¶à¸à¸‹à¸¶à¹‰à¸‡)</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-full" style="margin-bottom: 1.5rem;">
+          ðŸ’¾ à¸šà¸±à¸™à¸—à¸¶à¸à¸à¸²à¸£à¸•à¸±à¹‰à¸‡à¸„à¹ˆà¸²
+        </button>
+
+        <hr style="border: 0; border-top: 1px solid var(--border-subtle); margin-bottom: 1.5rem;">
+
+        <!-- Backup & Restore -->
+        <h3 style="font-size: 1rem; margin-bottom: 0.75rem;">ðŸ“¦ à¸ªà¸³à¸£à¸­à¸‡à¹à¸¥à¸°à¸à¸¹à¹‰à¸„à¸·à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥ (Backup / Restore)</h3>
+        <div class="flex gap-2">
+          <button type="button" id="btn-export-data" class="btn btn-secondary" style="flex: 1;">
+            ðŸ“¥ à¸ªà¹ˆà¸‡à¸­à¸­à¸à¹„à¸Ÿà¸¥à¹Œ JSON
+          </button>
+          <label class="btn btn-secondary" style="flex: 1; cursor: pointer;">
+            ðŸ“¤ à¸™à¸³à¹€à¸‚à¹‰à¸²à¸‚à¹‰à¸­à¸¡à¸¹à¸¥ JSON
+            <input type="file" id="import-file-input" accept=".json" style="display: none;">
+          </label>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 3: EDIT GOAL & DURATION MODAL -->
+  <div id="edit-goal-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="flex items-center gap-2">
+          <span style="font-size: 1.5rem;">âœï¸</span>
+          <h2 class="modal-title">à¹à¸à¹‰à¹„à¸‚à¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢, à¸ˆà¸³à¸™à¸§à¸™à¸§à¸±à¸™ & à¹€à¸§à¸¥à¸²</h2>
+        </div>
+        <button class="btn-icon btn-close-modal" title="à¸›à¸´à¸”">âœ•</button>
+      </div>
+
+      <form id="edit-goal-form">
+        <!-- Goal Title -->
+        <div class="form-group">
+          <label class="form-label" for="edit-goal-title">à¸Šà¸·à¹ˆà¸­à¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢ <span
+              style="color: var(--danger);">*</span></label>
+          <input type="text" id="edit-goal-title" class="form-input" required>
+        </div>
+
+        <div class="form-row">
+          <!-- Duration in Days -->
+          <div class="form-group">
+            <label class="form-label" for="edit-goal-duration">à¸ˆà¸³à¸™à¸§à¸™à¸§à¸±à¸™à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸” (à¸§à¸±à¸™)</label>
+            <input type="number" id="edit-goal-duration" class="form-input" min="1" max="365" required>
+          </div>
+
+          <!-- Daily Target Time -->
+          <div class="form-group">
+            <label class="form-label">à¹€à¸§à¸¥à¸²à¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢à¸•à¹ˆà¸­à¸§à¸±à¸™</label>
+            <div class="flex items-center gap-2">
+              <div style="flex: 1; display: flex; align-items: center; gap: 0.35rem;">
+                <input type="number" id="edit-goal-hours" class="form-input" min="0" max="23" placeholder="0"
+                  style="text-align: center;">
+                <span style="font-size: 0.875rem; color: var(--text-muted);">à¸Šà¸¡.</span>
+              </div>
+              <div style="flex: 1; display: flex; align-items: center; gap: 0.35rem;">
+                <input type="number" id="edit-goal-minutes" class="form-input" min="0" max="59" step="5"
+                  placeholder="30" style="text-align: center;">
+                <span style="font-size: 0.875rem; color: var(--text-muted);">à¸™à¸²à¸—à¸µ</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notes -->
+        <div class="form-group">
+          <label class="form-label" for="edit-goal-notes">à¸„à¸³à¸­à¸˜à¸´à¸šà¸²à¸¢à¹€à¸žà¸´à¹ˆà¸¡à¹€à¸•à¸´à¸¡</label>
+          <textarea id="edit-goal-notes" class="form-textarea" rows="2"></textarea>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="display: flex; flex-direction: column; gap: 0.65rem; margin-top: 1.25rem;">
+          <button type="submit" id="btn-save-goal-info" class="btn btn-primary w-full">
+            ðŸ’¾ à¸šà¸±à¸™à¸—à¸¶à¸à¸à¸²à¸£à¹à¸à¹‰à¹„à¸‚à¸‚à¹‰à¸­à¸¡à¸¹à¸¥
+          </button>
+          <button type="button" id="btn-replan-goal-ai" class="btn btn-secondary w-full"
+            style="border-color: var(--primary); color: var(--primary);">
+            âœ¨ à¹ƒà¸«à¹‰ AI à¸§à¸²à¸‡à¹à¸œà¸™à¸•à¸²à¸£à¸²à¸‡à¹ƒà¸«à¸¡à¹ˆà¸•à¸²à¸¡à¸ˆà¸³à¸™à¸§à¸™à¸§à¸±à¸™à¹à¸¥à¸°à¹€à¸§à¸¥à¸²à¸—à¸µà¹ˆà¸•à¸±à¹‰à¸‡à¹„à¸§à¹‰
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 4: EDIT INDIVIDUAL TASK MODAL -->
+  <div id="edit-task-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="flex items-center gap-2">
+          <span style="font-size: 1.5rem;">âœï¸</span>
+          <h2 class="modal-title">à¹à¸à¹‰à¹„à¸‚à¸ à¸²à¸£à¸à¸´à¸ˆ & à¸à¸³à¸«à¸™à¸”à¹€à¸§à¸¥à¸²</h2>
+        </div>
+        <button class="btn-icon btn-close-modal" title="à¸›à¸´à¸”">âœ•</button>
+      </div>
+
+      <form id="edit-task-form">
+        <input type="hidden" id="edit-task-id">
+        <input type="hidden" id="edit-task-day-num">
+
+        <!-- Task Title -->
+        <div class="form-group">
+          <label class="form-label" for="edit-task-title">à¸Šà¸·à¹ˆà¸­à¸ à¸²à¸£à¸à¸´à¸ˆ <span
+              style="color: var(--danger);">*</span></label>
+          <input type="text" id="edit-task-title" class="form-input" required>
+        </div>
+
+        <!-- Task Description -->
+        <div class="form-group">
+          <label class="form-label" for="edit-task-desc">à¸„à¸³à¸­à¸˜à¸´à¸šà¸²à¸¢ / à¸§à¸´à¸˜à¸µà¸›à¸à¸´à¸šà¸±à¸•à¸´</label>
+          <textarea id="edit-task-desc" class="form-textarea" rows="3"></textarea>
+        </div>
+
+        <div class="form-row">
+          <!-- Time Duration: Hours and Minutes -->
+          <div class="form-group">
+            <label class="form-label">à¸£à¸°à¸¢à¸°à¹€à¸§à¸¥à¸²à¸—à¸µà¹ˆà¹ƒà¸Šà¹‰à¸—à¸³à¸ à¸²à¸£à¸à¸´à¸ˆà¸™à¸µà¹‰</label>
+            <div class="flex items-center gap-2">
+              <div style="flex: 1; display: flex; align-items: center; gap: 0.35rem;">
+                <input type="number" id="edit-task-hours" class="form-input" min="0" max="23" placeholder="0"
+                  style="text-align: center;">
+                <span style="font-size: 0.875rem; color: var(--text-muted);">à¸Šà¸¡.</span>
+              </div>
+              <div style="flex: 1; display: flex; align-items: center; gap: 0.35rem;">
+                <input type="number" id="edit-task-minutes" class="form-input" min="1" max="59" step="5"
+                  placeholder="15" style="text-align: center;" required>
+                <span style="font-size: 0.875rem; color: var(--text-muted);">à¸™à¸²à¸—à¸µ</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Difficulty -->
+          <div class="form-group">
+            <label class="form-label" for="edit-task-difficulty">à¸£à¸°à¸”à¸±à¸šà¸„à¸§à¸²à¸¡à¸¢à¸²à¸</label>
+            <select id="edit-task-difficulty" class="form-select">
+              <option value="easy">à¸‡à¹ˆà¸²à¸¢ (Level 1: Easy)</option>
+              <option value="medium">à¸›à¸²à¸™à¸à¸¥à¸²à¸‡ (Level 2-3: Medium)</option>
+              <option value="hard">à¸—à¹‰à¸²à¸—à¸²à¸¢ (Level 4-6: Hard)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Pro Tip -->
+        <div class="form-group">
+          <label class="form-label" for="edit-task-tip">à¹€à¸„à¸¥à¹‡à¸”à¸¥à¸±à¸š / à¹€à¸—à¸„à¸™à¸´à¸„ (Tip)</label>
+          <input type="text" id="edit-task-tip" class="form-input"
+            placeholder="à¹€à¸Šà¹ˆà¸™ à¸«à¸²à¸¢à¹ƒà¸ˆà¹ƒà¸«à¹‰à¹€à¸›à¹‡à¸™à¸ˆà¸±à¸‡à¸«à¸§à¸° à¸«à¸£à¸·à¸­à¸ˆà¸³à¸ˆà¸¸à¸”à¸ªà¸³à¸„à¸±à¸...">
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex gap-2" style="margin-top: 1.25rem;">
+          <button type="submit" class="btn btn-primary" style="flex: 2;">
+            ðŸ’¾ à¸šà¸±à¸™à¸—à¸¶à¸à¸à¸²à¸£à¹à¸à¹‰à¹„à¸‚
+          </button>
+          <button type="button" id="btn-delete-current-task" class="btn btn-ghost"
+            style="flex: 1; color: var(--danger);">
+            ðŸ—‘ï¸ à¸¥à¸šà¸ à¸²à¸£à¸à¸´à¸ˆà¸™à¸µà¹‰
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 5: ADD NEW TASK MODAL -->
+  <div id="add-task-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="flex items-center gap-2">
+          <span style="font-size: 1.5rem;">âž•</span>
+          <h2 class="modal-title">à¹€à¸žà¸´à¹ˆà¸¡à¸ à¸²à¸£à¸à¸´à¸ˆà¹ƒà¸«à¸¡à¹ˆà¹ƒà¸™à¸§à¸±à¸™à¸™à¸µà¹‰</h2>
+        </div>
+        <button class="btn-icon btn-close-modal" title="à¸›à¸´à¸”">âœ•</button>
+      </div>
+
+      <form id="add-task-form">
+        <!-- Task Title -->
+        <div class="form-group">
+          <label class="form-label" for="add-task-title">à¸Šà¸·à¹ˆà¸­à¸ à¸²à¸£à¸à¸´à¸ˆ <span style="color: var(--danger);">*</span></label>
+          <input type="text" id="add-task-title" class="form-input"
+            placeholder="à¹€à¸Šà¹ˆà¸™ à¸à¸¶à¸à¸—à¹ˆà¸­à¸‡à¸¨à¸±à¸žà¸—à¹Œ 10 à¸„à¸³ à¸«à¸£à¸·à¸­ à¸§à¸´à¸”à¸žà¸·à¹‰à¸™ 3 à¹€à¸‹à¹‡à¸•" required>
+        </div>
+
+        <!-- Task Description -->
+        <div class="form-group">
+          <label class="form-label" for="add-task-desc">à¸„à¸³à¸­à¸˜à¸´à¸šà¸²à¸¢ / à¸§à¸´à¸˜à¸µà¸›à¸à¸´à¸šà¸±à¸•à¸´</label>
+          <textarea id="add-task-desc" class="form-textarea" rows="2"
+            placeholder="à¸­à¸˜à¸´à¸šà¸²à¸¢à¸‚à¸±à¹‰à¸™à¸•à¸­à¸™à¸—à¸µà¹ˆà¸•à¹‰à¸­à¸‡à¸—à¸³à¸­à¸¢à¹ˆà¸²à¸‡à¸Šà¸±à¸”à¹€à¸ˆà¸™..."></textarea>
+        </div>
+
+        <div class="form-row">
+          <!-- Time Duration -->
+          <div class="form-group">
+            <label class="form-label">à¸£à¸°à¸¢à¸°à¹€à¸§à¸¥à¸²à¸—à¸µà¹ˆà¹ƒà¸Šà¹‰</label>
+            <div class="flex items-center gap-2">
+              <div style="flex: 1; display: flex; align-items: center; gap: 0.35rem;">
+                <input type="number" id="add-task-hours" class="form-input" min="0" max="23" placeholder="0"
+                  style="text-align: center;">
+                <span style="font-size: 0.875rem; color: var(--text-muted);">à¸Šà¸¡.</span>
+              </div>
+              <div style="flex: 1; display: flex; align-items: center; gap: 0.35rem;">
+                <input type="number" id="add-task-minutes" class="form-input" min="1" max="59" step="5" value="15"
+                  style="text-align: center;" required>
+                <span style="font-size: 0.875rem; color: var(--text-muted);">à¸™à¸²à¸—à¸µ</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Difficulty -->
+          <div class="form-group">
+            <label class="form-label" for="add-task-difficulty">à¸£à¸°à¸”à¸±à¸šà¸„à¸§à¸²à¸¡à¸¢à¸²à¸</label>
+            <select id="add-task-difficulty" class="form-select">
+              <option value="easy">à¸‡à¹ˆà¸²à¸¢ (Level 1: Easy)</option>
+              <option value="medium">à¸›à¸²à¸™à¸à¸¥à¸²à¸‡ (Level 2-3: Medium)</option>
+              <option value="hard">à¸—à¹‰à¸²à¸—à¸²à¸¢ (Level 4-6: Hard)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Pro Tip -->
+        <div class="form-group">
+          <label class="form-label" for="add-task-tip">à¹€à¸„à¸¥à¹‡à¸”à¸¥à¸±à¸š (à¹„à¸¡à¹ˆà¸šà¸±à¸‡à¸„à¸±à¸š)</label>
+          <input type="text" id="add-task-tip" class="form-input" placeholder="à¸„à¸³à¹à¸™à¸°à¸™à¸³à¸—à¸µà¹ˆà¹€à¸›à¹‡à¸™à¸›à¸£à¸°à¹‚à¸¢à¸Šà¸™à¹Œ...">
+        </div>
+
+        <button type="submit" class="btn btn-primary w-full" style="margin-top: 1.25rem;">
+          âž• à¹€à¸žà¸´à¹ˆà¸¡à¸ à¸²à¸£à¸à¸´à¸ˆà¸—à¸±à¸™à¸—à¸µ
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- JavaScript Entry -->
+  <script src="js/app.js?v=20260823"></script>
+  <script>
+    // Show user info in navbar
+    (function () {
+      const user = AuthService.getCurrentUser();
+      if (user) {
+        const avatar = document.getElementById('nav-user-avatar');
+        if (avatar) {
+          avatar.textContent = user.avatar || user.name.charAt(0).toUpperCase();
+          avatar.title = user.name + ' (' + user.email + ')';
+        }
+      }
+      const logoutBtn = document.getElementById('btn-logout');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+          if (confirm('à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸­à¸­à¸à¸ˆà¸²à¸à¸£à¸°à¸šà¸šà¹ƒà¸Šà¹ˆà¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?')) {
+            AuthService.logout();
+            window.location.href = 'login.html';
+          }
+        });
+      }
+    })();
+  </script>
+</body>
+
+</html>

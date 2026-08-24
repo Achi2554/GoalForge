@@ -1,0 +1,711 @@
+﻿<!DOCTYPE html>
+<html lang="th" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>à¹€à¸‚à¹‰à¸²à¸ªà¸¹à¹ˆà¸£à¸°à¸šà¸š â€” GoalForge AI</title>
+  <meta name="description" content="à¹€à¸‚à¹‰à¸²à¸ªà¸¹à¹ˆà¸£à¸°à¸šà¸šà¸«à¸£à¸·à¸­à¸ªà¸¡à¸±à¸„à¸£à¸ªà¸¡à¸²à¸Šà¸´à¸ GoalForge AI à¹à¸žà¸¥à¸•à¸Ÿà¸­à¸£à¹Œà¸¡à¸•à¸±à¹‰à¸‡à¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢à¹à¸¥à¸°à¹à¸•à¸à¸ à¸²à¸£à¸à¸´à¸ˆà¸£à¸²à¸¢à¸§à¸±à¸™à¸”à¹‰à¸§à¸¢ AI">
+  <link rel="stylesheet" href="css/main.css">
+  <style>
+    /* â”€â”€ Auth Page Layout â”€â”€ */
+    body {
+      min-height: 100vh;
+      background: var(--bg-body);
+      padding: 2rem 1.5rem 3rem;
+      position: relative;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    /* Ambient background blobs */
+    body::before,
+    body::after {
+      content: '';
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(80px);
+      opacity: 0.35;
+    }
+
+    body::before {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, hsl(238, 82%, 59%), transparent 70%);
+      top: -120px;
+      right: -100px;
+    }
+
+    body::after {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, hsl(158, 75%, 42%), transparent 70%);
+      bottom: -100px;
+      left: -80px;
+    }
+
+    /* â”€â”€ Card â”€â”€ */
+    .auth-card {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 440px;
+      margin: 0 auto;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 28px;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 24px 48px -8px rgba(15, 23, 42, 0.18), 0 8px 16px -4px rgba(15, 23, 42, 0.08);
+    }
+
+    /* â”€â”€ Brand Logo â”€â”€ */
+    .auth-brand {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .auth-logo-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, var(--primary), #818cf8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      box-shadow: 0 8px 24px var(--primary-glow);
+      margin-bottom: 1rem;
+    }
+
+    .auth-brand-name {
+      font-family: var(--font-heading);
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+    }
+
+    .auth-brand-name span {
+      color: var(--primary);
+    }
+
+    .auth-brand-tagline {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-top: 0.3rem;
+    }
+
+    /* â”€â”€ Tab Switcher â”€â”€ */
+    .auth-tabs {
+      display: flex;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 0.3rem;
+      gap: 0.25rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .auth-tab-btn {
+      flex: 1;
+      padding: 0.6rem 1rem;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: var(--font-body);
+    }
+
+    .auth-tab-btn.active {
+      background: var(--bg-surface);
+      color: var(--primary);
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+    }
+
+    /* â”€â”€ Form Panels â”€â”€ */
+    .auth-panel {
+      display: none;
+    }
+
+    .auth-panel.active {
+      display: block;
+    }
+
+    /* â”€â”€ Input Group â”€â”€ */
+    .auth-field {
+      margin-bottom: 1.1rem;
+    }
+
+    .auth-label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 0.45rem;
+    }
+
+    .auth-input-wrap {
+      position: relative;
+    }
+
+    .auth-input-icon {
+      position: absolute;
+      left: 0.9rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1rem;
+      pointer-events: none;
+      opacity: 0.55;
+    }
+
+    .auth-input {
+      width: 100%;
+      padding: 0.75rem 1rem 0.75rem 2.6rem;
+      border-radius: 12px;
+      border: 1.5px solid var(--border-medium);
+      background: var(--bg-input);
+      color: var(--text-main);
+      font-size: 0.9375rem;
+      font-family: var(--font-body);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .auth-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+
+    /* â”€â”€ Error & Success Messages â”€â”€ */
+    .auth-alert {
+      padding: 0.7rem 1rem;
+      border-radius: 10px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: 1rem;
+      display: none;
+    }
+
+    .auth-alert.error {
+      background: var(--danger-light);
+      color: var(--danger);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .auth-alert.success {
+      background: var(--accent-light);
+      color: var(--accent);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* â”€â”€ Submit Button & Social Auth â”€â”€ */
+    .auth-submit-btn {
+      width: 100%;
+      padding: 0.85rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 14px;
+      background: var(--primary);
+      color: white;
+      cursor: pointer;
+      font-family: var(--font-body);
+      transition: all 0.2s ease;
+      box-shadow: 0 6px 20px var(--primary-glow);
+      margin-top: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .auth-submit-btn:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px var(--primary-glow);
+    }
+
+    .auth-submit-btn:active {
+      transform: scale(0.98);
+    }
+
+    .auth-submit-btn:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .auth-google-btn {
+      width: 100%;
+      padding: 0.85rem 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border: 1px solid var(--border-medium);
+      border-radius: 14px;
+      background: var(--bg-surface);
+      color: var(--text-main);
+      cursor: pointer;
+      font-family: var(--font-body);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .auth-google-btn:hover {
+      background: var(--bg-subtle);
+      border-color: var(--border-focus);
+    }
+
+    .auth-google-btn img {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* â”€â”€ Divider â”€â”€ */
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 1.25rem 0;
+      color: var(--text-subtle);
+      font-size: 0.8125rem;
+    }
+
+    .auth-divider::before,
+    .auth-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border-subtle);
+    }
+
+    /* â”€â”€ Features List â”€â”€ */
+    .auth-features {
+      margin-top: 1.75rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+
+    .auth-feature-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .auth-feature-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      background: var(--primary-light);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      flex-shrink: 0;
+    }
+
+    /* â”€â”€ Theme Toggle â”€â”€ */
+    .auth-theme-btn {
+      position: fixed;
+      top: 1.25rem;
+      right: 1.25rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-surface);
+      cursor: pointer;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      transition: all 0.2s;
+    }
+
+    .auth-theme-btn:hover {
+      background: var(--bg-subtle);
+    }
+
+    /* â”€â”€ Loading Spinner â”€â”€ */
+    .btn-spinner {
+      width: 18px;
+      height: 18px;
+      border: 2.5px solid rgba(255,255,255,0.35);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* â”€â”€ Mobile â”€â”€ */
+    @media (max-width: 480px) {
+      .auth-card {
+        padding: 1.75rem 1.25rem;
+        border-radius: 20px;
+      }
+
+      .auth-logo-icon {
+        width: 52px;
+        height: 52px;
+        font-size: 1.6rem;
+      }
+
+      .auth-brand-name {
+        font-size: 1.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Theme Toggle -->
+  <button class="auth-theme-btn" id="auth-theme-btn" title="à¸ªà¸¥à¸±à¸šà¹‚à¸«à¸¡à¸”à¸¡à¸·à¸”/à¸ªà¸§à¹ˆà¸²à¸‡">ðŸŒ™</button>
+
+  <!-- Auth Card -->
+  <div class="auth-card">
+
+    <!-- Brand Logo -->
+    <div class="auth-brand">
+      <div class="auth-logo-icon">ðŸŽ¯</div>
+      <div class="auth-brand-name">GoalForge <span>AI</span></div>
+      <div class="auth-brand-tagline">à¹à¸•à¸à¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢à¹ƒà¸«à¸à¹ˆà¹ƒà¸«à¹‰à¸à¸¥à¸²à¸¢à¹€à¸›à¹‡à¸™à¸ à¸²à¸£à¸à¸´à¸ˆà¸£à¸²à¸¢à¸§à¸±à¸™à¸”à¹‰à¸§à¸¢ AI</div>
+    </div>
+
+    <!-- Tab Switcher -->
+    <div class="auth-tabs">
+      <button class="auth-tab-btn active" data-panel="login" id="tab-login">ðŸ”‘ à¹€à¸‚à¹‰à¸²à¸ªà¸¹à¹ˆà¸£à¸°à¸šà¸š</button>
+      <button class="auth-tab-btn" data-panel="register" id="tab-register">âœ¨ à¸ªà¸¡à¸±à¸„à¸£à¸ªà¸¡à¸²à¸Šà¸´à¸</button>
+    </div>
+
+    <!-- â”€â”€ LOGIN PANEL â”€â”€ -->
+    <div class="auth-panel active" id="panel-login">
+      <div class="auth-alert error" id="login-error">âš ï¸ <span id="login-error-text"></span></div>
+
+      <button type="button" class="auth-google-btn btn-google-login">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo">
+        à¹€à¸‚à¹‰à¸²à¸ªà¸¹à¹ˆà¸£à¸°à¸šà¸šà¸”à¹‰à¸§à¸¢ Google
+      </button>
+
+      <div class="auth-divider">à¸«à¸£à¸·à¸­à¹ƒà¸Šà¹‰à¸­à¸µà¹€à¸¡à¸¥</div>
+
+      <form id="login-form" novalidate>
+        <div class="auth-field">
+          <label class="auth-label" for="login-email">à¸­à¸µà¹€à¸¡à¸¥</label>
+          <div class="auth-input-wrap">
+            <span class="auth-input-icon">âœ‰ï¸</span>
+            <input type="email" id="login-email" class="auth-input" placeholder="your@email.com" required autocomplete="email">
+          </div>
+        </div>
+
+        <div class="auth-field">
+          <label class="auth-label" for="login-password">à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™</label>
+          <div class="auth-input-wrap">
+            <span class="auth-input-icon">ðŸ”’</span>
+            <input type="password" id="login-password" class="auth-input" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required autocomplete="current-password">
+          </div>
+        </div>
+
+        <button type="submit" class="auth-submit-btn" id="login-submit-btn">
+          ðŸ”‘ à¹€à¸‚à¹‰à¸²à¸ªà¸¹à¹ˆà¸£à¸°à¸šà¸š
+        </button>
+      </form>
+
+      <div class="auth-divider">à¸«à¸£à¸·à¸­</div>
+      <p style="text-align: center; font-size: 0.875rem; color: var(--text-muted);">
+        à¸¢à¸±à¸‡à¹„à¸¡à¹ˆà¸¡à¸µà¸šà¸±à¸à¸Šà¸µ?
+        <a href="#" id="goto-register" style="color: var(--primary); font-weight: 600;">à¸ªà¸¡à¸±à¸„à¸£à¸ªà¸¡à¸²à¸Šà¸´à¸à¸Ÿà¸£à¸µ â†’</a>
+      </p>
+    </div>
+
+    <!-- â”€â”€ REGISTER PANEL â”€â”€ -->
+    <div class="auth-panel" id="panel-register">
+      <div class="auth-alert error" id="register-error">âš ï¸ <span id="register-error-text"></span></div>
+      <div class="auth-alert success" id="register-success">âœ… <span id="register-success-text"></span></div>
+
+      <button type="button" class="auth-google-btn btn-google-login">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo">
+        à¸ªà¸¡à¸±à¸„à¸£à¸ªà¸¡à¸²à¸Šà¸´à¸à¸”à¹‰à¸§à¸¢ Google
+      </button>
+
+      <div class="auth-divider">à¸«à¸£à¸·à¸­à¹ƒà¸Šà¹‰à¸­à¸µà¹€à¸¡à¸¥</div>
+
+      <form id="register-form" novalidate>
+        <div class="auth-field">
+          <label class="auth-label" for="reg-name">à¸Šà¸·à¹ˆà¸­à¸‚à¸­à¸‡à¸„à¸¸à¸“</label>
+          <div class="auth-input-wrap">
+            <span class="auth-input-icon">ðŸ‘¤</span>
+            <input type="text" id="reg-name" class="auth-input" placeholder="à¹€à¸Šà¹ˆà¸™ à¸ªà¸¡à¸Šà¸²à¸¢ à¹ƒà¸ˆà¸”à¸µ" required autocomplete="name">
+          </div>
+        </div>
+
+        <div class="auth-field">
+          <label class="auth-label" for="reg-email">à¸­à¸µà¹€à¸¡à¸¥</label>
+          <div class="auth-input-wrap">
+            <span class="auth-input-icon">âœ‰ï¸</span>
+            <input type="email" id="reg-email" class="auth-input" placeholder="your@email.com" required autocomplete="email">
+          </div>
+        </div>
+
+        <div class="auth-field">
+          <label class="auth-label" for="reg-password">à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™ <span style="color: var(--text-muted); font-weight: 400;">(à¸­à¸¢à¹ˆà¸²à¸‡à¸™à¹‰à¸­à¸¢ 6 à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£)</span></label>
+          <div class="auth-input-wrap">
+            <span class="auth-input-icon">ðŸ”’</span>
+            <input type="password" id="reg-password" class="auth-input" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required autocomplete="new-password" minlength="6">
+          </div>
+        </div>
+
+        <div class="auth-field">
+          <label class="auth-label" for="reg-confirm">à¸¢à¸·à¸™à¸¢à¸±à¸™à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™</label>
+          <div class="auth-input-wrap">
+            <span class="auth-input-icon">ðŸ”’</span>
+            <input type="password" id="reg-confirm" class="auth-input" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required autocomplete="new-password">
+          </div>
+        </div>
+
+        <button type="submit" class="auth-submit-btn" id="register-submit-btn">
+          âœ¨ à¸ªà¸¡à¸±à¸„à¸£à¸ªà¸¡à¸²à¸Šà¸´à¸à¸Ÿà¸£à¸µ
+        </button>
+      </form>
+
+      <div class="auth-divider">à¸«à¸£à¸·à¸­</div>
+      <p style="text-align: center; font-size: 0.875rem; color: var(--text-muted);">
+        à¸¡à¸µà¸šà¸±à¸à¸Šà¸µà¸­à¸¢à¸¹à¹ˆà¹à¸¥à¹‰à¸§?
+        <a href="#" id="goto-login" style="color: var(--primary); font-weight: 600;">â† à¹€à¸‚à¹‰à¸²à¸ªà¸¹à¹ˆà¸£à¸°à¸šà¸š</a>
+      </p>
+    </div>
+
+    <!-- Features hint -->
+    <div class="auth-features">
+      <div class="auth-feature-item">
+        <div class="auth-feature-icon">ðŸ¤–</div>
+        <span>AI à¸§à¸´à¹€à¸„à¸£à¸²à¸°à¸«à¹Œà¹à¸¥à¸°à¹à¸•à¸à¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢à¹€à¸›à¹‡à¸™à¸ à¸²à¸£à¸à¸´à¸ˆà¸£à¸²à¸¢à¸§à¸±à¸™</span>
+      </div>
+      <div class="auth-feature-item">
+        <div class="auth-feature-icon">ðŸ“ˆ</div>
+        <span>à¸•à¸´à¸”à¸•à¸²à¸¡à¸„à¸§à¸²à¸¡à¸à¹‰à¸²à¸§à¸«à¸™à¹‰à¸²à¹à¸¥à¸° Streak à¸‚à¸­à¸‡à¸„à¸¸à¸“</span>
+      </div>
+      <div class="auth-feature-item">
+        <div class="auth-feature-icon">ðŸ”</div>
+        <span>à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹à¸¢à¸à¹€à¸›à¹‡à¸™à¸ªà¹ˆà¸§à¸™à¸•à¸±à¸§à¸ªà¸³à¸«à¸£à¸±à¸šà¹à¸•à¹ˆà¸¥à¸°à¸šà¸±à¸à¸Šà¸µ</span>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
+  <script src="js/firebase-init.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    // â”€â”€ Check if already logged in â”€â”€
+    if (AuthService.isLoggedIn()) {
+      window.location.href = 'index.html';
+    }
+
+    // â”€â”€ Theme Toggle â”€â”€
+    const savedTheme = localStorage.getItem('goalforge_auth_theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    const themeBtn = document.getElementById('auth-theme-btn');
+    themeBtn.textContent = savedTheme === 'dark' ? 'â˜€ï¸' : 'ðŸŒ™';
+
+    themeBtn.addEventListener('click', () => {
+      const cur = document.documentElement.getAttribute('data-theme');
+      const next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('goalforge_auth_theme', next);
+      themeBtn.textContent = next === 'dark' ? 'â˜€ï¸' : 'ðŸŒ™';
+    });
+
+    // â”€â”€ Tab Switching â”€â”€
+    function switchPanel(panelName) {
+      document.querySelectorAll('.auth-tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-panel') === panelName);
+      });
+      document.querySelectorAll('.auth-panel').forEach(panel => {
+        panel.classList.toggle('active', panel.id === `panel-${panelName}`);
+      });
+    }
+
+    document.querySelectorAll('.auth-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => switchPanel(btn.getAttribute('data-panel')));
+    });
+
+    document.getElementById('goto-register').addEventListener('click', (e) => {
+      e.preventDefault();
+      switchPanel('register');
+    });
+
+    document.getElementById('goto-login').addEventListener('click', (e) => {
+      e.preventDefault();
+      switchPanel('login');
+    });
+
+    // â”€â”€ Show / Hide Alert â”€â”€
+    function showAlert(elId, message) {
+      const el = document.getElementById(elId);
+      if (!el) return;
+      el.style.display = 'flex';
+      const span = el.querySelector('span');
+      if (span) span.textContent = message;
+    }
+
+    function hideAlert(elId) {
+      const el = document.getElementById(elId);
+      if (el) el.style.display = 'none';
+    }
+
+    // â”€â”€ Login Form â”€â”€
+    document.getElementById('login-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      hideAlert('login-error');
+
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+
+      if (!email || !password) {
+        showAlert('login-error', 'à¸à¸£à¸¸à¸“à¸²à¸à¸£à¸­à¸à¸­à¸µà¹€à¸¡à¸¥à¹à¸¥à¸°à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™à¹ƒà¸«à¹‰à¸„à¸£à¸šà¸–à¹‰à¸§à¸™');
+        return;
+      }
+
+      const btn = document.getElementById('login-submit-btn');
+      btn.disabled = true;
+      btn.innerHTML = `<div class="btn-spinner"></div> à¸à¸³à¸¥à¸±à¸‡à¹€à¸‚à¹‰à¸²à¸ªà¸¹à¹ˆà¸£à¸°à¸šà¸š...`;
+
+      setTimeout(async () => {
+        const result = await AuthService.login({ email, password });
+
+        if (result.success) {
+          btn.innerHTML = 'âœ… à¸ªà¸³à¹€à¸£à¹‡à¸ˆ! à¸à¸³à¸¥à¸±à¸‡à¹€à¸‚à¹‰à¸²à¸ªà¸¹à¹ˆà¸£à¸°à¸šà¸š...';
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 600);
+        } else {
+          showAlert('login-error', result.error);
+          btn.disabled = false;
+          btn.innerHTML = 'ðŸ”‘ à¹€à¸‚à¹‰à¸²à¸ªà¸¹à¹ˆà¸£à¸°à¸šà¸š';
+        }
+      }, 400);
+    });
+
+    // â”€â”€ Register Form â”€â”€
+    document.getElementById('register-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      hideAlert('register-error');
+      hideAlert('register-success');
+
+      const name = document.getElementById('reg-name').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const password = document.getElementById('reg-password').value;
+      const confirm = document.getElementById('reg-confirm').value;
+
+      if (!name || !email || !password || !confirm) {
+        showAlert('register-error', 'à¸à¸£à¸¸à¸“à¸²à¸à¸£à¸­à¸à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹ƒà¸«à¹‰à¸„à¸£à¸šà¸—à¸¸à¸à¸Šà¹ˆà¸­à¸‡');
+        return;
+      }
+
+      if (password !== confirm) {
+        showAlert('register-error', 'à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™à¹„à¸¡à¹ˆà¸•à¸£à¸‡à¸à¸±à¸™ à¸à¸£à¸¸à¸“à¸²à¸•à¸£à¸§à¸ˆà¸ªà¸­à¸šà¸­à¸µà¸à¸„à¸£à¸±à¹‰à¸‡');
+        return;
+      }
+
+      const btn = document.getElementById('register-submit-btn');
+      btn.disabled = true;
+      btn.innerHTML = `<div class="btn-spinner"></div> à¸à¸³à¸¥à¸±à¸‡à¸ªà¸£à¹‰à¸²à¸‡à¸šà¸±à¸à¸Šà¸µ...`;
+
+      setTimeout(async () => {
+        const result = await AuthService.register({ name, email, password });
+
+        if (result.success) {
+          btn.innerHTML = 'âœ… à¸ªà¸¡à¸±à¸„à¸£à¸ªà¸³à¹€à¸£à¹‡à¸ˆ! à¸à¸³à¸¥à¸±à¸‡à¹€à¸‚à¹‰à¸²à¸ªà¸¹à¹ˆà¸£à¸°à¸šà¸š...';
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 700);
+        } else {
+          showAlert('register-error', result.error);
+          btn.disabled = false;
+          btn.innerHTML = 'âœ¨ à¸ªà¸¡à¸±à¸„à¸£à¸ªà¸¡à¸²à¸Šà¸´à¸à¸Ÿà¸£à¸µ';
+        }
+      }, 400);
+    });
+
+    // â”€â”€ Mock Google Login â”€â”€
+    document.querySelectorAll('.btn-google-login').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.disabled = true;
+        btn.innerHTML = `<div class="btn-spinner"></div> กำลังเชื่อมต่อกับ Google...`;
+        
+        const provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithRedirect(provider);
+      });
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      firebase.auth().getRedirectResult()
+        .then(async (result) => {
+          if (result && result.user) {
+            const firebaseUser = result.user;
+            const email = firebaseUser.email;
+            
+            try {
+              const userRef = window.db.collection('users').where('email', '==', email.toLowerCase());
+              const snapshot = await userRef.get();
+              let appUser = null;
+              
+              if (snapshot.empty) {
+                appUser = {
+                  id: 'google_' + Date.now(),
+                  name: firebaseUser.displayName || email.split('@')[0],
+                  email: email.toLowerCase(),
+                  avatar: firebaseUser.photoURL || null,
+                  createdAt: new Date().toISOString()
+                };
+                await window.db.collection('users').doc(appUser.id).set(appUser);
+              } else {
+                appUser = snapshot.docs[0].data();
+                if (!appUser.avatar && firebaseUser.photoURL) {
+                  appUser.avatar = firebaseUser.photoURL;
+                  await window.db.collection('users').doc(appUser.id).update({ avatar: appUser.avatar });
+                }
+              }
+              
+              AuthService.createSession(appUser);
+              window.location.href = 'index.html';
+            } catch (err) {
+              console.error(err);
+              showAlert('login-error', 'เกิดข้อผิดพลาดในการเชื่อมต่อฐานข้อมูล');
+            }
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          showAlert('login-error', 'เกิดข้อผิดพลาดในการเข้าสู่ระบบด้วย Google');
+        });
+    });
+  </script>
+</body>
+</html>

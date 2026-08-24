@@ -1,0 +1,751 @@
+﻿
+
+
+
+
+
+  
+
+  
+
+  
+à¹€à¸‚à¹‰à¸²à¸ªà¸¹à¹ˆà¸£à¸°à¸šà¸š â€” GoalForge AI
+
+  
+
+  
+
+  
+
+    /* â”€â”€ Auth Page Layout â”€â”€ */
+    body {
+      min-height: 100vh;
+      background: var(--bg-body);
+      padding: 2rem 1.5rem 3rem;
+      position: relative;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    /* Ambient background blobs */
+    body::before,
+    body::after {
+      content: '';
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(80px);
+      opacity: 0.35;
+    }
+
+    body::before {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, hsl(238, 82%, 59%), transparent 70%);
+      top: -120px;
+      right: -100px;
+    }
+
+    body::after {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, hsl(158, 75%, 42%), transparent 70%);
+      bottom: -100px;
+      left: -80px;
+    }
+
+    /* â”€â”€ Card â”€â”€ */
+    .auth-card {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 440px;
+      margin: 0 auto;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 28px;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 24px 48px -8px rgba(15, 23, 42, 0.18), 0 8px 16px -4px rgba(15, 23, 42, 0.08);
+    }
+
+    /* â”€â”€ Brand Logo â”€â”€ */
+    .auth-brand {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .auth-logo-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, var(--primary), #818cf8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      box-shadow: 0 8px 24px var(--primary-glow);
+      margin-bottom: 1rem;
+    }
+
+    .auth-brand-name {
+      font-family: var(--font-heading);
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+    }
+
+    .auth-brand-name span {
+      color: var(--primary);
+    }
+
+    .auth-brand-tagline {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-top: 0.3rem;
+    }
+
+    /* â”€â”€ Tab Switcher â”€â”€ */
+    .auth-tabs {
+      display: flex;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 0.3rem;
+      gap: 0.25rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .auth-tab-btn {
+      flex: 1;
+      padding: 0.6rem 1rem;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: var(--font-body);
+    }
+
+    .auth-tab-btn.active {
+      background: var(--bg-surface);
+      color: var(--primary);
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+    }
+
+    /* â”€â”€ Form Panels â”€â”€ */
+    .auth-panel {
+      display: none;
+    }
+
+    .auth-panel.active {
+      display: block;
+    }
+
+    /* â”€â”€ Input Group â”€â”€ */
+    .auth-field {
+      margin-bottom: 1.1rem;
+    }
+
+    .auth-label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 0.45rem;
+    }
+
+    .auth-input-wrap {
+      position: relative;
+    }
+
+    .auth-input-icon {
+      position: absolute;
+      left: 0.9rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1rem;
+      pointer-events: none;
+      opacity: 0.55;
+    }
+
+    .auth-input {
+      width: 100%;
+      padding: 0.75rem 1rem 0.75rem 2.6rem;
+      border-radius: 12px;
+      border: 1.5px solid var(--border-medium);
+      background: var(--bg-input);
+      color: var(--text-main);
+      font-size: 0.9375rem;
+      font-family: var(--font-body);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .auth-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+
+    /* â”€â”€ Error & Success Messages â”€â”€ */
+    .auth-alert {
+      padding: 0.7rem 1rem;
+      border-radius: 10px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: 1rem;
+      display: none;
+    }
+
+    .auth-alert.error {
+      background: var(--danger-light);
+      color: var(--danger);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .auth-alert.success {
+      background: var(--accent-light);
+      color: var(--accent);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* â”€â”€ Submit Button & Social Auth â”€â”€ */
+    .auth-submit-btn {
+      width: 100%;
+      padding: 0.85rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 14px;
+      background: var(--primary);
+      color: white;
+      cursor: pointer;
+      font-family: var(--font-body);
+      transition: all 0.2s ease;
+      box-shadow: 0 6px 20px var(--primary-glow);
+      margin-top: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .auth-submit-btn:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px var(--primary-glow);
+    }
+
+    .auth-submit-btn:active {
+      transform: scale(0.98);
+    }
+
+    .auth-submit-btn:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .auth-google-btn {
+      width: 100%;
+      padding: 0.85rem 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border: 1px solid var(--border-medium);
+      border-radius: 14px;
+      background: var(--bg-surface);
+      color: var(--text-main);
+      cursor: pointer;
+      font-family: var(--font-body);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .auth-google-btn:hover {
+      background: var(--bg-subtle);
+      border-color: var(--border-focus);
+    }
+
+    .auth-google-btn img {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* â”€â”€ Divider â”€â”€ */
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 1.25rem 0;
+      color: var(--text-subtle);
+      font-size: 0.8125rem;
+    }
+
+    .auth-divider::before,
+    .auth-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border-subtle);
+    }
+
+    /* â”€â”€ Features List â”€â”€ */
+    .auth-features {
+      margin-top: 1.75rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+
+    .auth-feature-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .auth-feature-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      background: var(--primary-light);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      flex-shrink: 0;
+    }
+
+    /* â”€â”€ Theme Toggle â”€â”€ */
+    .auth-theme-btn {
+      position: fixed;
+      top: 1.25rem;
+      right: 1.25rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-surface);
+      cursor: pointer;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      transition: all 0.2s;
+    }
+
+    .auth-theme-btn:hover {
+      background: var(--bg-subtle);
+    }
+
+    /* â”€â”€ Loading Spinner â”€â”€ */
+    .btn-spinner {
+      width: 18px;
+      height: 18px;
+      border: 2.5px solid rgba(255,255,255,0.35);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* â”€â”€ Mobile â”€â”€ */
+    @media (max-width: 480px) {
+      .auth-card {
+        padding: 1.75rem 1.25rem;
+        border-radius: 20px;
+      }
+
+      .auth-logo-icon {
+        width: 52px;
+        height: 52px;
+        font-size: 1.6rem;
+      }
+
+      .auth-brand-name {
+        font-size: 1.4rem;
+      }
+    }
+  
+
+
+
+
+
+
+  
+
+  
+ðŸŒ™
+
+
+  
+
+  
+
+
+    
+
+    
+
+      
+ðŸŽ¯
+
+      
+GoalForge 
+AI
+
+
+      
+à¹à¸•à¸à¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢à¹ƒà¸«à¸à¹ˆà¹ƒà¸«à¹‰à¸à¸¥à¸²à¸¢à¹€à¸›à¹‡à¸™à¸ à¸²à¸£à¸à¸´à¸ˆà¸£à¸²à¸¢à¸§à¸±à¸™à¸”à¹‰à¸§à¸¢ AI
+
+    
+
+
+    
+
+    
+
+      
+ðŸ”‘ à¹€à¸‚à¹‰à¸²à¸ªà¸¹à¹ˆà¸£à¸°à¸šà¸š
+
+      
+âœ¨ à¸ªà¸¡à¸±à¸„à¸£à¸ªà¸¡à¸²à¸Šà¸´à¸
+
+    
+
+
+    
+
+    
+
+      
+âš ï¸ 
+
+
+
+
+      
+
+        
+
+        à¹€à¸‚à¹‰à¸²à¸ªà¸¹à¹ˆà¸£à¸°à¸šà¸šà¸”à¹‰à¸§à¸¢ Google
+      
+
+
+      
+à¸«à¸£à¸·à¸­à¹ƒà¸Šà¹‰à¸­à¸µà¹€à¸¡à¸¥
+
+
+      
+
+        
+
+          
+à¸­à¸µà¹€à¸¡à¸¥
+
+          
+
+            
+âœ‰ï¸
+
+            
+
+          
+
+        
+
+
+        
+
+          
+à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™
+
+          
+
+            
+ðŸ”’
+
+            
+
+          
+
+        
+
+
+        
+
+          ðŸ”‘ à¹€à¸‚à¹‰à¸²à¸ªà¸¹à¹ˆà¸£à¸°à¸šà¸š
+        
+
+      
+
+
+      
+à¸«à¸£à¸·à¸­
+
+      
+
+        à¸¢à¸±à¸‡à¹„à¸¡à¹ˆà¸¡à¸µà¸šà¸±à¸à¸Šà¸µ?
+        
+à¸ªà¸¡à¸±à¸„à¸£à¸ªà¸¡à¸²à¸Šà¸´à¸à¸Ÿà¸£à¸µ â†’
+
+      
+
+    
+
+
+    
+
+    
+
+      
+âš ï¸ 
+
+
+
+      
+âœ… 
+
+
+
+
+      
+
+        
+
+        à¸ªà¸¡à¸±à¸„à¸£à¸ªà¸¡à¸²à¸Šà¸´à¸à¸”à¹‰à¸§à¸¢ Google
+      
+
+
+      
+à¸«à¸£à¸·à¸­à¹ƒà¸Šà¹‰à¸­à¸µà¹€à¸¡à¸¥
+
+
+      
+
+        
+
+          
+à¸Šà¸·à¹ˆà¸­à¸‚à¸­à¸‡à¸„à¸¸à¸“
+
+          
+
+            
+ðŸ‘¤
+
+            
+
+          
+
+        
+
+
+        
+
+          
+à¸­à¸µà¹€à¸¡à¸¥
+
+          
+
+            
+âœ‰ï¸
+
+            
+
+          
+
+        
+
+
+        
+
+          
+à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™ 
+(à¸­à¸¢à¹ˆà¸²à¸‡à¸™à¹‰à¸­à¸¢ 6 à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£)
+
+
+          
+
+            
+ðŸ”’
+
+            
+
+          
+
+        
+
+
+        
+
+          
+à¸¢à¸·à¸™à¸¢à¸±à¸™à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™
+
+          
+
+            
+ðŸ”’
+
+            
+
+          
+
+        
+
+
+        
+
+          âœ¨ à¸ªà¸¡à¸±à¸„à¸£à¸ªà¸¡à¸²à¸Šà¸´à¸à¸Ÿà¸£à¸µ
+        
+
+      
+
+
+      
+à¸«à¸£à¸·à¸­
+
+      
+
+        à¸¡à¸µà¸šà¸±à¸à¸Šà¸µà¸­à¸¢à¸¹à¹ˆà¹à¸¥à¹‰à¸§?
+        
+â† à¹€à¸‚à¹‰à¸²à¸ªà¸¹à¹ˆà¸£à¸°à¸šà¸š
+
+      
+
+    
+
+
+    
+
+    
+
+      
+
+        
+ðŸ¤–
+
+        
+AI à¸§à¸´à¹€à¸„à¸£à¸²à¸°à¸«à¹Œà¹à¸¥à¸°à¹à¸•à¸à¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢à¹€à¸›à¹‡à¸™à¸ à¸²à¸£à¸à¸´à¸ˆà¸£à¸²à¸¢à¸§à¸±à¸™
+
+      
+
+      
+
+        
+ðŸ“ˆ
+
+        
+à¸•à¸´à¸”à¸•à¸²à¸¡à¸„à¸§à¸²à¸¡à¸à¹‰à¸²à¸§à¸«à¸™à¹‰à¸²à¹à¸¥à¸° Streak à¸‚à¸­à¸‡à¸„à¸¸à¸“
+
+      
+
+      
+
+        
+ðŸ”
+
+        
+à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹à¸¢à¸à¹€à¸›à¹‡à¸™à¸ªà¹ˆà¸§à¸™à¸•à¸±à¸§à¸ªà¸³à¸«à¸£à¸±à¸šà¹à¸•à¹ˆà¸¥à¸°à¸šà¸±à¸à¸Šà¸µ
+
+      
+
+    
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+
+  
+
+
+  
+ {
+      e.preventDefault();
+      hideAlert('login-error');
+
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+
+      if (!email || !password) {
+        showAlert('login-error', 'à¸à¸£à¸¸à¸“à¸²à¸à¸£à¸­à¸à¸­à¸µà¹€à¸¡à¸¥à¹à¸¥à¸°à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™à¹ƒà¸«à¹‰à¸„à¸£à¸šà¸–à¹‰à¸§à¸™');
+        return;
+      }
+
+      const btn = document.getElementById('login-submit-btn');
+      btn.disabled = true;
+      btn.innerHTML = `
+
+ {
+      e.preventDefault();
+      hideAlert('register-error');
+      hideAlert('register-success');
+
+      const name = document.getElementById('reg-name').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const password = document.getElementById('reg-password').value;
+      const confirm = document.getElementById('reg-confirm').value;
+
+      if (!name || !email || !password || !confirm) {
+        showAlert('register-error', 'à¸à¸£à¸¸à¸“à¸²à¸à¸£à¸­à¸à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹ƒà¸«à¹‰à¸„à¸£à¸šà¸—à¸¸à¸à¸Šà¹ˆà¸­à¸‡');
+        return;
+      }
+
+      if (password !== confirm) {
+        showAlert('register-error', 'à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™à¹„à¸¡à¹ˆà¸•à¸£à¸‡à¸à¸±à¸™ à¸à¸£à¸¸à¸“à¸²à¸•à¸£à¸§à¸ˆà¸ªà¸­à¸šà¸­à¸µà¸à¸„à¸£à¸±à¹‰à¸‡');
+        return;
+      }
+
+      const btn = document.getElementById('register-submit-btn');
+      btn.disabled = true;
+      btn.innerHTML = `
+
+ {
+        btn.disabled = true;
+        btn.innerHTML = `
+
+ {
+          console.error(error);
+          showAlert('login-error', 'เกิดข้อผิดพลาดในการเข้าสู่ระบบด้วย Google');
+        });
+    });
+  
+
+
+
+
+
