@@ -50,6 +50,27 @@
       left: -80px;
     }
 
+    /* Brand Logo */
+    .auth-brand {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+    .auth-logo-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, var(--primary), #818cf8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      box-shadow: 0 8px 24px var(--primary-glow);
+      margin-bottom: 1rem;
+    }
+
     /* Container */
     .auth-container {
       width: 100%;
@@ -235,7 +256,8 @@
   <div class="auth-container">
 
     <div class="auth-box">
-      <div style="text-align: center; margin-bottom: 2rem;">
+      <div class="auth-brand">
+        <div class="auth-logo-icon">🎯</div>
         <h1 style="font-size: 2.2rem; margin-bottom: 0.5rem; color: var(--text-main);">GoalForge <span style="background: linear-gradient(135deg, var(--primary), #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">AI</span></h1>
         <p style="color: var(--text-muted); font-size: 1rem;">แตกเป้าหมายใหญ่ให้กลายเป็นภารกิจรายวันด้วย AI</p>
       </div>
