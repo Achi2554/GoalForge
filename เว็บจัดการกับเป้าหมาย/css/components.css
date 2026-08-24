@@ -810,23 +810,6 @@
 
   .timer-controls {
     flex-wrap: wrap;
-    gap: 0.5rem;
-  }
 
-  .timer-controls .btn {
-    flex: 1;
-    min-width: 0;
-    font-size: 0.875rem;
-    padding: 0.55rem 0.75rem;
-  }
-
-  /* Empty state */
-  .empty-state {
-    padding: 2.5rem 1.25rem;
-  }
-}
-
- 
- . d a y - s w i t c h e r - b a r   {   m a x - w i d t h :   1 0 0 v w ;   b o x - s i z i n g :   b o r d e r - b o x ;   } 
- . c o n t a i n e r   {   m a x - w i d t h :   1 0 0 v w ;   o v e r f l o w - x :   h i d d e n ;   b o x - s i z i n g :   b o r d e r - b o x ;   }  
- 
+.day-switcher-bar { max-width: 100vw; box-sizing: border-box; }
+.container { max-width: 100vw; overflow-x: hidden; box-sizing: border-box; }
