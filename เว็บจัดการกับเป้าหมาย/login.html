@@ -66,8 +66,8 @@
 
     /* Auth Box */
     .auth-box {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
       border-radius: 24px;
       padding: 2.5rem 2rem;
       box-shadow: 0 12px 36px rgba(0,0,0,0.06);
@@ -95,7 +95,7 @@
       transition: all 0.3s ease;
     }
     .auth-tab-btn.active {
-      background: var(--bg-card);
+      background: var(--bg-surface);
       color: var(--text-main);
       box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
@@ -126,7 +126,7 @@
     .auth-google-btn {
       width: 100%;
       padding: 0.875rem 1.5rem;
-      background: var(--bg-card);
+      background: var(--bg-surface);
       border: 1px solid var(--primary);
       border-radius: 12px;
       color: var(--text-main);
@@ -160,7 +160,7 @@
     .auth-divider::before, .auth-divider::after {
       content: '';
       flex: 1;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--border-subtle);
     }
     .auth-divider:not(:empty)::before { margin-right: .5em; }
     .auth-divider:not(:empty)::after { margin-left: .5em; }
@@ -191,7 +191,7 @@
       width: 100%;
       padding: 0.875rem 1rem 0.875rem 2.8rem;
       background: var(--bg-body);
-      border: 1px solid var(--border);
+      border: 1px solid var(--border-subtle);
       border-radius: 12px;
       color: var(--text-main);
       font-size: 1rem;
@@ -207,7 +207,7 @@
     .auth-submit-btn {
       width: 100%;
       padding: 1rem;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      background: linear-gradient(135deg, var(--primary), var(--accent));
       color: white;
       border: none;
       border-radius: 12px;
@@ -229,12 +229,12 @@
 <body>
 
   <!-- Theme Toggle -->
-  <button id="auth-theme-btn" style="position: absolute; top: 1rem; right: 1rem; background: var(--bg-card); border: 1px solid var(--border); padding: 0.5rem 1rem; border-radius: 20px; color: var(--text-main); font-weight: 600; cursor: pointer;">🌙</button>
+  <button id="auth-theme-btn" style="position: absolute; top: 1rem; right: 1rem; background: var(--bg-surface); border: 1px solid var(--border-subtle); padding: 0.5rem 1rem; border-radius: 20px; color: var(--text-main); font-weight: 600; cursor: pointer;">🌙</button>
 
   <div class="auth-container">
     
     <div style="text-align: center; margin-bottom: 2rem;">
-      <h1 style="font-size: 2.2rem; margin-bottom: 0.5rem; color: var(--text-main);">GoalForge <span style="background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">AI</span></h1>
+      <h1 style="font-size: 2.2rem; margin-bottom: 0.5rem; color: var(--text-main);">GoalForge <span style="background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">AI</span></h1>
       <p style="color: var(--text-muted); font-size: 1rem;">แตกเป้าหมายใหญ่ให้กลายเป็นภารกิจรายวันด้วย AI</p>
     </div>
 
