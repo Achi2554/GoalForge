@@ -630,6 +630,11 @@ const Store = {
 // 3. FOCUS TIMER MODULE
 // ==========================================================================
 const TimerEngine = {
+  modeDurations: {
+    focus: 25,
+    short_break: 5,
+    long_break: 15
+  },
   durationSeconds: 25 * 60,
   remainingSeconds: 25 * 60,
   timerInterval: null,
@@ -647,19 +652,14 @@ const TimerEngine = {
   setMode(mode) {
     this.mode = mode;
     this.pause();
-    if (mode === 'focus') {
-      this.durationSeconds = 25 * 60;
-    } else if (mode === 'short_break') {
-      this.durationSeconds = 5 * 60;
-    } else if (mode === 'long_break') {
-      this.durationSeconds = 15 * 60;
-    }
+    this.durationSeconds = this.modeDurations[mode] * 60;
     this.remainingSeconds = this.durationSeconds;
     this.notifyTick();
   },
 
   setCustomTime(minutes) {
     this.pause();
+    this.modeDurations[this.mode] = minutes;
     this.durationSeconds = minutes * 60;
     this.remainingSeconds = this.durationSeconds;
     this.notifyTick();
@@ -723,7 +723,8 @@ const TimerEngine = {
         seconds,
         progress,
         isRunning: this.isRunning,
-        mode: this.mode
+        mode: this.mode,
+        durationSeconds: this.durationSeconds
       });
     }
   }
@@ -1369,6 +1370,14 @@ const App = {
     TimerEngine.init({
       onTick: (state) => {
         if (timerDigits) timerDigits.textContent = state.formatted;
+        
+        const activeBtn = document.querySelector(`.timer-mode-btn[data-mode="${state.mode}"]`);
+        if (activeBtn) {
+          const modeNames = { focus: 'โฟกัส', short_break: 'พักสั้น', long_break: 'พักยาว' };
+          const mins = Math.round(state.durationSeconds / 60);
+          activeBtn.textContent = `${modeNames[state.mode]} ${mins} น.`;
+        }
+
         if (timerToggleBtn) {
           timerToggleBtn.textContent = state.isRunning ? '⏸️ หยุดชั่วคราว' : '▶️ เริ่มโฟกัส';
           timerToggleBtn.className = state.isRunning ? 'btn btn-secondary' : 'btn btn-primary';
