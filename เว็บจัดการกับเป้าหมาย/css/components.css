@@ -811,5 +811,14 @@
   .timer-controls {
     flex-wrap: wrap;
 
+
+    gap: 0.5rem;
+  }
+
+  .empty-state {
+    padding: 2.5rem 1.25rem;
+  }
+}
+
 .day-switcher-bar { max-width: 100vw; box-sizing: border-box; }
 .container { max-width: 100vw; overflow-x: hidden; box-sizing: border-box; }
