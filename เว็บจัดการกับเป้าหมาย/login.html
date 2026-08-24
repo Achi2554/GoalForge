@@ -6,9 +6,9 @@
   <title>เข้าสู่ระบบ — GoalForge AI</title>
   <meta name="description" content="เข้าสู่ระบบ GoalForge AI แพลตฟอร์มตั้งเป้าหมายและแตกภารกิจรายวันด้วย AI">
   
-  <link rel="stylesheet" href="css/main.css?v=4">
-  <link rel="stylesheet" href="css/components.css?v=4">
-  <link rel="stylesheet" href="css/roadmap.css?v=4">
+  <link rel="stylesheet" href="css/main.css?v=5">
+  <link rel="stylesheet" href="css/components.css?v=5">
+  <link rel="stylesheet" href="css/roadmap.css?v=5">
   
   <style>
     /* Auth Page Layout */
@@ -97,7 +97,7 @@
     .auth-tab-btn.active {
       background: var(--bg-surface);
       color: var(--text-main);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
     }
 
     /* Alerts */
@@ -127,7 +127,7 @@
       width: 100%;
       padding: 0.875rem 1.5rem;
       background: var(--bg-surface);
-      border: 1px solid var(--primary);
+      border: 1px solid var(--border-subtle);
       border-radius: 12px;
       color: var(--text-main);
       font-weight: 600;
@@ -141,7 +141,7 @@
       margin-bottom: 1.5rem;
     }
     .auth-google-btn:hover {
-      background: var(--primary-light);
+      background: var(--bg-subtle);
     }
     .auth-google-btn img {
       width: 20px;
@@ -190,8 +190,8 @@
     .auth-input {
       width: 100%;
       padding: 0.875rem 1rem 0.875rem 2.8rem;
-      background: var(--bg-body);
-      border: 1px solid var(--border-subtle);
+      background: var(--bg-input);
+      border: 1.5px solid var(--border-medium);
       border-radius: 12px;
       color: var(--text-main);
       font-size: 1rem;
@@ -207,7 +207,7 @@
     .auth-submit-btn {
       width: 100%;
       padding: 1rem;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
+      background: var(--primary);
       color: white;
       border: none;
       border-radius: 12px;
@@ -216,10 +216,11 @@
       cursor: pointer;
       transition: all 0.3s ease;
       margin-top: 1rem;
+      box-shadow: 0 6px 20px var(--primary-glow);
     }
     .auth-submit-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px var(--primary-glow);
+      box-shadow: 0 8px 24px var(--primary-glow);
     }
     
     .auth-panel { display: none; }
@@ -234,7 +235,7 @@
   <div class="auth-container">
     
     <div style="text-align: center; margin-bottom: 2rem;">
-      <h1 style="font-size: 2.2rem; margin-bottom: 0.5rem; color: var(--text-main);">GoalForge <span style="background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">AI</span></h1>
+      <h1 style="font-size: 2.2rem; margin-bottom: 0.5rem; color: var(--text-main);">GoalForge <span style="background: linear-gradient(135deg, var(--primary), #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">AI</span></h1>
       <p style="color: var(--text-muted); font-size: 1rem;">แตกเป้าหมายใหญ่ให้กลายเป็นภารกิจรายวันด้วย AI</p>
     </div>
 
@@ -392,7 +393,7 @@
     function showAlert(elId, message) {
       const el = document.getElementById(elId);
       if (!el) return;
-      el.style.display = 'flex'; // Fix applied here inherently
+      el.style.display = 'flex';
       const span = el.querySelector('span');
       if (span) span.textContent = message;
     }
