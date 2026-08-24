@@ -26,6 +26,7 @@
       window.location.href = 'login.html';
     }
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -698,7 +699,7 @@
   </div>
 
   <!-- JavaScript Entry -->
-  <script src="js/app.js?v=20260823"></script>
+  <script src="js/app.js?v=20260824_4"></script>
   <script>
     // Show user info in navbar
     (function () {
@@ -712,11 +713,27 @@
       }
       const logoutBtn = document.getElementById('btn-logout');
       if (logoutBtn) {
-        logoutBtn.addEventListener('click', () => {
-          if (confirm('คุณต้องการออกจากระบบใช่หรือไม่?')) {
-            AuthService.logout();
-            window.location.href = 'login.html';
-          }
+        logoutBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          Swal.fire({
+            title: 'ออกจากระบบ',
+            text: 'คุณต้องการออกจากระบบใช่หรือไม่?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: 'var(--danger, #ef4444)',
+            cancelButtonColor: 'var(--bg-subtle, #f1f5f9)',
+            confirmButtonText: 'ออกจากระบบ',
+            cancelButtonText: 'ยกเลิก',
+            reverseButtons: true,
+            customClass: {
+              cancelButton: 'swal2-cancel-custom'
+            }
+          }).then((result) => {
+            if (result.isConfirmed) {
+              AuthService.logout();
+              window.location.href = 'login.html';
+            }
+          })
         });
       }
     })();

@@ -1506,11 +1506,24 @@ const App = {
         const active = Store.getActiveGoal();
         if (!active || !taskId) return;
 
-        if (confirm('คุณแน่ใจหรือไม่ว่าต้องการลบภารกิจนี้?')) {
-          Store.deleteTask(active.id, dayNum, taskId);
-          this.closeModal('edit-task-modal');
-          this.render();
-        }
+        Swal.fire({
+          title: 'ลบภารกิจ',
+          text: 'คุณแน่ใจหรือไม่ว่าต้องการลบภารกิจนี้?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: 'var(--danger, #ef4444)',
+          cancelButtonColor: 'var(--bg-subtle, #f1f5f9)',
+          confirmButtonText: 'ลบ',
+          cancelButtonText: 'ยกเลิก',
+          reverseButtons: true,
+          customClass: { cancelButton: 'swal2-cancel-custom' }
+        }).then((result) => {
+          if (result.isConfirmed) {
+            Store.deleteTask(active.id, dayNum, taskId);
+            this.closeModal('edit-task-modal');
+            this.render();
+          }
+        });
       });
     }
 
@@ -1538,10 +1551,23 @@ const App = {
       deleteGoalBtn.addEventListener('click', () => {
         const active = Store.getActiveGoal();
         if (!active) return;
-        if (confirm(`คุณแน่ใจหรือไม่ว่าต้องการลบเป้าหมาย "${active.title}"?`)) {
+        Swal.fire({
+        title: 'ลบเป้าหมาย',
+        text: `คุณแน่ใจหรือไม่ว่าต้องการลบเป้าหมาย "${active.title}"?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: 'var(--danger, #ef4444)',
+        cancelButtonColor: 'var(--bg-subtle, #f1f5f9)',
+        confirmButtonText: 'ลบเป้าหมาย',
+        cancelButtonText: 'ยกเลิก',
+        reverseButtons: true,
+        customClass: { cancelButton: 'swal2-cancel-custom' }
+      }).then((result) => {
+        if (result.isConfirmed) {
           Store.deleteGoal(active.id);
           this.render();
         }
+      });
       });
     }
 
@@ -1967,10 +1993,23 @@ const App = {
       const removeDayBtn = document.getElementById('btn-quick-remove-day');
       if (removeDayBtn) {
         removeDayBtn.addEventListener('click', () => {
-          if (confirm(`คุณต้องการลบ วันที่ ${goal.dailyTasks.length} ออกจากเป้าหมายใช่หรือไม่?`)) {
-            Store.removeLastDayFromGoal(goal.id);
-            this.render();
-          }
+          Swal.fire({
+            title: 'ลบวันสุดท้าย',
+            text: `คุณต้องการลบ วันที่ ${goal.dailyTasks.length} ออกจากเป้าหมายใช่หรือไม่?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: 'var(--danger, #ef4444)',
+            cancelButtonColor: 'var(--bg-subtle, #f1f5f9)',
+            confirmButtonText: 'ลบ',
+            cancelButtonText: 'ยกเลิก',
+            reverseButtons: true,
+            customClass: { cancelButton: 'swal2-cancel-custom' }
+          }).then((result) => {
+            if (result.isConfirmed) {
+              Store.removeLastDayFromGoal(goal.id);
+              this.render();
+            }
+          });
         });
       }
     }
@@ -2087,10 +2126,23 @@ const App = {
           btn.addEventListener('click', (e) => {
             e.stopPropagation();
             const taskId = btn.getAttribute('data-task-id');
-            if (confirm('คุณแน่ใจหรือไม่ว่าต้องการลบภารกิจนี้?')) {
-              Store.deleteTask(goal.id, currentDayNum, taskId);
-              this.render();
-            }
+            Swal.fire({
+              title: 'ลบภารกิจ',
+              text: 'คุณแน่ใจหรือไม่ว่าต้องการลบภารกิจนี้?',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: 'var(--danger, #ef4444)',
+              cancelButtonColor: 'var(--bg-subtle, #f1f5f9)',
+              confirmButtonText: 'ลบ',
+              cancelButtonText: 'ยกเลิก',
+              reverseButtons: true,
+              customClass: { cancelButton: 'swal2-cancel-custom' }
+            }).then((result) => {
+              if (result.isConfirmed) {
+                Store.deleteTask(goal.id, currentDayNum, taskId);
+                this.render();
+              }
+            });
           });
         });
 
