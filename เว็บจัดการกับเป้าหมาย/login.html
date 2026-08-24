@@ -531,13 +531,18 @@
                   await window.db.collection('users').doc(appUser.id).update({ avatar: appUser.avatar });
                 }
               }
-              
-              AuthService.createSession(appUser);
-              window.location.href = 'index.html';
             } catch (err) {
-              console.error(err);
-              showAlert('login-error', 'เกิดข้อผิดพลาดในการเชื่อมต่อฐานข้อมูล');
+              console.warn('Firestore disabled or permission denied. Falling back to local session.', err);
+              appUser = {
+                id: 'google_' + Date.now(),
+                name: firebaseUser.displayName || email.split('@')[0],
+                email: email.toLowerCase(),
+                avatar: firebaseUser.photoURL || null,
+                createdAt: new Date().toISOString()
+              };
             }
+            AuthService.createSession(appUser);
+            window.location.href = 'index.html';
           }
         })
         .catch((error) => {

@@ -217,24 +217,24 @@ const Store = {
           if (data.stats) this.state.stats = { ...this.state.stats, ...data.stats };
         }
       } else {
-        // Fallback for local testing if needed
-        const savedGoals = localStorage.getItem(STORAGE_KEYS.GOALS);
-        if (savedGoals) this.state.goals = JSON.parse(savedGoals);
-        const savedActiveId = localStorage.getItem(STORAGE_KEYS.ACTIVE_GOAL_ID);
-        if (savedActiveId && this.state.goals.some(g => g.id === savedActiveId)) {
-          this.state.activeGoalId = savedActiveId;
-        } else if (this.state.goals.length > 0) {
-          this.state.activeGoalId = this.state.goals[0].id;
-        }
-        const savedSettings = localStorage.getItem(STORAGE_KEYS.SETTINGS);
-        if (savedSettings) this.state.settings = { ...this.state.settings, ...JSON.parse(savedSettings) };
-        const savedStats = localStorage.getItem(STORAGE_KEYS.STATS);
-        if (savedStats) this.state.stats = { ...this.state.stats, ...JSON.parse(savedStats) };
+        throw new Error('No DB');
       }
-
       this.checkDailyStreak();
     } catch (e) {
-      console.error('Store init error:', e);
+      console.warn('Firestore load failed. Falling back to local storage.', e);
+      const savedGoals = localStorage.getItem(STORAGE_KEYS.GOALS);
+      if (savedGoals) this.state.goals = JSON.parse(savedGoals);
+      const savedActiveId = localStorage.getItem(STORAGE_KEYS.ACTIVE_GOAL_ID);
+      if (savedActiveId && this.state.goals.some(g => g.id === savedActiveId)) {
+        this.state.activeGoalId = savedActiveId;
+      } else if (this.state.goals.length > 0) {
+        this.state.activeGoalId = this.state.goals[0].id;
+      }
+      const savedSettings = localStorage.getItem(STORAGE_KEYS.SETTINGS);
+      if (savedSettings) this.state.settings = { ...this.state.settings, ...JSON.parse(savedSettings) };
+      const savedStats = localStorage.getItem(STORAGE_KEYS.STATS);
+      if (savedStats) this.state.stats = { ...this.state.stats, ...JSON.parse(savedStats) };
+      this.checkDailyStreak();
     }
   },
 
