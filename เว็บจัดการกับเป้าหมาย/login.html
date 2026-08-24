@@ -1,13 +1,13 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="th" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>เข้าสู่ระบบ — GoalForge AI</title>
-  <meta name="description" content="เข้าสู่ระบบหรือสมัครสมาชิก GoalForge AI แพลตฟอร์มตั้งเป้าหมายและแตกภารกิจรายวันด้วย AI">
+  <title>à¹€à¸‚à¹‰à¸²à¸ªà¸¹à¹ˆà¸£à¸°à¸šà¸š â€” GoalForge AI</title>
+  <meta name="description" content="à¹€à¸‚à¹‰à¸²à¸ªà¸¹à¹ˆà¸£à¸°à¸šà¸šà¸«à¸£à¸·à¸­à¸ªà¸¡à¸±à¸„à¸£à¸ªà¸¡à¸²à¸Šà¸´à¸ GoalForge AI à¹à¸žà¸¥à¸•à¸Ÿà¸­à¸£à¹Œà¸¡à¸•à¸±à¹‰à¸‡à¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢à¹à¸¥à¸°à¹à¸•à¸à¸ à¸²à¸£à¸à¸´à¸ˆà¸£à¸²à¸¢à¸§à¸±à¸™à¸”à¹‰à¸§à¸¢ AI">
   <link rel="stylesheet" href="css/main.css">
   <style>
-    /* ── Auth Page Layout ── */
+    /* â”€â”€ Auth Page Layout â”€â”€ */
     body {
       min-height: 100vh;
       background: var(--bg-body);
@@ -45,7 +45,7 @@
       left: -80px;
     }
 
-    /* ── Card ── */
+    /* â”€â”€ Card â”€â”€ */
     .auth-card {
       position: relative;
       z-index: 1;
@@ -59,7 +59,7 @@
       box-shadow: 0 24px 48px -8px rgba(15, 23, 42, 0.18), 0 8px 16px -4px rgba(15, 23, 42, 0.08);
     }
 
-    /* ── Brand Logo ── */
+    /* â”€â”€ Brand Logo â”€â”€ */
     .auth-brand {
       display: flex;
       flex-direction: column;
@@ -99,7 +99,7 @@
       margin-top: 0.3rem;
     }
 
-    /* ── Tab Switcher ── */
+    /* â”€â”€ Tab Switcher â”€â”€ */
     .auth-tabs {
       display: flex;
       background: var(--bg-subtle);
@@ -130,7 +130,7 @@
       box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
     }
 
-    /* ── Form Panels ── */
+    /* â”€â”€ Form Panels â”€â”€ */
     .auth-panel {
       display: none;
     }
@@ -139,7 +139,7 @@
       display: block;
     }
 
-    /* ── Input Group ── */
+    /* â”€â”€ Input Group â”€â”€ */
     .auth-field {
       margin-bottom: 1.1rem;
     }
@@ -184,7 +184,7 @@
       box-shadow: 0 0 0 3px var(--primary-glow);
     }
 
-    /* ── Error & Success Messages ── */
+    /* â”€â”€ Error & Success Messages â”€â”€ */
     .auth-alert {
       padding: 0.7rem 1rem;
       border-radius: 10px;
@@ -210,7 +210,7 @@
       gap: 0.5rem;
     }
 
-    /* ── Submit Button & Social Auth ── */
+    /* â”€â”€ Submit Button & Social Auth â”€â”€ */
     .auth-submit-btn {
       width: 100%;
       padding: 0.85rem 1.5rem;
@@ -276,7 +276,7 @@
       height: 20px;
     }
 
-    /* ── Divider ── */
+    /* â”€â”€ Divider â”€â”€ */
     .auth-divider {
       display: flex;
       align-items: center;
@@ -294,7 +294,7 @@
       background: var(--border-subtle);
     }
 
-    /* ── Features List ── */
+    /* â”€â”€ Features List â”€â”€ */
     .auth-features {
       margin-top: 1.75rem;
       padding-top: 1.5rem;
@@ -325,7 +325,7 @@
       flex-shrink: 0;
     }
 
-    /* ── Theme Toggle ── */
+    /* â”€â”€ Theme Toggle â”€â”€ */
     .auth-theme-btn {
       position: fixed;
       top: 1.25rem;
@@ -348,7 +348,7 @@
       background: var(--bg-subtle);
     }
 
-    /* ── Loading Spinner ── */
+    /* â”€â”€ Loading Spinner â”€â”€ */
     .btn-spinner {
       width: 18px;
       height: 18px;
@@ -362,7 +362,7 @@
       to { transform: rotate(360deg); }
     }
 
-    /* ── Mobile ── */
+    /* â”€â”€ Mobile â”€â”€ */
     @media (max-width: 480px) {
       .auth-card {
         padding: 1.75rem 1.25rem;
@@ -384,164 +384,164 @@
 <body>
 
   <!-- Theme Toggle -->
-  <button class="auth-theme-btn" id="auth-theme-btn" title="สลับโหมดมืด/สว่าง">🌙</button>
+  <button class="auth-theme-btn" id="auth-theme-btn" title="à¸ªà¸¥à¸±à¸šà¹‚à¸«à¸¡à¸”à¸¡à¸·à¸”/à¸ªà¸§à¹ˆà¸²à¸‡">ðŸŒ™</button>
 
   <!-- Auth Card -->
   <div class="auth-card">
 
     <!-- Brand Logo -->
     <div class="auth-brand">
-      <div class="auth-logo-icon">🎯</div>
+      <div class="auth-logo-icon">ðŸŽ¯</div>
       <div class="auth-brand-name">GoalForge <span>AI</span></div>
-      <div class="auth-brand-tagline">แตกเป้าหมายใหญ่ให้กลายเป็นภารกิจรายวันด้วย AI</div>
+      <div class="auth-brand-tagline">à¹à¸•à¸à¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢à¹ƒà¸«à¸à¹ˆà¹ƒà¸«à¹‰à¸à¸¥à¸²à¸¢à¹€à¸›à¹‡à¸™à¸ à¸²à¸£à¸à¸´à¸ˆà¸£à¸²à¸¢à¸§à¸±à¸™à¸”à¹‰à¸§à¸¢ AI</div>
     </div>
 
     <!-- Tab Switcher -->
     <div class="auth-tabs">
-      <button class="auth-tab-btn active" data-panel="login" id="tab-login">🔑 เข้าสู่ระบบ</button>
-      <button class="auth-tab-btn" data-panel="register" id="tab-register">✨ สมัครสมาชิก</button>
+      <button class="auth-tab-btn active" data-panel="login" id="tab-login">ðŸ”‘ à¹€à¸‚à¹‰à¸²à¸ªà¸¹à¹ˆà¸£à¸°à¸šà¸š</button>
+      <button class="auth-tab-btn" data-panel="register" id="tab-register">âœ¨ à¸ªà¸¡à¸±à¸„à¸£à¸ªà¸¡à¸²à¸Šà¸´à¸</button>
     </div>
 
-    <!-- ── LOGIN PANEL ── -->
+    <!-- â”€â”€ LOGIN PANEL â”€â”€ -->
     <div class="auth-panel active" id="panel-login">
-      <div class="auth-alert error" id="login-error">⚠️ <span id="login-error-text"></span></div>
+      <div class="auth-alert error" id="login-error">âš ï¸ <span id="login-error-text"></span></div>
 
       <button type="button" class="auth-google-btn btn-google-login">
         <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo">
-        เข้าสู่ระบบด้วย Google
+        à¹€à¸‚à¹‰à¸²à¸ªà¸¹à¹ˆà¸£à¸°à¸šà¸šà¸”à¹‰à¸§à¸¢ Google
       </button>
 
-      <div class="auth-divider">หรือใช้อีเมล</div>
+      <div class="auth-divider">à¸«à¸£à¸·à¸­à¹ƒà¸Šà¹‰à¸­à¸µà¹€à¸¡à¸¥</div>
 
       <form id="login-form" novalidate>
         <div class="auth-field">
-          <label class="auth-label" for="login-email">อีเมล</label>
+          <label class="auth-label" for="login-email">à¸­à¸µà¹€à¸¡à¸¥</label>
           <div class="auth-input-wrap">
-            <span class="auth-input-icon">✉️</span>
+            <span class="auth-input-icon">âœ‰ï¸</span>
             <input type="email" id="login-email" class="auth-input" placeholder="your@email.com" required autocomplete="email">
           </div>
         </div>
 
         <div class="auth-field">
-          <label class="auth-label" for="login-password">รหัสผ่าน</label>
+          <label class="auth-label" for="login-password">à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™</label>
           <div class="auth-input-wrap">
-            <span class="auth-input-icon">🔒</span>
-            <input type="password" id="login-password" class="auth-input" placeholder="••••••••" required autocomplete="current-password">
+            <span class="auth-input-icon">ðŸ”’</span>
+            <input type="password" id="login-password" class="auth-input" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required autocomplete="current-password">
           </div>
         </div>
 
         <button type="submit" class="auth-submit-btn" id="login-submit-btn">
-          🔑 เข้าสู่ระบบ
+          ðŸ”‘ à¹€à¸‚à¹‰à¸²à¸ªà¸¹à¹ˆà¸£à¸°à¸šà¸š
         </button>
       </form>
 
-      <div class="auth-divider">หรือ</div>
+      <div class="auth-divider">à¸«à¸£à¸·à¸­</div>
       <p style="text-align: center; font-size: 0.875rem; color: var(--text-muted);">
-        ยังไม่มีบัญชี?
-        <a href="#" id="goto-register" style="color: var(--primary); font-weight: 600;">สมัครสมาชิกฟรี →</a>
+        à¸¢à¸±à¸‡à¹„à¸¡à¹ˆà¸¡à¸µà¸šà¸±à¸à¸Šà¸µ?
+        <a href="#" id="goto-register" style="color: var(--primary); font-weight: 600;">à¸ªà¸¡à¸±à¸„à¸£à¸ªà¸¡à¸²à¸Šà¸´à¸à¸Ÿà¸£à¸µ â†’</a>
       </p>
     </div>
 
-    <!-- ── REGISTER PANEL ── -->
+    <!-- â”€â”€ REGISTER PANEL â”€â”€ -->
     <div class="auth-panel" id="panel-register">
-      <div class="auth-alert error" id="register-error">⚠️ <span id="register-error-text"></span></div>
-      <div class="auth-alert success" id="register-success">✅ <span id="register-success-text"></span></div>
+      <div class="auth-alert error" id="register-error">âš ï¸ <span id="register-error-text"></span></div>
+      <div class="auth-alert success" id="register-success">âœ… <span id="register-success-text"></span></div>
 
       <button type="button" class="auth-google-btn btn-google-login">
         <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo">
-        สมัครสมาชิกด้วย Google
+        à¸ªà¸¡à¸±à¸„à¸£à¸ªà¸¡à¸²à¸Šà¸´à¸à¸”à¹‰à¸§à¸¢ Google
       </button>
 
-      <div class="auth-divider">หรือใช้อีเมล</div>
+      <div class="auth-divider">à¸«à¸£à¸·à¸­à¹ƒà¸Šà¹‰à¸­à¸µà¹€à¸¡à¸¥</div>
 
       <form id="register-form" novalidate>
         <div class="auth-field">
-          <label class="auth-label" for="reg-name">ชื่อของคุณ</label>
+          <label class="auth-label" for="reg-name">à¸Šà¸·à¹ˆà¸­à¸‚à¸­à¸‡à¸„à¸¸à¸“</label>
           <div class="auth-input-wrap">
-            <span class="auth-input-icon">👤</span>
-            <input type="text" id="reg-name" class="auth-input" placeholder="เช่น สมชาย ใจดี" required autocomplete="name">
+            <span class="auth-input-icon">ðŸ‘¤</span>
+            <input type="text" id="reg-name" class="auth-input" placeholder="à¹€à¸Šà¹ˆà¸™ à¸ªà¸¡à¸Šà¸²à¸¢ à¹ƒà¸ˆà¸”à¸µ" required autocomplete="name">
           </div>
         </div>
 
         <div class="auth-field">
-          <label class="auth-label" for="reg-email">อีเมล</label>
+          <label class="auth-label" for="reg-email">à¸­à¸µà¹€à¸¡à¸¥</label>
           <div class="auth-input-wrap">
-            <span class="auth-input-icon">✉️</span>
+            <span class="auth-input-icon">âœ‰ï¸</span>
             <input type="email" id="reg-email" class="auth-input" placeholder="your@email.com" required autocomplete="email">
           </div>
         </div>
 
         <div class="auth-field">
-          <label class="auth-label" for="reg-password">รหัสผ่าน <span style="color: var(--text-muted); font-weight: 400;">(อย่างน้อย 6 ตัวอักษร)</span></label>
+          <label class="auth-label" for="reg-password">à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™ <span style="color: var(--text-muted); font-weight: 400;">(à¸­à¸¢à¹ˆà¸²à¸‡à¸™à¹‰à¸­à¸¢ 6 à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£)</span></label>
           <div class="auth-input-wrap">
-            <span class="auth-input-icon">🔒</span>
-            <input type="password" id="reg-password" class="auth-input" placeholder="••••••••" required autocomplete="new-password" minlength="6">
+            <span class="auth-input-icon">ðŸ”’</span>
+            <input type="password" id="reg-password" class="auth-input" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required autocomplete="new-password" minlength="6">
           </div>
         </div>
 
         <div class="auth-field">
-          <label class="auth-label" for="reg-confirm">ยืนยันรหัสผ่าน</label>
+          <label class="auth-label" for="reg-confirm">à¸¢à¸·à¸™à¸¢à¸±à¸™à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™</label>
           <div class="auth-input-wrap">
-            <span class="auth-input-icon">🔒</span>
-            <input type="password" id="reg-confirm" class="auth-input" placeholder="••••••••" required autocomplete="new-password">
+            <span class="auth-input-icon">ðŸ”’</span>
+            <input type="password" id="reg-confirm" class="auth-input" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required autocomplete="new-password">
           </div>
         </div>
 
         <button type="submit" class="auth-submit-btn" id="register-submit-btn">
-          ✨ สมัครสมาชิกฟรี
+          âœ¨ à¸ªà¸¡à¸±à¸„à¸£à¸ªà¸¡à¸²à¸Šà¸´à¸à¸Ÿà¸£à¸µ
         </button>
       </form>
 
-      <div class="auth-divider">หรือ</div>
+      <div class="auth-divider">à¸«à¸£à¸·à¸­</div>
       <p style="text-align: center; font-size: 0.875rem; color: var(--text-muted);">
-        มีบัญชีอยู่แล้ว?
-        <a href="#" id="goto-login" style="color: var(--primary); font-weight: 600;">← เข้าสู่ระบบ</a>
+        à¸¡à¸µà¸šà¸±à¸à¸Šà¸µà¸­à¸¢à¸¹à¹ˆà¹à¸¥à¹‰à¸§?
+        <a href="#" id="goto-login" style="color: var(--primary); font-weight: 600;">â† à¹€à¸‚à¹‰à¸²à¸ªà¸¹à¹ˆà¸£à¸°à¸šà¸š</a>
       </p>
     </div>
 
     <!-- Features hint -->
     <div class="auth-features">
       <div class="auth-feature-item">
-        <div class="auth-feature-icon">🤖</div>
-        <span>AI วิเคราะห์และแตกเป้าหมายเป็นภารกิจรายวัน</span>
+        <div class="auth-feature-icon">ðŸ¤–</div>
+        <span>AI à¸§à¸´à¹€à¸„à¸£à¸²à¸°à¸«à¹Œà¹à¸¥à¸°à¹à¸•à¸à¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢à¹€à¸›à¹‡à¸™à¸ à¸²à¸£à¸à¸´à¸ˆà¸£à¸²à¸¢à¸§à¸±à¸™</span>
       </div>
       <div class="auth-feature-item">
-        <div class="auth-feature-icon">📈</div>
-        <span>ติดตามความก้าวหน้าและ Streak ของคุณ</span>
+        <div class="auth-feature-icon">ðŸ“ˆ</div>
+        <span>à¸•à¸´à¸”à¸•à¸²à¸¡à¸„à¸§à¸²à¸¡à¸à¹‰à¸²à¸§à¸«à¸™à¹‰à¸²à¹à¸¥à¸° Streak à¸‚à¸­à¸‡à¸„à¸¸à¸“</span>
       </div>
       <div class="auth-feature-item">
-        <div class="auth-feature-icon">🔐</div>
-        <span>ข้อมูลแยกเป็นส่วนตัวสำหรับแต่ละบัญชี</span>
+        <div class="auth-feature-icon">ðŸ”</div>
+        <span>à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹à¸¢à¸à¹€à¸›à¹‡à¸™à¸ªà¹ˆà¸§à¸™à¸•à¸±à¸§à¸ªà¸³à¸«à¸£à¸±à¸šà¹à¸•à¹ˆà¸¥à¸°à¸šà¸±à¸à¸Šà¸µ</span>
       </div>
     </div>
 
   </div>
 
   <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
   <script src="js/firebase-init.js"></script>
   <script src="js/auth.js"></script>
   <script>
-    // ── Check if already logged in ──
+    // â”€â”€ Check if already logged in â”€â”€
     if (AuthService.isLoggedIn()) {
       window.location.href = 'index.html';
     }
 
-    // ── Theme Toggle ──
+    // â”€â”€ Theme Toggle â”€â”€
     const savedTheme = localStorage.getItem('goalforge_auth_theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
     const themeBtn = document.getElementById('auth-theme-btn');
-    themeBtn.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+    themeBtn.textContent = savedTheme === 'dark' ? 'â˜€ï¸' : 'ðŸŒ™';
 
     themeBtn.addEventListener('click', () => {
       const cur = document.documentElement.getAttribute('data-theme');
       const next = cur === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', next);
       localStorage.setItem('goalforge_auth_theme', next);
-      themeBtn.textContent = next === 'dark' ? '☀️' : '🌙';
+      themeBtn.textContent = next === 'dark' ? 'â˜€ï¸' : 'ðŸŒ™';
     });
 
-    // ── Tab Switching ──
+    // â”€â”€ Tab Switching â”€â”€
     function switchPanel(panelName) {
       document.querySelectorAll('.auth-tab-btn').forEach(btn => {
         btn.classList.toggle('active', btn.getAttribute('data-panel') === panelName);
@@ -565,7 +565,7 @@
       switchPanel('login');
     });
 
-    // ── Show / Hide Alert ──
+    // â”€â”€ Show / Hide Alert â”€â”€
     function showAlert(elId, message) {
       const el = document.getElementById(elId);
       if (!el) return;
@@ -579,7 +579,7 @@
       if (el) el.style.display = 'none';
     }
 
-    // ── Login Form ──
+    // â”€â”€ Login Form â”€â”€
     document.getElementById('login-form').addEventListener('submit', (e) => {
       e.preventDefault();
       hideAlert('login-error');
@@ -588,31 +588,31 @@
       const password = document.getElementById('login-password').value;
 
       if (!email || !password) {
-        showAlert('login-error', 'กรุณากรอกอีเมลและรหัสผ่านให้ครบถ้วน');
+        showAlert('login-error', 'à¸à¸£à¸¸à¸“à¸²à¸à¸£à¸­à¸à¸­à¸µà¹€à¸¡à¸¥à¹à¸¥à¸°à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™à¹ƒà¸«à¹‰à¸„à¸£à¸šà¸–à¹‰à¸§à¸™');
         return;
       }
 
       const btn = document.getElementById('login-submit-btn');
       btn.disabled = true;
-      btn.innerHTML = `<div class="btn-spinner"></div> กำลังเข้าสู่ระบบ...`;
+      btn.innerHTML = `<div class="btn-spinner"></div> à¸à¸³à¸¥à¸±à¸‡à¹€à¸‚à¹‰à¸²à¸ªà¸¹à¹ˆà¸£à¸°à¸šà¸š...`;
 
       setTimeout(async () => {
         const result = await AuthService.login({ email, password });
 
         if (result.success) {
-          btn.innerHTML = '✅ สำเร็จ! กำลังเข้าสู่ระบบ...';
+          btn.innerHTML = 'âœ… à¸ªà¸³à¹€à¸£à¹‡à¸ˆ! à¸à¸³à¸¥à¸±à¸‡à¹€à¸‚à¹‰à¸²à¸ªà¸¹à¹ˆà¸£à¸°à¸šà¸š...';
           setTimeout(() => {
             window.location.href = 'index.html';
           }, 600);
         } else {
           showAlert('login-error', result.error);
           btn.disabled = false;
-          btn.innerHTML = '🔑 เข้าสู่ระบบ';
+          btn.innerHTML = 'ðŸ”‘ à¹€à¸‚à¹‰à¸²à¸ªà¸¹à¹ˆà¸£à¸°à¸šà¸š';
         }
       }, 400);
     });
 
-    // ── Register Form ──
+    // â”€â”€ Register Form â”€â”€
     document.getElementById('register-form').addEventListener('submit', (e) => {
       e.preventDefault();
       hideAlert('register-error');
@@ -624,80 +624,87 @@
       const confirm = document.getElementById('reg-confirm').value;
 
       if (!name || !email || !password || !confirm) {
-        showAlert('register-error', 'กรุณากรอกข้อมูลให้ครบทุกช่อง');
+        showAlert('register-error', 'à¸à¸£à¸¸à¸“à¸²à¸à¸£à¸­à¸à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹ƒà¸«à¹‰à¸„à¸£à¸šà¸—à¸¸à¸à¸Šà¹ˆà¸­à¸‡');
         return;
       }
 
       if (password !== confirm) {
-        showAlert('register-error', 'รหัสผ่านไม่ตรงกัน กรุณาตรวจสอบอีกครั้ง');
+        showAlert('register-error', 'à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™à¹„à¸¡à¹ˆà¸•à¸£à¸‡à¸à¸±à¸™ à¸à¸£à¸¸à¸“à¸²à¸•à¸£à¸§à¸ˆà¸ªà¸­à¸šà¸­à¸µà¸à¸„à¸£à¸±à¹‰à¸‡');
         return;
       }
 
       const btn = document.getElementById('register-submit-btn');
       btn.disabled = true;
-      btn.innerHTML = `<div class="btn-spinner"></div> กำลังสร้างบัญชี...`;
+      btn.innerHTML = `<div class="btn-spinner"></div> à¸à¸³à¸¥à¸±à¸‡à¸ªà¸£à¹‰à¸²à¸‡à¸šà¸±à¸à¸Šà¸µ...`;
 
       setTimeout(async () => {
         const result = await AuthService.register({ name, email, password });
 
         if (result.success) {
-          btn.innerHTML = '✅ สมัครสำเร็จ! กำลังเข้าสู่ระบบ...';
+          btn.innerHTML = 'âœ… à¸ªà¸¡à¸±à¸„à¸£à¸ªà¸³à¹€à¸£à¹‡à¸ˆ! à¸à¸³à¸¥à¸±à¸‡à¹€à¸‚à¹‰à¸²à¸ªà¸¹à¹ˆà¸£à¸°à¸šà¸š...';
           setTimeout(() => {
             window.location.href = 'index.html';
           }, 700);
         } else {
           showAlert('register-error', result.error);
           btn.disabled = false;
-          btn.innerHTML = '✨ สมัครสมาชิกฟรี';
+          btn.innerHTML = 'âœ¨ à¸ªà¸¡à¸±à¸„à¸£à¸ªà¸¡à¸²à¸Šà¸´à¸à¸Ÿà¸£à¸µ';
         }
       }, 400);
     });
 
-    // ── Mock Google Login ──
+    // â”€â”€ Mock Google Login â”€â”€
     document.querySelectorAll('.btn-google-login').forEach(btn => {
       btn.addEventListener('click', () => {
-        // Mock prompt to simulate Google Account selection
-        const email = prompt('[จำลองการเข้าสู่ระบบด้วย Google]\\nกรุณาระบุ Gmail ของคุณ:', 'user@gmail.com');
-        if (!email) return;
-
-        const name = email.split('@')[0];
-        
         btn.disabled = true;
-        btn.innerHTML = `<div class="btn-spinner"></div> กำลังเชื่อมต่อ Google...`;
-
-        setTimeout(async () => {
-          // In a real app we'd use Firebase Auth, but here we just check Firestore directly
-          try {
-            const userRef = window.db.collection('users').where('email', '==', email.toLowerCase());
-            const snapshot = await userRef.get();
-            let user = null;
-            
-            if (snapshot.empty) {
-              user = {
-                id: 'google_' + Date.now(),
-                name: name,
-                email: email.toLowerCase(),
-                passwordHash: 'google_oauth_mock',
-                createdAt: new Date().toISOString(),
-                avatar: name.charAt(0).toUpperCase()
-              };
-              await window.db.collection('users').doc(user.id).set(user);
-            } else {
-              user = snapshot.docs[0].data();
-            }
-
-            AuthService.createSession(user);
-            btn.innerHTML = '✅ เชื่อมต่อสำเร็จ! กำลังเข้าสู่ระบบ...';
-            setTimeout(() => {
-              window.location.href = 'index.html';
-            }, 600);
-          } catch(err) {
-            console.error(err);
-            btn.innerHTML = '❌ เชื่อมต่อล้มเหลว';
-            btn.disabled = false;
-          }
-        }, 800);
+        btn.innerHTML = `<div class="btn-spinner"></div> กำลังเชื่อมต่อกับ Google...`;
+        
+        const provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithRedirect(provider);
       });
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      firebase.auth().getRedirectResult()
+        .then(async (result) => {
+          if (result && result.user) {
+            const firebaseUser = result.user;
+            const email = firebaseUser.email;
+            
+            try {
+              const userRef = window.db.collection('users').where('email', '==', email.toLowerCase());
+              const snapshot = await userRef.get();
+              let appUser = null;
+              
+              if (snapshot.empty) {
+                appUser = {
+                  id: 'google_' + Date.now(),
+                  name: firebaseUser.displayName || email.split('@')[0],
+                  email: email.toLowerCase(),
+                  avatar: firebaseUser.photoURL || null,
+                  createdAt: new Date().toISOString()
+                };
+                await window.db.collection('users').doc(appUser.id).set(appUser);
+              } else {
+                appUser = snapshot.docs[0].data();
+                if (!appUser.avatar && firebaseUser.photoURL) {
+                  appUser.avatar = firebaseUser.photoURL;
+                  await window.db.collection('users').doc(appUser.id).update({ avatar: appUser.avatar });
+                }
+              }
+              
+              AuthService.createSession(appUser);
+              window.location.href = 'index.html';
+            } catch (err) {
+              console.error(err);
+              showAlert('login-error', 'เกิดข้อผิดพลาดในการเชื่อมต่อฐานข้อมูล');
+            }
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          showAlert('login-error', 'เกิดข้อผิดพลาดในการเข้าสู่ระบบด้วย Google');
+        });
     });
   </script>
 </body>
