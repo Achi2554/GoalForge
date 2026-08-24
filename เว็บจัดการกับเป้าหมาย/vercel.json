@@ -1,4 +1,8 @@
 {
-  "version": 2,
-  "name": "my-goalforge"
+  "rewrites": [
+    {
+      "source": "/__/auth/(.*)",
+      "destination": "https://goalforge-app-c800d.firebaseapp.com/__/auth/$1"
+    }
+  ]
 }

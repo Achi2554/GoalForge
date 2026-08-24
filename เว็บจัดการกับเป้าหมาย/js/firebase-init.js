@@ -1,6 +1,6 @@
 const firebaseConfig = {
   apiKey: "AIzaSyD-DqVgpshpt0_zIvPG-jtL-5RaMUVo4_s",
-  authDomain: "goalforge-app-c800d.firebaseapp.com",
+  authDomain: "goalforge-ruby.vercel.app",
   projectId: "goalforge-app-c800d",
   storageBucket: "goalforge-app-c800d.firebasestorage.app",
   messagingSenderId: "259416655451",
