@@ -1393,6 +1393,8 @@ const App = {
         }
       },
       onComplete: (mode) => {
+        const activeTimerTask = document.getElementById('active-timer-task');
+        if (activeTimerTask) activeTimerTask.style.display = 'none';
         Utils.launchConfetti();
         alert(mode === 'focus' ? '🎉 ยอดเยี่ยมมาก! คุณจดจ่อครบ 25 นาทีแล้ว ได้เวลาพักสายตาสักครู่' : '🔔 หมดเวลาพักแล้ว! พร้อมลุยภารกิจต่อหรือยัง?');
       }
@@ -2072,6 +2074,9 @@ const App = {
                 <div class="task-header-row">
                   <div class="task-title">${Utils.escapeHTML(t.title)}</div>
                   <div class="task-actions-wrap">
+                    <button type="button" class="btn-task-action" data-action="play-task" data-task-id="${t.id}" title="เริ่มจับเวลาภารกิจนี้">
+                      ▶️
+                    </button>
                     <button type="button" class="btn-task-action" data-action="edit-task" data-task-id="${t.id}" title="แก้ไขเวลาหรือรายละเอียดภารกิจนี้">
                       ✏️ แก้ไข
                     </button>
@@ -2136,6 +2141,30 @@ const App = {
               }
             }
             this.render();
+          });
+        });
+
+        // Play Task Trigger
+        taskList.querySelectorAll('[data-action="play-task"]').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const taskId = btn.getAttribute('data-task-id');
+            const task = dayData.tasks.find(t => t.id === taskId);
+            if (task) {
+              const activeTimerTask = document.getElementById('active-timer-task');
+              if (activeTimerTask) {
+                activeTimerTask.style.display = 'block';
+                activeTimerTask.querySelector('span').textContent = task.title;
+              }
+              
+              const modeBtn = document.querySelector('.timer-mode-btn[data-mode="focus"]');
+              if (modeBtn) modeBtn.click(); // Switch to focus mode
+              
+              TimerEngine.setCustomTime(task.estMinutes || 25);
+              
+              const timerWidget = document.querySelector('.timer-widget');
+              if (timerWidget) timerWidget.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
           });
         });
 
