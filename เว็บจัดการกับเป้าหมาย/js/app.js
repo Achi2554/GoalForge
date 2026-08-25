@@ -630,11 +630,6 @@ const Store = {
 // 3. FOCUS TIMER MODULE
 // ==========================================================================
 const TimerEngine = {
-  modeDurations: JSON.parse(localStorage.getItem('goalforge_timer_settings')) || {
-    focus: 25,
-    short_break: 5,
-    long_break: 15
-  },
   durationSeconds: 25 * 60,
   remainingSeconds: 25 * 60,
   timerInterval: null,
@@ -643,26 +638,52 @@ const TimerEngine = {
   onTick: null,
   onComplete: null,
 
+  getModeDurations() {
+    let goalId = 'default';
+    if (typeof Store !== 'undefined') {
+      const active = Store.getActiveGoal();
+      if (active && active.id) goalId = active.id;
+    }
+    const key = 'goalforge_timer_' + goalId;
+    return JSON.parse(localStorage.getItem(key)) || {
+      focus: 25,
+      short_break: 5,
+      long_break: 15
+    };
+  },
+
+  saveModeDurations(durations) {
+    let goalId = 'default';
+    if (typeof Store !== 'undefined') {
+      const active = Store.getActiveGoal();
+      if (active && active.id) goalId = active.id;
+    }
+    const key = 'goalforge_timer_' + goalId;
+    localStorage.setItem(key, JSON.stringify(durations));
+  },
+
   init({ onTick, onComplete }) {
     this.onTick = onTick;
     this.onComplete = onComplete;
-    // Load duration for current mode
-    this.durationSeconds = this.modeDurations[this.mode] * 60;
+    const durations = this.getModeDurations();
+    this.durationSeconds = durations[this.mode] * 60;
     this.reset();
   },
 
   setMode(mode) {
     this.mode = mode;
     this.pause();
-    this.durationSeconds = this.modeDurations[mode] * 60;
+    const durations = this.getModeDurations();
+    this.durationSeconds = durations[mode] * 60;
     this.remainingSeconds = this.durationSeconds;
     this.notifyTick();
   },
 
   setCustomTime(minutes) {
     this.pause();
-    this.modeDurations[this.mode] = minutes;
-    localStorage.setItem('goalforge_timer_settings', JSON.stringify(this.modeDurations));
+    const durations = this.getModeDurations();
+    durations[this.mode] = minutes;
+    this.saveModeDurations(durations);
     this.durationSeconds = minutes * 60;
     this.remainingSeconds = this.durationSeconds;
     this.notifyTick();
@@ -1378,7 +1399,8 @@ const App = {
         document.querySelectorAll('.timer-mode-btn').forEach(btn => {
           const btnMode = btn.getAttribute('data-mode');
           if (btnMode && modeNames[btnMode]) {
-            const mins = TimerEngine.modeDurations[btnMode];
+            const durations = TimerEngine.getModeDurations();
+            const mins = durations[btnMode];
             btn.textContent = `${modeNames[btnMode]} ${mins} น.`;
           }
         });
@@ -2074,9 +2096,6 @@ const App = {
                 <div class="task-header-row">
                   <div class="task-title">${Utils.escapeHTML(t.title)}</div>
                   <div class="task-actions-wrap">
-                    <button type="button" class="btn-task-action" data-action="play-task" data-task-id="${t.id}" title="เริ่มจับเวลาภารกิจนี้">
-                      ▶️
-                    </button>
                     <button type="button" class="btn-task-action" data-action="edit-task" data-task-id="${t.id}" title="แก้ไขเวลาหรือรายละเอียดภารกิจนี้">
                       ✏️ แก้ไข
                     </button>
@@ -2141,30 +2160,6 @@ const App = {
               }
             }
             this.render();
-          });
-        });
-
-        // Play Task Trigger
-        taskList.querySelectorAll('[data-action="play-task"]').forEach(btn => {
-          btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const taskId = btn.getAttribute('data-task-id');
-            const task = dayData.tasks.find(t => t.id === taskId);
-            if (task) {
-              const activeTimerTask = document.getElementById('active-timer-task');
-              if (activeTimerTask) {
-                activeTimerTask.style.display = 'block';
-                activeTimerTask.querySelector('span').textContent = task.title;
-              }
-              
-              const modeBtn = document.querySelector('.timer-mode-btn[data-mode="focus"]');
-              if (modeBtn) modeBtn.click(); // Switch to focus mode
-              
-              TimerEngine.setCustomTime(task.estMinutes || 25);
-              
-              const timerWidget = document.querySelector('.timer-widget');
-              if (timerWidget) timerWidget.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
           });
         });
 
