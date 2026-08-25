@@ -630,7 +630,7 @@ const Store = {
 // 3. FOCUS TIMER MODULE
 // ==========================================================================
 const TimerEngine = {
-  modeDurations: {
+  modeDurations: JSON.parse(localStorage.getItem('goalforge_timer_settings')) || {
     focus: 25,
     short_break: 5,
     long_break: 15
@@ -646,6 +646,8 @@ const TimerEngine = {
   init({ onTick, onComplete }) {
     this.onTick = onTick;
     this.onComplete = onComplete;
+    // Load duration for current mode
+    this.durationSeconds = this.modeDurations[this.mode] * 60;
     this.reset();
   },
 
@@ -660,6 +662,7 @@ const TimerEngine = {
   setCustomTime(minutes) {
     this.pause();
     this.modeDurations[this.mode] = minutes;
+    localStorage.setItem('goalforge_timer_settings', JSON.stringify(this.modeDurations));
     this.durationSeconds = minutes * 60;
     this.remainingSeconds = this.durationSeconds;
     this.notifyTick();
@@ -1371,12 +1374,14 @@ const App = {
       onTick: (state) => {
         if (timerDigits) timerDigits.textContent = state.formatted;
         
-        const activeBtn = document.querySelector(`.timer-mode-btn[data-mode="${state.mode}"]`);
-        if (activeBtn) {
-          const modeNames = { focus: 'โฟกัส', short_break: 'พักสั้น', long_break: 'พักยาว' };
-          const mins = Math.round(state.durationSeconds / 60);
-          activeBtn.textContent = `${modeNames[state.mode]} ${mins} น.`;
-        }
+        const modeNames = { focus: 'โฟกัส', short_break: 'พักสั้น', long_break: 'พักยาว' };
+        document.querySelectorAll('.timer-mode-btn').forEach(btn => {
+          const btnMode = btn.getAttribute('data-mode');
+          if (btnMode && modeNames[btnMode]) {
+            const mins = TimerEngine.modeDurations[btnMode];
+            btn.textContent = `${modeNames[btnMode]} ${mins} น.`;
+          }
+        });
 
         if (timerToggleBtn) {
           timerToggleBtn.textContent = state.isRunning ? '⏸️ หยุดชั่วคราว' : '▶️ เริ่มโฟกัส';
