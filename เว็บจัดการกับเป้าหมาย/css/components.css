@@ -663,7 +663,6 @@
     gap: 0.5rem;
     padding: 0 1rem;
     justify-content: space-between;
-    overflow: hidden; /* Prevent body scroll */
   }
 
   .brand-logo {
@@ -681,8 +680,7 @@
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     justify-content: flex-start;
-    padding-right: 1rem;
-    margin-right: -1rem; /* extend scroll area slightly */
+    padding-right: 0.5rem;
   }
   .nav-actions::-webkit-scrollbar {
     display: none;
