@@ -175,6 +175,7 @@ const Utils = {
           p.style.left = `${startX}px`;
           p.style.top = `${startY}px`;
           p.style.opacity = '1';
+          p.style.pointerEvents = 'none';
           p.style.borderRadius = Math.random() > 0.5 ? '50%' : '3px';
           p.style.transition = 'all 1.5s cubic-bezier(0.1, 1, 0.3, 1)';
           
