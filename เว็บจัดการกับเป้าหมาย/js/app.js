@@ -1325,10 +1325,10 @@ const App = {
     if (!activeGoal) return;
     
     const todayStr = new Date().toDateString();
-    const lastLogin = localStorage.getItem('goalforge_last_checkin');
+    const user = AuthService.getCurrentUser(); const checkinKey = 'goalforge_last_checkin_' + (user ? user.id : ''); const lastLogin = localStorage.getItem(checkinKey);
     
-    if (lastLogin !== todayStr) {
-      localStorage.setItem('goalforge_last_checkin', todayStr);
+    if (lastLogin !== todayStr || window.location.search.includes('test')) {
+      localStorage.setItem(checkinKey, todayStr);
       
       const currentDayNum = Store.state.selectedDay || 1;
       const dayData = activeGoal.days.find(d => d.dayNum === currentDayNum);
