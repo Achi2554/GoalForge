@@ -658,46 +658,37 @@
     --header-height: 56px;
   }
 
-  /* Navbar — make the ENTIRE navbar scrollable */
+  /* Navbar — Scrollable setup */
   .navbar {
-    gap: 1rem;
     padding: 0 1rem;
-    justify-content: flex-start;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    flex-wrap: nowrap;
-    align-items: center;
   }
   .navbar::-webkit-scrollbar {
     display: none;
   }
+  
+  /* The inner container that holds everything */
+  .navbar-scroll-inner {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    width: max-content; /* This is the magic that forces scrolling */
+    padding-right: 1.5rem; /* Space at the end of the scroll */
+  }
 
-  /* Force elements to their actual width so they trigger scrolling */
   .brand-logo {
-    font-size: 1.15rem;
+    font-size: 1.25rem;
     gap: 0.5rem;
     white-space: nowrap;
-    flex-shrink: 0;
-    min-width: max-content;
   }
   
   .nav-actions {
-    flex-shrink: 0;
-    min-width: max-content;
-    justify-content: flex-start;
-  }
-  
-  .nav-actions > * {
-    flex-shrink: 0;
-    min-width: max-content;
-  }
-  
-  /* Fix right padding being ignored when scrolling in flexbox */
-  .navbar::after {
-    content: '';
-    padding-right: 1rem;
-    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    white-space: nowrap;
   }
 
   .logo-icon {
