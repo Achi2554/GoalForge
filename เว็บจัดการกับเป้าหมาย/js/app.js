@@ -2168,7 +2168,7 @@ const App = {
 
                 <div class="task-desc">${Utils.escapeHTML(t.description)}</div>
                 <div class="task-meta">
-                  <span class="task-tag time clickable" data-action="edit-task" data-task-id="${t.id}" title="คลิกเพื่อปรับแก้เวลา">
+                  <span class="task-tag time clickable" data-action="send-to-timer" data-task-id="${t.id}" title="คลิกเพื่อส่งเวลาไปที่นาฬิกาโฟกัส">
                     ⏱️ ${Utils.formatMinutes(t.estMinutes || 15)}
                   </span>
                   <span class="task-tag difficulty-${t.difficulty || 'easy'}">⚡ ${diffMap[t.difficulty] || 'ง่าย'}</span>
