@@ -70,6 +70,22 @@ const Utils = {
         osc1.stop(now + 0.1);
         osc2.start(now + 0.08);
         osc2.stop(now + 0.4);
+      } else if (type === 'achievement') {
+        const now = ctx.currentTime;
+        const gain = ctx.createGain();
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 1.5);
+        gain.connect(ctx.destination);
+        
+        // C Major Arpeggio Fanfare
+        [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+          const osc = ctx.createOscillator();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, now + (i * 0.12));
+          osc.connect(gain);
+          osc.start(now + (i * 0.12));
+          osc.stop(now + 1.5);
+        });
       } else if (type === 'timer_bell') {
         const now = ctx.currentTime;
         const osc = ctx.createOscillator();
@@ -127,6 +143,61 @@ const Utils = {
     }
   },
 
+  launchGoldenConfetti() {
+    for (let i = 0; i < 5; i++) {
+      setTimeout(() => {
+        const count = 70;
+        const container = document.createElement('div');
+        container.style.position = 'fixed';
+        container.style.inset = '0';
+        container.style.pointerEvents = 'none';
+        container.style.zIndex = '99999';
+        container.style.overflow = 'hidden';
+        document.body.appendChild(container);
+
+        const colors = ['#FFD700', '#FDB931', '#FFDF00', '#D4AF37', '#FFF8DC'];
+
+        for (let j = 0; j < count; j++) {
+          const p = document.createElement('div');
+          const size = Math.random() * 12 + 8;
+          const color = colors[Math.floor(Math.random() * colors.length)];
+          const startX = window.innerWidth / 2 + (Math.random() * 100 - 50);
+          const startY = window.innerHeight * 0.5;
+          const destX = startX + (Math.random() * 1000 - 500);
+          const destY = startY + Math.random() * 800 - 400;
+          const rot = Math.random() * 1080 - 540;
+
+          p.style.position = 'absolute';
+          p.style.width = `${size}px`;
+          p.style.height = `${size}px`;
+          p.style.backgroundColor = color;
+          p.style.boxShadow = `0 0 15px ${color}`;
+          p.style.left = `${startX}px`;
+          p.style.top = `${startY}px`;
+          p.style.opacity = '1';
+          p.style.borderRadius = Math.random() > 0.5 ? '50%' : '3px';
+          p.style.transition = 'all 1.5s cubic-bezier(0.1, 1, 0.3, 1)';
+          
+          container.appendChild(p);
+
+          setTimeout(() => {
+            p.style.transform = `translate(${destX - startX}px, ${destY - startY}px) rotate(${rot}deg) scale(${Math.random() + 0.5})`;
+            p.style.opacity = '0';
+          }, 50);
+        }
+        setTimeout(() => container.remove(), 2000);
+      }, i * 350);
+    }
+  },
+
+  launchEpicConfetti() {
+    this.launchConfetti();
+    setTimeout(() => this.launchConfetti(), 300);
+    setTimeout(() => this.launchConfetti(), 600);
+    setTimeout(() => this.launchConfetti(), 900);
+    setTimeout(() => this.launchConfetti(), 1200);
+  },
+  
   launchConfetti() {
     const count = 50;
     const container = document.createElement('div');
@@ -1346,16 +1417,60 @@ const App = {
       newlyUnlocked.forEach(ach => {
         stats.unlockedAchievements.push(ach.id);
         
-        // Show Swal toast for achievement
+        // ULTRA GOLD Achievement Popup
+        Utils.playSound('achievement');
+        Utils.launchGoldenConfetti();
+        
         Swal.fire({
-          title: `ปลดล็อกความสำเร็จ!`,
-          html: `<div style="font-size:3.5rem; margin:10px 0;">${ach.icon}</div>
-                 <div style="font-size:1.25rem; font-weight:bold; color:var(--primary);">${ach.title}</div>
-                 <div style="font-size:0.9rem; color:var(--text-muted); margin-top:5px;">สุดยอดไปเลย! ทำต่อไปเรื่อยๆ นะครับ 🎉</div>`,
+          title: `🏆 ปลดล็อกความสำเร็จ! 🏆`,
+          color: '#FFD700',
+          background: 'linear-gradient(145deg, #111111, #222222)',
+          html: `
+            <style>
+              @keyframes ultraBounce {
+                0% { transform: scale(0); opacity: 0; }
+                40% { transform: scale(1.5) rotate(15deg); opacity: 1; filter: drop-shadow(0 0 30px #FFD700); }
+                70% { transform: scale(0.8) rotate(-10deg); filter: drop-shadow(0 0 50px #FFDF00); }
+                100% { transform: scale(1) rotate(0); filter: drop-shadow(0 0 40px #FFD700); }
+              }
+              @keyframes goldGlow {
+                0% { box-shadow: 0 0 20px #D4AF37, inset 0 0 20px #D4AF37; }
+                50% { box-shadow: 0 0 80px #FFDF00, inset 0 0 40px #FFDF00; border-color: #FFF; }
+                100% { box-shadow: 0 0 20px #D4AF37, inset 0 0 20px #D4AF37; }
+              }
+              .gold-icon {
+                font-size: 7rem;
+                margin: 20px auto;
+                animation: ultraBounce 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+                display: inline-block;
+              }
+              .gold-title {
+                font-size: 2rem;
+                font-weight: 900;
+                background: linear-gradient(to right, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                animation: ultraBounce 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+              }
+              .swal-gold-bg {
+                border: 4px solid #FFD700 !important;
+                border-radius: 30px !important;
+                animation: goldGlow 2s infinite !important;
+              }
+            </style>
+            <div class="gold-icon">${ach.icon}</div>
+            <div class="gold-title">${ach.title}</div>
+            <div style="font-size:1.2rem; color:#FFF8DC; margin-top:20px; font-weight:bold; letter-spacing: 1px;">ยอดเยี่ยมที่สุด! ทำต่อไปเรื่อยๆ นะ 🚀</div>
+          `,
           showConfirmButton: true,
-          confirmButtonText: 'เยี่ยมเลย!',
-          confirmButtonColor: 'var(--primary)',
-          backdrop: `rgba(0,0,0,0.5)`,
+          confirmButtonText: 'รับรางวัล! 👑',
+          confirmButtonColor: '#D4AF37',
+          backdrop: `rgba(0,0,0,0.9)`,
+          customClass: {
+            popup: 'swal-gold-bg'
+          }
         });
       });
       Store.save();
