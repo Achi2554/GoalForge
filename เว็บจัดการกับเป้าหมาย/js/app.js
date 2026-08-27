@@ -2224,6 +2224,39 @@ const App = {
           });
         });
 
+        // Send to Timer Trigger
+        taskList.querySelectorAll('[data-action="send-to-timer"]').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const taskId = btn.getAttribute('data-task-id');
+            const task = dayData.tasks.find(t => t.id === taskId);
+            if (task) {
+              const modeBtn = document.querySelector('.timer-mode-btn[data-mode="focus"]');
+              if (modeBtn) modeBtn.click();
+              
+              const mins = task.estMinutes || 25;
+              TimerEngine.setCustomTime(mins);
+              
+              Swal.fire({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 2500,
+                icon: 'success',
+                title: `ตั้งเวลา ${mins} นาทีเรียบร้อย!`,
+                text: `สำหรับภารกิจ: ${task.title}`
+              });
+              
+              const timerWidget = document.querySelector('.timer-widget');
+              if (timerWidget) {
+                timerWidget.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                timerWidget.classList.add('highlight-pulse');
+                setTimeout(() => timerWidget.classList.remove('highlight-pulse'), 1500);
+              }
+            }
+          });
+        });
+
         // Edit Task Trigger
         taskList.querySelectorAll('[data-action="edit-task"]').forEach(btn => {
           btn.addEventListener('click', (e) => {
