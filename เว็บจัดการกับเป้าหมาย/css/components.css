@@ -658,11 +658,22 @@
     --header-height: 56px;
   }
 
-  /* Navbar — stack brand left, actions right, shrink everything */
+  /* Navbar — make the ENTIRE navbar scrollable */
   .navbar {
-    gap: 0.5rem;
+    gap: 1rem; /* slightly more gap for readability */
     padding: 0 1rem;
-    justify-content: space-between;
+    justify-content: flex-start;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    flex-wrap: nowrap;
+  }
+  .navbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .navbar > * {
+    flex-shrink: 0;
   }
 
   .brand-logo {
@@ -672,18 +683,11 @@
     flex-shrink: 0;
   }
   
-  /* Make only the right side actions scrollable */
   .nav-actions {
-    flex: 1;
-    min-width: 0;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+    flex-shrink: 0;
+    overflow-x: visible;
     justify-content: flex-start;
-    padding-right: 0.5rem;
-  }
-  .nav-actions::-webkit-scrollbar {
-    display: none;
+    padding-right: 1rem; /* extra space at the very end of scroll */
   }
   
   .nav-actions > * {
