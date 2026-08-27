@@ -1457,7 +1457,7 @@ const App = {
               .swal-gold-bg {
                 border: 4px solid #FFD700 !important;
                 border-radius: 30px !important;
-                animation: goldGlow 2s infinite !important;
+                box-shadow: 0 0 40px rgba(255, 215, 0, 0.4) !important;
               }
             </style>
             <div class="gold-icon">${ach.icon}</div>
@@ -1468,6 +1468,7 @@ const App = {
           confirmButtonText: 'รับรางวัล! 👑',
           confirmButtonColor: '#D4AF37',
           backdrop: `rgba(0,0,0,0.9)`,
+          allowOutsideClick: true,
           customClass: {
             popup: 'swal-gold-bg'
           }
