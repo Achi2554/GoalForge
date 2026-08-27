@@ -1391,7 +1391,7 @@ const App = {
     }, 500); // slight delay so UI renders first
   },
 
-  checkAchievements() {
+  async checkAchievements() {
     const activeGoal = Store.getActiveGoal();
     if (!activeGoal) return;
     const stats = Store.getStats(activeGoal.id);
@@ -1414,14 +1414,14 @@ const App = {
     const newlyUnlocked = achievements.filter(ach => ach.unlocked && !stats.unlockedAchievements.includes(ach.id));
     
     if (newlyUnlocked.length > 0) {
-      newlyUnlocked.forEach(ach => {
+      for (const ach of newlyUnlocked) {
         stats.unlockedAchievements.push(ach.id);
+        Store.save();
         
-        // ULTRA GOLD Achievement Popup
         Utils.playSound('achievement');
         Utils.launchGoldenConfetti();
         
-        Swal.fire({
+        await Swal.fire({
           title: `🏆 ปลดล็อกความสำเร็จ! 🏆`,
           color: '#FFD700',
           background: 'linear-gradient(145deg, #111111, #222222)',
@@ -1472,8 +1472,7 @@ const App = {
             popup: 'swal-gold-bg'
           }
         });
-      });
-      Store.save();
+      }
     }
   },
 
