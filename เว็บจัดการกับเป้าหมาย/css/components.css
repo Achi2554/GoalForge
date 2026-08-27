@@ -662,13 +662,8 @@
   .navbar {
     gap: 0.5rem;
     padding: 0 1rem;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    justify-content: flex-start;
-  }
-  .navbar::-webkit-scrollbar {
-    display: none;
+    justify-content: space-between;
+    overflow: hidden; /* Prevent body scroll */
   }
 
   .brand-logo {
@@ -677,7 +672,23 @@
     white-space: nowrap;
     flex-shrink: 0;
   }
+  
+  /* Make only the right side actions scrollable */
   .nav-actions {
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    justify-content: flex-start;
+    padding-right: 1rem;
+    margin-right: -1rem; /* extend scroll area slightly */
+  }
+  .nav-actions::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .nav-actions > * {
     flex-shrink: 0;
   }
 
