@@ -199,4 +199,3 @@ button, input, select, textarea {
 }
 
 .markdown-alert, .markdown-alert-warning, .markdown-alert-success, .markdown-alert-caution, .markdown-alert-note { display: none !important; }
-html, body { overflow-x: hidden; max-width: 100vw; }
