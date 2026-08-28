@@ -1648,6 +1648,13 @@ const App = {
   },
 
   bindEvents() {
+    // Check daily welcome when coming back to the tab
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        this.checkDailyWelcome();
+      }
+    });
+
     // Navigation Tabs
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
