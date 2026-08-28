@@ -916,10 +916,15 @@ const AIService = {
           "difficulty": "easy",
           "tip": "คำแนะนำ",
           "drill": {
-            "type": "steps",
-            "title": "หัวข้อเนื้อหาฝึกฝนเฉพาะวันนี้",
+            "type": "vocab", // เลือกประเภท: "vocab" (เรียนภาษา), "workout" (ออกกำลังกาย), "code" (เขียนโปรแกรม), "steps" (ทั่วไป)
+            "title": "หัวข้อฝึกฝน",
+            "lang": "es-ES", // หากเป็น vocab ให้ระบุรหัสภาษาเช่น en-US, es-ES, ja-JP, zh-CN เป็นต้น
+            // ถ้า type="vocab" items ต้องเป็น array ของ object: { "word": "คำศัพท์", "ipa": "คำอ่าน", "meaning": "ความหมาย", "example": "ประโยคตัวอย่าง" }
+            // ถ้า type="workout" ให้ใช้ key exercises: [{ "name": "ชื่อท่า", "reps": "จำนวนครั้ง", "sets": "จำนวนเซ็ต", "desc": "คำอธิบาย" }]
+            // ถ้า type="code" ให้ใช้ key code: "โค้ดตัวอย่าง"
+            // ถ้า type="steps" items ต้องเป็น array ของ string: ["ขั้นที่ 1", "ขั้นที่ 2"]
             "items": [
-              "ขั้นตอนที่ 1", "ขั้นตอนที่ 2"
+              { "word": "Hola", "ipa": "โอ-ล่า", "meaning": "สวัสดี", "example": "¡Hola! ¿Cómo estás?" }
             ]
           },
           "resources": [
@@ -2458,7 +2463,8 @@ const App = {
           btn.addEventListener('click', (e) => {
             e.stopPropagation();
             const text = btn.getAttribute('data-speak');
-            Utils.speakText(text);
+            const lang = btn.getAttribute('data-lang') || 'en-US';
+            Utils.speakText(text, lang);
           });
         });
 
@@ -2505,7 +2511,7 @@ const App = {
                     <span class="vocab-word">${Utils.escapeHTML(item.word)}</span>
                     ${item.ipa ? `<span class="vocab-ipa">${Utils.escapeHTML(item.ipa)}</span>` : ''}
                   </div>
-                  <button type="button" class="btn-speak" data-speak="${Utils.escapeHTML(item.word)}" title="คลิกเพื่อฟังเสียงอ่านภาษาอังกฤษ">
+                  <button type="button" class="btn-speak" data-speak="${Utils.escapeHTML(item.word)}" data-lang="${drill.lang || 'en-US'}" title="คลิกเพื่อฟังเสียงอ่าน">
                     🔊 ฟังเสียง
                   </button>
                 </div>
