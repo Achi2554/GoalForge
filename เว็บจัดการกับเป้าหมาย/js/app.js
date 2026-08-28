@@ -1740,16 +1740,9 @@ const App = {
     // Form Submissions: Edit Goal Form
     const editGoalForm = document.getElementById('edit-goal-form');
     if (editGoalForm) {
-      editGoalForm.addEventListener('submit', (e) => {
+      editGoalForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        this.handleSaveEditGoal(false);
-      });
-    }
-
-    // Re-plan with AI button in Edit Goal Modal
-    const btnReplanAI = document.getElementById('btn-replan-goal-ai');
-    if (btnReplanAI) {
-      btnReplanAI.addEventListener('click', async () => {
+        // Always pass true so AI replans whenever the user edits
         await this.handleSaveEditGoal(true);
       });
     }
