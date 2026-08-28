@@ -927,6 +927,45 @@ const AIService = {
               { "word": "Hola", "ipa": "โอ-ล่า", "meaning": "สวัสดี", "example": "¡Hola! ¿Cómo estás?" }
             ]
           },
+
+  async callAITutor(contents, model = 'gemini-3.6-flash') {
+    const endpoint = new URL('/api/generate-goal', window.location.origin);
+    const requestBody = {
+      contents: contents,
+      generationConfig: {
+        temperature: 0.7,
+        topP: 0.95
+      }
+    };
+    
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model, requestBody })
+    });
+
+    if (!response.ok) throw new Error('API Error');
+    const data = await response.json();
+    return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  },
+
+  renderTutorChat() {
+    const container = document.getElementById('ai-tutor-chat-history');
+    if (!container) return;
+    
+    let html = '';
+    for (let i = 1; i < (this.tutorHistory || []).length; i++) {
+      const msg = this.tutorHistory[i];
+      const isUser = msg.role === 'user';
+      // Simple format, parse bold markdown if possible, replace newlines
+      let text = Utils.escapeHTML(msg.parts[0].text).replace(/\n/g, '<br>');
+      text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      html += `<div class="chat-bubble ${isUser ? 'user' : 'ai'}">${text}</div>`;
+    }
+    
+    container.innerHTML = html;
+    container.scrollTop = container.scrollHeight;
+  },
           "resources": [
             { "title": "แหล่งศึกษาข้อมูล", "url": "https://..." }
           ]
@@ -1648,6 +1687,65 @@ const App = {
   },
 
   bindEvents() {
+    // AI Tutor Events
+    const btnOpenTutor = document.getElementById('btn-open-ai-tutor');
+    if (btnOpenTutor) {
+      btnOpenTutor.addEventListener('click', () => {
+        const goal = Store.getActiveGoal();
+        const currentDayNum = Store.state.selectedDay || 1;
+        const dayData = goal?.dailyTasks.find(d => d.day === currentDayNum);
+        
+        if (!goal || !dayData) return;
+        
+        this.tutorHistory = [
+          {
+            role: "user",
+            parts: [{ text: `ฉันกำลังทำเป้าหมาย "${goal.title}" ตอนนี้อยู่ในวันที่ ${currentDayNum} ภารกิจภาพรวมคือ "${dayData.focus}" และมีภารกิจย่อยดังนี้ ${dayData.tasks.map(t=>t.title).join(', ')} ช่วยเป็นติวเตอร์ส่วนตัวที่ให้คำแนะนำแบบสั้นๆ กระชับ เป็นกันเอง และช่วยไขข้อสงสัยให้ฉันหน่อย (ตอบสั้นๆ ไม่เกิน 2-3 ย่อหน้า)` }]
+          },
+          {
+            role: "model",
+            parts: [{ text: `สวัสดีครับ! ผมคือ AI โค้ชประจำตัวสำหรับเป้าหมาย "${goal.title}" ของคุณ มีอะไรให้ผมช่วยแนะนำหรืออธิบายเพิ่มเติมเกี่ยวกับภารกิจในวันนี้ไหมครับ?` }]
+          }
+        ];
+        
+        this.renderTutorChat();
+        this.openModal('ai-tutor-modal');
+      });
+    }
+    
+    const btnSendTutor = document.getElementById('btn-send-tutor');
+    const inputTutor = document.getElementById('ai-tutor-input');
+    
+    const sendTutorMessage = async () => {
+      if (!inputTutor) return;
+      const text = inputTutor.value.trim();
+      if (!text) return;
+      
+      inputTutor.value = '';
+      this.tutorHistory.push({ role: 'user', parts: [{ text }] });
+      this.renderTutorChat();
+      
+      const chatContainer = document.getElementById('ai-tutor-chat-history');
+      const loadingHtml = `<div class="chat-bubble loading">AI กำลังพิมพ์...</div>`;
+      chatContainer.insertAdjacentHTML('beforeend', loadingHtml);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+      
+      try {
+        const reply = await this.callAITutor(this.tutorHistory, Store.state.settings.model);
+        this.tutorHistory.push({ role: 'model', parts: [{ text: reply }] });
+      } catch (err) {
+        this.tutorHistory.push({ role: 'model', parts: [{ text: 'ขออภัยครับ เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่อีกครั้ง' }] });
+      }
+      this.renderTutorChat();
+    };
+    
+    if (btnSendTutor && inputTutor) {
+      btnSendTutor.addEventListener('click', sendTutorMessage);
+      inputTutor.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendTutorMessage();
+      });
+    }
+
     // Check daily welcome when coming back to the tab
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'visible') {

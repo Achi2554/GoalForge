@@ -29,7 +29,7 @@
 
   <!-- CSS Stylesheets -->
   <link rel="stylesheet" href="css/main.css?v=20260827_2">
-  <link rel="stylesheet" href="css/components.css?v=20260827_9">
+  <link rel="stylesheet" href="css/components.css?v=20260828_4">
   <link rel="stylesheet" href="css/roadmap.css?v=20260824">
 
   <!-- Firebase SDK -->
@@ -208,9 +208,14 @@
                       <span id="today-day-badge" style="font-size: 0.8125rem; color: var(--text-muted);">วันที่ 1</span>
                     </div>
                   </div>
-                  <button id="btn-add-task" class="btn btn-secondary btn-sm" title="เพิ่มภารกิจใหม่ในวันนี้">
-                    ➕ เพิ่มภารกิจ
-                  </button>
+                                    <div style="display: flex; gap: 0.5rem;">
+                    <button id="btn-open-ai-tutor" class="btn btn-secondary" style="border-color: var(--primary); color: var(--primary); padding: 0.4rem 0.75rem; border-radius: 99px; background: rgba(99, 102, 241, 0.05);">
+                      🤖 ถาม AI โค้ช
+                    </button>
+                    <button id="btn-add-task" class="btn btn-primary" style="padding: 0.4rem 0.75rem; border-radius: 99px;">
+                      + เพิ่ม
+                    </button>
+                  </div>
                 </div>
 
                 <!-- Task List -->
@@ -715,7 +720,7 @@
   </div>
 
   <!-- JavaScript Entry -->
-  <script src="js/app.js?v=20260828_3"></script>
+  <script src="js/app.js?v=20260828_4"></script>
   <script>
     // Show user info in navbar
     (function () {
