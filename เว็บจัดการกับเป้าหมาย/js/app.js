@@ -1494,7 +1494,7 @@ const App = {
       localStorage.setItem(checkinKey, todayStr);
       
       const currentDayNum = Store.state.selectedDay || 1;
-      const dayData = activeGoal.days.find(d => d.dayNum === currentDayNum);
+      const dayData = activeGoal.dailyTasks && activeGoal.dailyTasks.find(d => d.day === currentDayNum);
       let tasksCountText = '';
       
       if (dayData && dayData.tasks && dayData.tasks.length > 0) {
