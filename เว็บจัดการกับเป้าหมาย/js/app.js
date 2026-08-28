@@ -1648,6 +1648,8 @@ const App = {
   },
 
   bindEvents() {
+    this.bindJournalEvents();
+
     // AI Tutor Events
     const btnOpenTutor = document.getElementById('btn-open-ai-tutor');
     if (btnOpenTutor) {
@@ -2800,6 +2802,102 @@ const App = {
     
     container.innerHTML = html;
     container.scrollTop = container.scrollHeight;
+  }
+
+
+  , // Comma to continue App object
+
+  bindJournalEvents() {
+    const btnOpenJournal = document.getElementById('btn-ai-journal');
+    const btnAnalyze = document.getElementById('btn-analyze-journal');
+    const inputJournal = document.getElementById('journal-input');
+    const feedbackContainer = document.getElementById('journal-ai-feedback-container');
+    const feedbackText = document.getElementById('journal-ai-feedback-text');
+
+    if (btnOpenJournal) {
+      btnOpenJournal.addEventListener('click', () => {
+        const goal = Store.getActiveGoal();
+        const currentDayNum = Store.state.selectedDay || 1;
+        const dayData = goal?.dailyTasks.find(d => d.day === currentDayNum);
+        
+        if (!goal || !dayData) return;
+        
+        if (inputJournal) inputJournal.value = dayData.notes || '';
+        
+        if (dayData.journalAiFeedback) {
+          feedbackContainer.style.display = 'block';
+          let formattedText = Utils.escapeHTML(dayData.journalAiFeedback).replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+          feedbackText.innerHTML = formattedText;
+        } else {
+          feedbackContainer.style.display = 'none';
+          feedbackText.innerHTML = '';
+        }
+        
+        this.openModal('daily-journal-modal');
+      });
+    }
+
+    if (btnAnalyze && inputJournal) {
+      btnAnalyze.addEventListener('click', async () => {
+        const goal = Store.getActiveGoal();
+        const currentDayNum = Store.state.selectedDay || 1;
+        const dayData = goal?.dailyTasks.find(d => d.day === currentDayNum);
+        if (!goal || !dayData) return;
+        
+        const note = inputJournal.value.trim();
+        if (!note) {
+          Swal.fire({ icon: 'warning', title: 'โปรดกรอกข้อความ', text: 'เล่าให้ AI โค้ชฟังหน่อยว่าวันนี้เป็นยังไงบ้าง' });
+          return;
+        }
+        
+        Store.saveDayNote(goal.id, currentDayNum, note);
+        
+        const originalBtnText = btnAnalyze.innerHTML;
+        btnAnalyze.innerHTML = '<span class="loading-spinner" style="display:inline-block;width:1rem;height:1rem;border:2px solid #fff;border-bottom-color:transparent;border-radius:50%;animation:spin 1s linear infinite;margin-right:0.5rem;"></span> กำลังวิเคราะห์...';
+        btnAnalyze.disabled = true;
+        
+        try {
+          const completedTasks = dayData.tasks.filter(t => t.completed).map(t => t.title).join(', ');
+          const uncompletedTasks = dayData.tasks.filter(t => !t.completed).map(t => t.title).join(', ');
+          
+          let prompt = `ฉันกำลังทำเป้าหมาย "${goal.title}" (วันที่ ${currentDayNum})\n`;
+          prompt += `ภารกิจที่ทำเสร็จแล้ว: ${completedTasks || 'ไม่มี'}\n`;
+          prompt += `ภารกิจที่ยังไม่เสร็จ: ${uncompletedTasks || 'ไม่มี'}\n`;
+          prompt += `บันทึกความรู้สึกของฉันวันนี้: "${note}"\n\n`;
+          prompt += `ในฐานะ AI โค้ชใจดี โปรดเขียนสรุปผลสั้นๆ (ไม่เกิน 3 ย่อหน้า) ให้กำลังใจ ชื่นชมความสำเร็จ (ถ้ามี) และให้ข้อคิดหรือคำแนะนำสำหรับการลุยต่อในวันพรุ่งนี้`;
+          
+          const endpoint = new URL('/api/generate-goal', window.location.origin);
+          const requestBody = {
+            contents: [{ role: 'user', parts: [{ text: prompt }] }],
+            generationConfig: { temperature: 0.7, topP: 0.95 }
+          };
+          
+          const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ model: Store.state.settings.model || 'gemini-3.6-flash', requestBody })
+          });
+          
+          if (!response.ok) throw new Error('API Error');
+          const data = await response.json();
+          const feedback = data.candidates?.[0]?.content?.parts?.[0]?.text || 'ขออภัยครับ เกิดข้อผิดพลาดในการประมวลผล';
+          
+          dayData.journalAiFeedback = feedback;
+          Store.save();
+          
+          feedbackContainer.style.display = 'block';
+          feedbackText.innerHTML = Utils.escapeHTML(feedback).replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+          Utils.launchConfetti();
+          
+        } catch (err) {
+          console.error(err);
+          Swal.fire({ icon: 'error', title: 'ข้อผิดพลาด', text: 'ไม่สามารถติดต่อ AI ได้ กรุณาลองใหม่' });
+        } finally {
+          btnAnalyze.innerHTML = originalBtnText;
+          btnAnalyze.disabled = false;
+        }
+      });
+    }
   }
 
 };
