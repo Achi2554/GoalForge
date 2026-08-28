@@ -29,7 +29,7 @@
 
   <!-- CSS Stylesheets -->
   <link rel="stylesheet" href="css/main.css?v=20260827_2">
-  <link rel="stylesheet" href="css/components.css?v=20260828_5">
+  <link rel="stylesheet" href="css/components.css?v=20260828_6">
   <link rel="stylesheet" href="css/roadmap.css?v=20260824">
 
   <!-- Firebase SDK -->
@@ -719,8 +719,30 @@
     </div>
   </div>
 
+  
+  <!-- MODAL 6: AI TUTOR CHAT MODAL -->
+  <div id="ai-tutor-modal" class="modal-overlay">
+    <div class="modal" style="max-width: 500px; display: flex; flex-direction: column; height: 80vh; max-height: 700px; padding: 0; overflow: hidden;">
+      <div class="modal-header" style="padding: 1.25rem; border-bottom: 1px solid var(--border-subtle); background: var(--bg-surface);">
+        <h2 class="modal-title">🤖 AI โค้ชประจำตัว</h2>
+        <button class="btn-close" data-close-modal="ai-tutor-modal">✖</button>
+      </div>
+      
+      <div class="modal-body" style="flex: 1; overflow-y: auto; padding: 1.25rem; background: var(--bg-body); display: flex; flex-direction: column; gap: 1rem;" id="ai-tutor-chat-history">
+        <div style="text-align: center; color: var(--text-muted); font-size: 0.85rem; margin-top: auto; margin-bottom: auto;">
+          พิมพ์ถามสิ่งที่คุณสงสัยเกี่ยวกับภารกิจนี้ได้เลยครับ!
+        </div>
+      </div>
+      
+      <div class="modal-footer" style="padding: 1rem; border-top: 1px solid var(--border-subtle); display: flex; gap: 0.5rem; background: var(--bg-surface);">
+        <input type="text" id="ai-tutor-input" class="form-input" style="flex: 1; margin: 0;" placeholder="ถาม AI โค้ช..." autocomplete="off">
+        <button id="btn-send-tutor" class="btn btn-primary" style="padding: 0.5rem 1rem;">ส่ง ✈️</button>
+      </div>
+    </div>
+  </div>
+
   <!-- JavaScript Entry -->
-  <script src="js/app.js?v=20260828_5"></script>
+  <script src="js/app.js?v=20260828_6"></script>
   <script>
     // Show user info in navbar
     (function () {
