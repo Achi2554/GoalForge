@@ -927,45 +927,6 @@ const AIService = {
               { "word": "Hola", "ipa": "โอ-ล่า", "meaning": "สวัสดี", "example": "¡Hola! ¿Cómo estás?" }
             ]
           },
-
-  async callAITutor(contents, model = 'gemini-3.6-flash') {
-    const endpoint = new URL('/api/generate-goal', window.location.origin);
-    const requestBody = {
-      contents: contents,
-      generationConfig: {
-        temperature: 0.7,
-        topP: 0.95
-      }
-    };
-    
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model, requestBody })
-    });
-
-    if (!response.ok) throw new Error('API Error');
-    const data = await response.json();
-    return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-  },
-
-  renderTutorChat() {
-    const container = document.getElementById('ai-tutor-chat-history');
-    if (!container) return;
-    
-    let html = '';
-    for (let i = 1; i < (this.tutorHistory || []).length; i++) {
-      const msg = this.tutorHistory[i];
-      const isUser = msg.role === 'user';
-      // Simple format, parse bold markdown if possible, replace newlines
-      let text = Utils.escapeHTML(msg.parts[0].text).replace(/\n/g, '<br>');
-      text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-      html += `<div class="chat-bubble ${isUser ? 'user' : 'ai'}">${text}</div>`;
-    }
-    
-    container.innerHTML = html;
-    container.scrollTop = container.scrollHeight;
-  },
           "resources": [
             { "title": "แหล่งศึกษาข้อมูล", "url": "https://..." }
           ]
@@ -1726,9 +1687,11 @@ const App = {
       this.renderTutorChat();
       
       const chatContainer = document.getElementById('ai-tutor-chat-history');
-      const loadingHtml = `<div class="chat-bubble loading">AI กำลังพิมพ์...</div>`;
-      chatContainer.insertAdjacentHTML('beforeend', loadingHtml);
-      chatContainer.scrollTop = chatContainer.scrollHeight;
+      if(chatContainer) {
+          const loadingHtml = `<div class="chat-bubble loading">AI กำลังพิมพ์...</div>`;
+          chatContainer.insertAdjacentHTML('beforeend', loadingHtml);
+          chatContainer.scrollTop = chatContainer.scrollHeight;
+      }
       
       try {
         const reply = await this.callAITutor(this.tutorHistory, Store.state.settings.model);
@@ -1745,6 +1708,7 @@ const App = {
         if (e.key === 'Enter') sendTutorMessage();
       });
     }
+
 
     // Check daily welcome when coming back to the tab
     document.addEventListener('visibilitychange', () => {
@@ -2797,6 +2761,47 @@ const App = {
       `).join('');
     }
   }
+
+  , // Comma to continue App object
+
+  async callAITutor(contents, model = 'gemini-3.6-flash') {
+    const endpoint = new URL('/api/generate-goal', window.location.origin);
+    const requestBody = {
+      contents: contents,
+      generationConfig: {
+        temperature: 0.7,
+        topP: 0.95
+      }
+    };
+    
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model, requestBody })
+    });
+
+    if (!response.ok) throw new Error('API Error');
+    const data = await response.json();
+    return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  },
+
+  renderTutorChat() {
+    const container = document.getElementById('ai-tutor-chat-history');
+    if (!container) return;
+    
+    let html = '';
+    for (let i = 1; i < (this.tutorHistory || []).length; i++) {
+      const msg = this.tutorHistory[i];
+      const isUser = msg.role === 'user';
+      let text = Utils.escapeHTML(msg.parts[0].text).replace(/\n/g, '<br>');
+      text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      html += `<div class="chat-bubble ${isUser ? 'user' : 'ai'}">${text}</div>`;
+    }
+    
+    container.innerHTML = html;
+    container.scrollTop = container.scrollHeight;
+  }
+
 };
 
 // Initialize when DOM is ready
